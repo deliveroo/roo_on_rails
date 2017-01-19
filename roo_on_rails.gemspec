@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Scaffolding for building services}
   spec.description   = %q{Scaffolding for building services}
-  spec.homepage      = 'https://github/com/deliveroo/roo_on_rails'
+  spec.homepage      = 'https://github.com/deliveroo/roo_on_rails'
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
