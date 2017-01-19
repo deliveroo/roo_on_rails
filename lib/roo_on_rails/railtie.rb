@@ -20,11 +20,11 @@ module RooOnRails
         abort 'Aborting: NEW_RELIC_LICENSE_KEY is required'
       end
 
-      path = %w[new_relic.yml config/new_relic.yml].map { |p|
+      path = %w[newrelic.yml config/newrelic.yml].map { |p|
         Pathname.new(p) 
       }.find(&:exist?)
       if path
-        abort "Aborting: new_relic.yml detected in '#{path.parent.realpath}', should not exist"
+        abort "Aborting: newrelic.yml detected in '#{path.parent.realpath}', should not exist"
       end
 
       require 'newrelic_rpm'
