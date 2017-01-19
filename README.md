@@ -1,12 +1,12 @@
-# RooOnRails
+# `roo_on_rails` [![Build
+Status](https://travis-ci.org/deliveroo/roo_on_rails.svg?branch=master)](https://travis-ci.org/deliveroo/roo_on_rails)[![Code
+Climate](https://codeclimate.com/repos/58809e664ab8420081007382/badges/3489b7689ab2e0cf5d61/gpa.svg)](https://codeclimate.com/repos/58809e664ab8420081007382/feed)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/roo_on_rails`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A gem that makes following our [guidelines](http://deliveroo.engineering/guidelines/services/) easy.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your Rails application's Gemfile:
 
 ```ruby
 gem 'roo_on_rails'
@@ -16,23 +16,26 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
 
-    $ gem install roo_on_rails
+## Features
 
-## Usage
+### New Relic configuration
 
-TODO: Write usage instructions here
+We enforce configuration of New Relic.
 
-## Development
+1. Your app must be loaded with a `NEW_RELIC_LICENSE_KEY` environment variable,
+   otherwise it will abort.
+2. No `new_relic.yml` file may be presentin your app. Overrides to New Relic settings
+   through [environment
+   variables](https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration)
+   is permitted.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+No further configuration is required as the gem confiures our standard settings.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/roo_on_rails.
+Bug reports and pull requests are welcome on GitHub at https://github.com/deliveroo/roo_on_rails.
 
 
 ## License

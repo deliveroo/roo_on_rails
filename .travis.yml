@@ -2,4 +2,10 @@ sudo: false
 language: ruby
 rvm:
   - 2.3.3
-before_install: gem install bundler -v 1.13.6
+  - 2.4.0
+install:
+  - bundle install --jobs=3 --retry=3 --path=vendor/bundle
+cache:
+  bundler: false
+  directories:
+    - vendor/bundle

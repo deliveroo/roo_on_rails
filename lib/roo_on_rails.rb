@@ -1,5 +1,7 @@
-require "roo_on_rails/version"
+require 'roo_on_rails/version'
+require 'dotenv/rails-now'
 
 module RooOnRails
-  # Your code goes here...
 end
+
+require 'roo_on_rails/railtie' if defined?(Rails)
