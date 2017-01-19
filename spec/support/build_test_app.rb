@@ -66,14 +66,15 @@ module ROR
     def build_test_app
       let(:app_id) { '%s.%s' % [Time.now.strftime('%F.%H%M%S'), SecureRandom.hex(4)] }
       let(:app_path) { TEST_DIR.join(app_id) }
+      let(:app_helper) { Helper.new }
 
 
       before do
-        Helper.new.ensure_scaffold.unpack_scaffold_at(app_path)
+        app_helper.ensure_scaffold.unpack_scaffold_at(app_path)
       end
 
       after do
-        Helper.new.clear_test_app_at(app_path)
+        app_helper.clear_test_app_at(app_path)
       end
     end
   end
