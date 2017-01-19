@@ -36,12 +36,16 @@ describe 'New Relic integration' do
 
 
   context 'when a new_relic.yml exists' do
-    before do
-      app_helper.create_file app_path.join('config/new_relic.yml'), <<~EOF
-        # fake new relic config file
-      EOF
+    %w[. ./config].each do |path|
+      context "in directory #{path}" do
+        before do
+          app_helper.create_file app_path.join(path).join('new_relic.yml'), <<~EOF
+            # fake new relic config file
+          EOF
+        end
+      
+        include_examples 'abort early', /new_relic.yml detected/
+      end
     end
-  
-    include_examples 'abort early', /new_relic.yml detected/
   end
 end
