@@ -19,6 +19,7 @@ describe ROR::RunTestApp do
 
   it 'stops the app cleanly' do
     app.start.wait_start
-    app.stop.wait_stop
+    app.stop
+    expect(app.status).to be_success
   end
 end

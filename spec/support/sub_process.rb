@@ -5,6 +5,8 @@ VERBOSE = ENV.fetch('VERBOSE_ACCEPTANCE_TESTS', 'NO') == 'YES'
 
 module ROR
   class SubProcess
+    attr_reader :status
+
     def initialize(name:, dir: nil, command:, start: nil, stop: nil)
       @name    = name
       @dir     = dir
@@ -14,12 +16,14 @@ module ROR
       @loglines = []
       @start_regexp = start
       @stop_regexp  = stop
+      @status = nil
     end
 
     def start
       raise 'already started' if @pid
       _log 'starting'
       @loglines = []
+      @status = nil
       rd, wr = IO.pipe
       if @pid = fork
         # parent
@@ -40,11 +44,18 @@ module ROR
       self
     end
 
-    # politely ask the process to stop
+    # politely ask the process to stop, and wait for it to exit
     def stop
       return self if @pid.nil?
       _log "stopping (##{@pid})"
       Process.kill('TERM', @pid)
+
+      Timeout::timeout(10) do
+        sleep(10e-3) until Process.wait(@pid, Process::WNOHANG)
+        @status = $?
+        @pid = nil
+      end
+
       self
     end
 
@@ -52,7 +63,7 @@ module ROR
     # it is ready for use
     def wait_start
       return self unless @start_regexp && @pid
-      _log 'waiting to start'
+      _log 'waiting for startup marker'
       wait_log @start_regexp
       _log "started (##{@pid})"
       self
@@ -62,19 +73,18 @@ module ROR
     # the process has stoped cleanly
     def wait_stop
       return self unless @stop_regexp && @pid
-      _log "waiting to stop (##{@pid})"
+      _log "waiting for stop marker"
       wait_log @stop_regexp
       _log 'stopped'
-    ensure
-      terminate
+      self
     end
 
-    # terminate the process without waiting
+    # terminate the process without waiting for logs
     def terminate
       if @pid
         Process.kill('KILL', @pid)
         _log 'wait after SIGKILL'
-        Process.wait(@pid, Process::WNOHANG)
+        Process.wait(@pid)
       end
       @reader.join if @reader
       @pid = @reader = nil
