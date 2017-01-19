@@ -15,10 +15,13 @@ module RooOnRails
 
     initializer 'roo_on_rails.new_relic' do
       $stderr.puts 'initializer roo_on_rails.new_relic'
-      Dotenv.load File.expand_path('../default_env', __FILE__)
 
       unless ENV['NEW_RELIC_LICENSE_KEY']
-        abort "*** NEW_RELIC_LICENSE_KEY is required"
+        abort '*** NEW_RELIC_LICENSE_KEY is required'
+      end
+
+      if File.exist?('new_relic.yml') || File.exist?('config/new_relic.yml')
+        abort '*** new_relic.yml detected, should not exist'
       end
 
       require 'newrelic_rpm'
