@@ -6,16 +6,27 @@ A gem that makes following our [guidelines](http://deliveroo.engineering/guideli
 
 ## Installation
 
-Add this line to your Rails application's Gemfile:
+Add this line at the top of your Rails application's Gemfile:
 
 ```ruby
 gem 'roo_on_rails'
 ```
 
+Remove the following gems from your Gemfile, as they're provided and configured
+by `roo_on_rails`:
+
+- `dotenv`
+- `newrelic_rpm`
+
+Remove the following configuration files:
+
+- `newrelic.yml` or `config/newrelic.yml`
+
 And then execute:
 
     $ bundle
 
+Then re-run your test suite to make sure everything is shipshape.
 
 ## Features
 
