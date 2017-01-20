@@ -28,7 +28,7 @@ module RooOnRails
       end
 
       require 'newrelic_rpm'
-      ::NewRelic::Agent.manual_start
+      ::NewRelic::Agent.manual_start unless Rails.env.test?
     end
   end
 end
