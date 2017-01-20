@@ -9,3 +9,6 @@ cache:
   bundler: false
   directories:
     - vendor/bundle
+before_script:
+  - unset RACK_ENV
+  - unset RAILS_ENV
