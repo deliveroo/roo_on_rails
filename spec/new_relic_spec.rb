@@ -6,12 +6,24 @@ describe 'New Relic integration' do
 
   before { app.start }
 
-  context 'with correct setup' do
+  shared_examples 'loads' do
     it 'loads New Relic' do
-      app.wait_log /NewRelic.*Finished instrumentation/
+      app.wait_start
+      expect(app).to have_log /NewRelic.*Finished instrumentation/
     end
   end
 
+  shared_examples 'does not load' do
+    it 'does not load New Relic' do
+      app.wait_start
+      expect(app).not_to have_log /NewRelic.*Finished instrumentation/
+    end
+
+    it 'does not abort' do
+      app.wait_start.stop
+      expect(app.status).to be_success
+    end
+  end
 
   shared_examples 'abort early' do |message|
     it 'fails to load' do
@@ -26,12 +38,30 @@ describe 'New Relic integration' do
   end
 
 
+  context 'with correct setup' do
+    include_examples 'loads'
+  end
+
   context 'when NEW_RELIC_LICENSE_KEY is missing' do
     before do
       app_helper.comment_lines app_path.join('.env'), /NEW_RELIC_LICENSE_KEY/
     end
   
-    include_examples 'abort early', /NEW_RELIC_LICENSE_KEY is required/
+    context 'in the test environment' do
+      let(:app_env) { 'test' }
+
+      include_examples 'does not load'
+    end
+
+    context 'in the development environment' do
+      let(:app_env) { 'development' }
+      after { app.stop }
+      include_examples 'loads'
+    end
+
+    context 'in the production environment' do
+      include_examples 'abort early', /NEW_RELIC_LICENSE_KEY must be set/
+    end
   end
 
 

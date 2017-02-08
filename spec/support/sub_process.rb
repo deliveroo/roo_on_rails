@@ -39,7 +39,8 @@ module ROR
         $stdout.sync = true
         $stderr.sync = true
         Dir.chdir @dir.to_s if @dir
-        Bundler.with_clean_env { exec @command }
+
+        Bundler.with_original_env { exec @command }
       end
       self
     end
@@ -53,9 +54,9 @@ module ROR
       Timeout::timeout(10) do
         sleep(10e-3) until Process.wait(@pid, Process::WNOHANG)
         @status = $?
-        @pid = nil
       end
 
+      @pid = nil
       self
     end
 
@@ -93,14 +94,20 @@ module ROR
 
     # wait until a log line is seen that matches `regexp`, up to a timeout
     def wait_log(regexp)
+      cursor = 0
       Timeout::timeout(10) do
         loop do
-          line = @loglines.shift
+          line = @loglines[cursor]
           sleep(10e-3) if line.nil?
           break if line && line =~ regexp
+          cursor += 1 unless line.nil?
         end
       end
       self
+    end
+
+    def has_log?(regexp)
+      @loglines.any? { |line| line =~ regexp }
     end
 
     private
