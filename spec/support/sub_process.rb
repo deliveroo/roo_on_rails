@@ -40,7 +40,11 @@ module ROR
         $stderr.sync = true
         Dir.chdir @dir.to_s if @dir
 
-        Bundler.with_original_env { exec @command }
+        Bundler.with_original_env do
+          # this is required on Travis as it sets BUNDLE_GEMFILE explicitly:
+          ENV.delete('BUNDLE_GEMFILE')
+          exec @command
+        end
       end
       self
     end
