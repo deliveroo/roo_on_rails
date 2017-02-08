@@ -1,11 +1,6 @@
 #!/usr/bin/env ruby
 require 'rubygems'
-# require 'roo_on_rails'
 require 'roo_on_rails/harness'
-# require 'thor'
-# require 'active_support'
-# require 'hashie'
-# require 'pry'
 
 RooOnRails::Harness.new(try_fix: true).run
 
