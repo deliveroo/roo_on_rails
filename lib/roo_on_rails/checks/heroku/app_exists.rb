@@ -8,6 +8,7 @@ module RooOnRails
       # Check if a corresponding app exists on Heroku (for a given environment)
       # 
       # Input context
+      # - git_repo: the name of the repository
       # - heroku.api_client: a connected PlatformAPI client
       # - app_name_stem (optional): a name override
       #

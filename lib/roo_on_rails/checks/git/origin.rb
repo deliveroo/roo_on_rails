@@ -4,6 +4,9 @@ module RooOnRails
   module Checks
     module Git
       class Origin < Base
+        # Output context:
+        # - git_org (string)
+        # - git_repo (string)
         def intro
           "Checking your Git origin remote..."
         end
