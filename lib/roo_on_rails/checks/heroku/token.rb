@@ -9,12 +9,12 @@ module RooOnRails
           "Obtaining Heroku auth token..."
         end
 
-        def _call
-          status, token = _run "heroku auth:token"
-          _fail "could not get a token" unless status
+        def call
+          status, token = shell "heroku auth:token"
+          fail! "could not get a token" unless status
 
-          _state.heroku!.api_client = PlatformAPI.connect_oauth(token.strip)
-          _ok "connected to Heroku's API"
+          context.heroku!.api_client = PlatformAPI.connect_oauth(token.strip)
+          pass "connected to Heroku's API"
         end
       end
     end

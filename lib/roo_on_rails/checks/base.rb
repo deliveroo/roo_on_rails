@@ -10,20 +10,20 @@ module RooOnRails
         new(**options).run
       end
 
-      def initialize(fix: false, state: nil)
+      def initialize(fix: false, context: nil)
         @fix = fix
-        @state = state
+        @context = context
       end
 
       def run
         say _intro
-        _call
+        call
       rescue Failure
         raise unless @fix
         say "\t· attempting to fix", %i[yellow]
-        _fix
+        fix
         say "\t· re-checking", %i[yellow]
-        _call
+        call
       end
 
       protected
@@ -32,38 +32,38 @@ module RooOnRails
         self.class.name
       end
 
-      def _call
-        _fail "this check wasn't implemented"
+      def call
+        fail! "this check wasn't implemented"
       end
 
-      def _fix
-        _fail "can't fix this on my own"
+      def fix
+        fail! "can't fix this on my own"
       end
 
-      def _state
-        @state
+      def context
+        @context
       end
 
-      def _run(cmd)
+      def shell(cmd)
         result = Bundler.with_clean_env { %x{#{cmd}} }
         return [$?.success?, result]
       end
 
-      def _run!(cmd)
+      def shell!(cmd)
         Bundler.with_clean_env { system(cmd) }
         raise CommandFailed.new(cmd) unless $?.success?
       end
 
-      def _run?(cmd)
+      def shell?(cmd)
         Bundler.with_clean_env { system(cmd) }
         $?.success?
       end
 
-      def _ok(msg)
+      def pass(msg)
         say "\t✔ #{msg}", :green
       end
 
-      def _fail(msg)
+      def fail!(msg)
         say "\t✘ #{msg}", :red
         raise Failure
       end

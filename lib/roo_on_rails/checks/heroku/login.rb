@@ -8,17 +8,17 @@ module RooOnRails
           "Checking if you're signed in to Heroku..."
         end
 
-        def _call
-          status, email = _run "heroku whoami"
+        def call
+          status, email = shell "heroku whoami"
           if status
-            _ok "logged in as #{bold email.strip}"
+            pass "logged in as #{bold email.strip}"
           else
-            _fail "not logged in"
+            fail! "not logged in"
           end
         end
 
-        def _fix
-          _run! "heroku auth:login --sso"
+        def fix
+          shell! "heroku auth:login --sso"
         end
       end
     end

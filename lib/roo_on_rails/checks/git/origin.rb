@@ -8,14 +8,14 @@ module RooOnRails
           "Checking your Git origin remote..."
         end
 
-        def _call
-          status, url = _run "git config remote.origin.url"
-          _fail "Origin does not seem to be configured." unless status
+        def call
+          status, url = shell "git config remote.origin.url"
+          fail! "Origin does not seem to be configured." unless status
           
-          org, repo = url.strip.gsub(%r{\.git$}, '').split(%r{[:/]}).last(2)
-          _state.git_org  = org
-          _state.git_repo = repo
-          _ok "organisation #{bold org}, repository: #{bold repo}"
+          org, repo = url.strip.sub(%r{\.git$}, '').split(%r{[:/]}).last(2)
+          context.git_org  = org
+          context.git_repo = repo
+          pass "organisation #{bold org}, repository: #{bold repo}"
         end
       end
     end

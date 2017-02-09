@@ -16,27 +16,27 @@ module RooOnRails
           "Checking if #{bold @_env} app exist..."
         end
 
-        def _call
+        def call
           all_apps = _client.app.list.map { |a| a['name'] }
-          including_name = all_apps.select { |a| a.include?(_state.git_repo) }
+          including_name = all_apps.select { |a| a.include?(context.git_repo) }
           if including_name.empty?
-            _fail "no apps with names including #{bold _state.git_repo} were detected"
+            fail! "no apps with names including #{bold context.git_repo} were detected"
           end
 
-          correct_app = all_apps.select { |a| a =~ /^(roo-)?#{_state.git_repo}-#{@_env}$/ }
+          correct_app = all_apps.select { |a| a =~ /^(roo-)?#{context.git_repo}-#{@_env}$/ }
 
           unless correct_app.one?
-            _hardfail "some apps with name #{bold _state.git_repo} exist, but I can't tell which one is for environment #{bold @_env}"
+            fail‼ "some apps with name #{bold context.git_repo} exist, but I can't tell which one is for environment #{bold @_env}"
           end
 
-          _state.heroku.app![@_env] = correct_app.first
-          _ok "found app #{bold correct_app.first}"
+          context.heroku.app![@_env] = correct_app.first
+          pass "found app #{bold correct_app.first}"
         end
 
         private
 
         def _client
-          _state.heroku.api_client
+          context.heroku.api_client
         end
       end
     end

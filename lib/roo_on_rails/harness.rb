@@ -29,7 +29,7 @@ module RooOnRails
         Checks::Heroku::AppExists::All,
         Checks::Heroku::PrebootEnabled::All,
       ].each do |c|
-        c.run(fix: @try_fix, state: @state)
+        c.run(fix: @try_fix, context: @state)
       end
       self
     rescue Checks::CommandFailed

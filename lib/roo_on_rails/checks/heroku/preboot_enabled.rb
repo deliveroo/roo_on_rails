@@ -16,27 +16,27 @@ module RooOnRails
           "Checking preboot status on #{bold _app}"
         end
 
-        def _call
+        def call
           status = _client.app_feature.info(_app, 'preboot')
           if status['enabled']
-            _ok 'preboot enabled'
+            pass 'preboot enabled'
           else
-            _fail 'preboot disabled'
+            fail! 'preboot disabled'
           end
         end
 
         private
 
-        def _fix
+        def fix
           _client.app_feature.update(_app, 'preboot', enabled: true)
         end
 
         def _app
-          _state.heroku.app[@_env]
+          context.heroku.app[@_env]
         end
 
         def _client
-          _state.heroku.api_client
+          context.heroku.api_client
         end
       end
     end

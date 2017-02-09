@@ -8,11 +8,11 @@ module RooOnRails
           "Checking if the Heroku Toolbelt is working..."
         end
 
-        def _call
-          if _run? 'heroku status > /dev/null'
-            _ok 'read heroku status'
+        def call
+          if shell? 'heroku status > /dev/null'
+            pass 'read heroku status'
           else
-            _fail "could not run 'heroku status'"
+            fail! "could not run 'heroku status'"
           end
         end
       end
