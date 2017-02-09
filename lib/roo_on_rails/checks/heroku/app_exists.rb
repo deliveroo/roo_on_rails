@@ -19,18 +19,6 @@ module RooOnRails
 
         def call
           all_apps = _client.app.list.map { |a| a['name'] }
-          name_stem = context.git_repo.gsub('.', '')
-
-          candidates = [
-            [nil, 'roo', 'deliveroo'],
-            [name_stem],
-            [@_env],
-          ].tap { |a|
-            a.replace a.first.product(*a[1..-1])
-          }.map { |c|
-            c.compact.join('-')
-          }
-
           matches = all_apps.select { |a| candidates.include?(a) }
 
           unless matches.one?
@@ -50,6 +38,22 @@ module RooOnRails
         end
 
         private
+
+        def name_stem
+          context.app_name_stem || context.git_repo.gsub('.', '')
+        end
+
+        def candidates
+          [
+            [nil, 'roo', 'deliveroo'],
+            [name_stem],
+            [@_env],
+          ].tap { |a|
+            a.replace a.first.product(*a[1..-1])
+          }.map { |c|
+            c.compact.join('-')
+          }
+        end
 
         def _client
           context.heroku.api_client

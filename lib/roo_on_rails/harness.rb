@@ -13,9 +13,9 @@ module RooOnRails
   class Harness
     include Thor::Shell
 
-    def initialize(try_fix: false)
+    def initialize(try_fix: false, context: nil)
       @try_fix = try_fix
-      @state = Hashie::Mash.new
+      @context = context || Hashie::Mash.new
     end
 
     def run
@@ -29,7 +29,7 @@ module RooOnRails
         Checks::Heroku::AppExists::All,
         Checks::Heroku::PrebootEnabled::All,
       ].each do |c|
-        c.run(fix: @try_fix, context: @state)
+        c.run(fix: @try_fix, context: @context)
       end
       self
     rescue Checks::CommandFailed

@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 require 'rubygems'
+require 'roo_on_rails/config'
 require 'roo_on_rails/harness'
 
-RooOnRails::Harness.new(try_fix: true).run
-
+module RooOnRails
+  Harness.new(try_fix: true, context: Config.load).run
+end
