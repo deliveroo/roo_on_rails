@@ -9,7 +9,7 @@ module RooOnRails
         end
 
         def call
-          status, email = shell "heroku whoami"
+          status, email = shell.run "heroku whoami"
           if status
             pass "logged in as #{bold email.strip}"
           else

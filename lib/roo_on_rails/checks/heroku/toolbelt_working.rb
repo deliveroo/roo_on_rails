@@ -9,7 +9,7 @@ module RooOnRails
         end
 
         def call
-          if shell? 'heroku status > /dev/null'
+          if shell.run? 'heroku status > /dev/null'
             pass 'read heroku status'
           else
             fail! "could not run 'heroku status'"

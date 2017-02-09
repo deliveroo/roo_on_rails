@@ -9,7 +9,7 @@ module RooOnRails
         end
 
         def call
-          status, path = shell "which heroku"
+          status, path = shell.run "which heroku"
           if status
             pass "found #{bold path.strip} binary"
           else

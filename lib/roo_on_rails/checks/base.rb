@@ -1,5 +1,6 @@
 require 'roo_on_rails/checks'
 require 'roo_on_rails/checks/helpers'
+require 'roo_on_rails/shell'
 require 'bundler'
 
 module RooOnRails
@@ -11,9 +12,10 @@ module RooOnRails
         new(**options).run
       end
 
-      def initialize(fix: false, context: nil)
+      def initialize(fix: false, context: nil, shell: nil)
         @fix = fix
         @context = context
+        @shell = shell || Shell.new
       end
 
       def run
@@ -29,6 +31,8 @@ module RooOnRails
 
       protected
 
+      attr_reader :shell, :context
+
       def intro
         self.class.name
       end
@@ -39,25 +43,6 @@ module RooOnRails
 
       def fix
         fail! "can't fix this on my own"
-      end
-
-      def context
-        @context
-      end
-
-      def shell(cmd)
-        result = Bundler.with_clean_env { %x{#{cmd}} }
-        return [$?.success?, result]
-      end
-
-      def shell!(cmd)
-        Bundler.with_clean_env { system(cmd) }
-        raise CommandFailed.new(cmd) unless $?.success?
-      end
-
-      def shell?(cmd)
-        Bundler.with_clean_env { system(cmd) }
-        $?.success?
       end
 
       def pass(msg)

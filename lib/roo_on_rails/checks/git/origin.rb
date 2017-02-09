@@ -12,7 +12,7 @@ module RooOnRails
         end
 
         def call
-          status, url = shell "git config remote.origin.url"
+          status, url = shell.run "git config remote.origin.url"
           fail! "Origin does not seem to be configured." unless status
           
           org, repo = url.strip.sub(%r{\.git$}, '').split(%r{[:/]}).last(2)
