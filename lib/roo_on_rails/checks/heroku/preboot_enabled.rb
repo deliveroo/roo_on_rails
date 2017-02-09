@@ -4,6 +4,9 @@ require 'roo_on_rails/checks/multi'
 module RooOnRails
   module Checks
     module Heroku
+      # Input context
+      # - heroku.api_client: a connected PlatformAPI client
+      # - heroku.app.{env}: an existing app name.
       class PrebootEnabled < Base
         All = Multi.new(variants: %w[staging production], of: self)
 

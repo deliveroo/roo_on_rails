@@ -4,6 +4,8 @@ require 'platform-api'
 module RooOnRails
   module Checks
     module Heroku
+      # Output context:
+      # - heroku.api_client: a connected PlatformAPI client
       class Token < Base
         def intro
           "Obtaining Heroku auth token..."

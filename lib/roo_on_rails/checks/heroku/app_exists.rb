@@ -5,6 +5,14 @@ require 'active_support/core_ext/enumerable'
 module RooOnRails
   module Checks
     module Heroku
+      # Check if a corresponding app exists on Heroku (for a given environment)
+      # 
+      # Input context
+      # - heroku.api_client: a connected PlatformAPI client
+      # - app_name_stem (optional): a name override
+      #
+      # Output context:
+      # - heroku.app.{env}: an app name.
       class AppExists < Base
         All = Multi.new(variants: %w[staging production], of: self)
 
