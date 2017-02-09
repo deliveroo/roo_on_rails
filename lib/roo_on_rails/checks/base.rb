@@ -1,5 +1,6 @@
 require 'roo_on_rails/checks'
 require 'roo_on_rails/checks/helpers'
+require 'bundler'
 
 module RooOnRails
   module Checks

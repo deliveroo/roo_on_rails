@@ -1,5 +1,6 @@
 require 'roo_on_rails/checks/base'
 require 'roo_on_rails/checks/multi'
+require 'active_support/core_ext/enumerable'
 
 module RooOnRails
   module Checks
@@ -18,19 +19,34 @@ module RooOnRails
 
         def call
           all_apps = _client.app.list.map { |a| a['name'] }
-          including_name = all_apps.select { |a| a.include?(context.git_repo) }
-          if including_name.empty?
-            fail! "no apps with names including #{bold context.git_repo} were detected"
+          name_stem = context.git_repo.gsub('.', '')
+
+          candidates = [
+            [nil, 'roo', 'deliveroo'],
+            [name_stem],
+            [@_env],
+          ].tap { |a|
+            a.replace a.first.product(*a[1..-1])
+          }.map { |c|
+            c.compact.join('-')
+          }
+
+          matches = all_apps.select { |a| candidates.include?(a) }
+
+          unless matches.one?
+            say "\tcandidates: #{candidates.join(', ')}"
           end
 
-          correct_app = all_apps.select { |a| a =~ /^(roo-)?#{context.git_repo}-#{@_env}$/ }
-
-          unless correct_app.one?
-            fail‼ "some apps with name #{bold context.git_repo} exist, but I can't tell which one is for environment #{bold @_env}"
+          if matches.empty?
+            fail! "no apps with matching names detected"
           end
 
-          context.heroku.app![@_env] = correct_app.first
-          pass "found app #{bold correct_app.first}"
+          if matches.many?
+            fail‼︎ "multiple matching apps detected: #{candidates.map { |c| bold c}.join(', ')}"
+          end
+
+          context.heroku.app![@_env] = matches.first
+          pass "found app #{bold matches.first}"
         end
 
         private
