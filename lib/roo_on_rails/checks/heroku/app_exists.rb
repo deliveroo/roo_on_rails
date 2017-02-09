@@ -18,15 +18,15 @@ module RooOnRails
 
         def initialize(env, **options)
           super(options)
-          @_env = env
+          @env = env
         end
         
         def intro
-          "Checking if #{bold @_env} app exist..."
+          "Checking if #{bold @env} app exist..."
         end
 
         def call
-          all_apps = _client.app.list.map { |a| a['name'] }
+          all_apps = client.app.list.map { |a| a['name'] }
           matches = all_apps.select { |a| candidates.include?(a) }
 
           unless matches.one?
@@ -41,7 +41,7 @@ module RooOnRails
             fail‼︎ "multiple matching apps detected: #{candidates.map { |c| bold c}.join(', ')}"
           end
 
-          context.heroku.app![@_env] = matches.first
+          context.heroku.app![@env] = matches.first
           pass "found app #{bold matches.first}"
         end
 
@@ -55,7 +55,7 @@ module RooOnRails
           [
             [nil, 'roo', 'deliveroo'],
             [name_stem],
-            [@_env],
+            [@env],
           ].tap { |a|
             a.replace a.first.product(*a[1..-1])
           }.map { |c|
@@ -63,7 +63,7 @@ module RooOnRails
           }
         end
 
-        def _client
+        def client
           context.heroku.api_client
         end
       end

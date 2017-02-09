@@ -12,15 +12,15 @@ module RooOnRails
 
         def initialize(env, **options)
           super(options)
-          @_env = env
+          @env = env
         end
         
         def intro
-          "Checking preboot status on #{bold _app}"
+          "Checking preboot status on #{bold app_name}"
         end
 
         def call
-          status = _client.app_feature.info(_app, 'preboot')
+          status = client.app_feature.info(app_name, 'preboot')
           if status['enabled']
             pass 'preboot enabled'
           else
@@ -31,14 +31,14 @@ module RooOnRails
         private
 
         def fix
-          _client.app_feature.update(_app, 'preboot', enabled: true)
+          client.app_feature.update(app_name, 'preboot', enabled: true)
         end
 
-        def _app
-          context.heroku.app[@_env]
+        def app_name
+          context.heroku.app[@env]
         end
 
-        def _client
+        def client
           context.heroku.api_client
         end
       end
