@@ -16,7 +16,13 @@ module RooOnRails
     initializer 'roo_on_rails.new_relic' do
       $stderr.puts 'initializer roo_on_rails.new_relic'
 
-      unless ENV['NEW_RELIC_LICENSE_KEY']
+      license_key = ENV['NEW_RELIC_LICENSE_KEY']
+
+      if %w[ test development ].exclude?(Rails.env.to_s) and license_key == 'override-me'
+        abort 'Aborting: NEW_RELIC_LICENSE_KEY must be set in production environments'
+      end
+       
+      if license_key.nil?
         abort 'Aborting: NEW_RELIC_LICENSE_KEY is required'
       end
 

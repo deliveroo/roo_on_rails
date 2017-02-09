@@ -7,11 +7,12 @@ module ROR
     def run_test_app
       build_test_app
 
+      let(:app_env) { 'production' }
       let(:app) { 
         ROR::SubProcess.new(
           name:     'rails',
           dir:      app_path,
-          command:  'bundle exec rails s -e production',
+          command:  'bundle exec rails server -e %s' % app_env,
           start:    /Use Ctrl-C to stop/,
           stop:     /- Goodbye!/)
       }
