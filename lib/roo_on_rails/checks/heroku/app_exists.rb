@@ -12,7 +12,7 @@ module RooOnRails
           @_env = env
         end
         
-        def _intro
+        def intro
           "Checking if #{bold @_env} app exist..."
         end
 

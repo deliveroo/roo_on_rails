@@ -4,7 +4,7 @@ module RooOnRails
   module Checks
     module Git
       class Origin < Base
-        def _intro
+        def intro
           "Checking your Git origin remote..."
         end
 

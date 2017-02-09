@@ -4,7 +4,7 @@ module RooOnRails
   module Checks
     module Heroku
       class Login < Base
-        def _intro
+        def intro
           "Checking if you're signed in to Heroku..."
         end
 

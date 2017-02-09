@@ -12,7 +12,7 @@ module RooOnRails
           @_env = env
         end
         
-        def _intro
+        def intro
           "Checking preboot status on #{bold _app}"
         end
 

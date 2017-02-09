@@ -4,7 +4,7 @@ module RooOnRails
   module Checks
     module Heroku
       class ToolbeltWorking < Base
-        def _intro
+        def intro
           "Checking if the Heroku Toolbelt is working..."
         end
 

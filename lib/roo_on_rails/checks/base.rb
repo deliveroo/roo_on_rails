@@ -16,7 +16,7 @@ module RooOnRails
       end
 
       def run
-        say _intro
+        say intro
         call
       rescue Failure
         raise unless @fix
@@ -28,7 +28,7 @@ module RooOnRails
 
       protected
 
-      def _intro
+      def intro
         self.class.name
       end
 

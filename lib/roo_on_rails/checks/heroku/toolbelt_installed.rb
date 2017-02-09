@@ -4,7 +4,7 @@ module RooOnRails
   module Checks
     module Heroku
       class ToolbeltInstalled < Base
-        def _intro
+        def intro
           "Checking if the Heroku Toolbelt is installed..."
         end
 

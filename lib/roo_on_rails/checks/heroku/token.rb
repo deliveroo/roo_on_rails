@@ -5,7 +5,7 @@ module RooOnRails
   module Checks
     module Heroku
       class Token < Base
-        def _intro
+        def intro
           "Obtaining Heroku auth token..."
         end
 
