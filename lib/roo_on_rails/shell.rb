@@ -11,12 +11,12 @@ module RooOnRails
     end
 
     def run!(cmd)
-      Bundler.with_clean_env { system(cmd) }
+      success, _ = run(cmd)
       raise CommandFailed.new(cmd) unless $?.success?
     end
 
     def run?(cmd)
-      Bundler.with_clean_env { system(cmd) }
+      success, _ = run(cmd)
       $?.success?
     end
   end

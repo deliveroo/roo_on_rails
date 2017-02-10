@@ -18,7 +18,7 @@ module RooOnRails
         end
 
         def fix
-          shell! "heroku auth:login --sso"
+          shell.run! "heroku auth:login --sso"
         end
       end
     end

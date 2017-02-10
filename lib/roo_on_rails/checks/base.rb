@@ -21,7 +21,8 @@ module RooOnRails
       def run
         say intro
         call
-      rescue Failure
+      rescue Failure => e
+        raise if e === FinalFailure
         raise unless @fix
         say "\t· attempting to fix", %i[yellow]
         fix
@@ -51,7 +52,12 @@ module RooOnRails
 
       def fail!(msg)
         say "\t✘ #{msg}", :red
-        raise Failure
+        raise Failure, msg
+      end
+
+      def fail‼︎(msg)
+        say "\t✘ #{msg}", :red
+        raise FinalFailure, msg
       end
     end
   end
