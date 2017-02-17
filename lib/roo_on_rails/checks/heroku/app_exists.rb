@@ -1,5 +1,6 @@
-require 'roo_on_rails/checks/base'
-require 'roo_on_rails/checks/multi'
+require 'roo_on_rails/checks/env_specific'
+require 'roo_on_rails/checks/git/origin'
+require 'roo_on_rails/checks/heroku/token'
 require 'active_support/core_ext/enumerable'
 
 module RooOnRails
@@ -14,16 +15,11 @@ module RooOnRails
       #
       # Output context:
       # - heroku.app.{env}: an app name.
-      class AppExists < Base
-        All = Multi.new(variants: %w[staging production], of: self)
+      class AppExists < EnvSpecific
+        requires Git::Origin, Heroku::Token
 
-        def initialize(env, **options)
-          super(options)
-          @env = env
-        end
-        
         def intro
-          "Checking if #{bold @env} app exist..."
+          "Checking if #{bold env} app exist..."
         end
 
         def call
@@ -42,7 +38,7 @@ module RooOnRails
             fail‼︎ "multiple matching apps detected: #{candidates.map { |c| bold c}.join(', ')}"
           end
 
-          context.heroku.app![@env] = matches.first
+          context.heroku.app![env] = matches.first
           pass "found app #{bold matches.first}"
         end
 
@@ -56,7 +52,7 @@ module RooOnRails
           [
             [nil, 'roo', 'deliveroo'],
             [name_stem],
-            [@env],
+            [env],
           ].tap { |a|
             a.replace a.first.product(*a[1..-1])
           }.map { |c|

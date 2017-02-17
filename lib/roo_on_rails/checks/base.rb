@@ -8,19 +8,26 @@ module RooOnRails
     class Base
       include Helpers
 
-      def self.run(**options)
-        new(**options).run
+      # Add `dependencies` to the list of prerequisites for this check.
+      # If none are specified, return the list of dependencies.
+      def self.requires(*dependencies)
+        @requires ||= Set.new
+        dependencies.any? ? @requires.merge(dependencies) : @requires
       end
 
-      def initialize(fix: false, context: nil, shell: nil)
-        @fix = fix
-        @context = context
-        @shell = shell || Shell.new
+
+      def initialize(options = {})
+        @options = options.dup
+        @fix     = @options.delete(:fix) { false }
+        @context = @options.delete(:context) { Hashie::Mash.new }
+        @shell   = @options.delete(:shell) { Shell.new }
       end
 
       def run
+        resolve dependencies
         say intro
         call
+        true
       rescue Failure => e
         raise if e === FinalFailure
         raise unless @fix
@@ -32,7 +39,14 @@ module RooOnRails
 
       protected
 
-      attr_reader :shell, :context
+      attr_reader :shell, :context, :options
+
+      # Returns prerequisite checks. Can be overriden.
+      def dependencies
+        self.class.requires.map { |k|
+          k.new(fix: @fix, context: @context, shell: @shell, **@options)
+        }
+      end
 
       def intro
         self.class.name
@@ -58,6 +72,28 @@ module RooOnRails
       def fail‼︎(msg)
         say "\t✘ #{msg}", :red
         raise FinalFailure, msg
+      end
+
+      # Return a unique signature for this check
+      def signature
+        [self.class.name]
+      end
+
+      private
+
+      # Run each dependency, then mark them as run.
+      def resolve(deps)
+        deps.each do |dep|
+          context.deps ||= {}
+          context.deps[dep.signature] ||= 
+            begin
+              # sig = signature.join('/')
+              # dep_sig = dep.signature.join('/')
+              # say "┌ resolving #{sig} → #{dep_sig}"
+              dep.run
+              # say "└ resolved  #{sig} → #{dep_sig}"
+            end
+        end
       end
     end
   end

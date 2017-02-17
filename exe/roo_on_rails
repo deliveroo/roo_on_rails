@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 require 'rubygems'
+require 'pry'
 require 'roo_on_rails/config'
 require 'roo_on_rails/harness'
 

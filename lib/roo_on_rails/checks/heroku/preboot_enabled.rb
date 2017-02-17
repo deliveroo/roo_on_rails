@@ -1,5 +1,6 @@
-require 'roo_on_rails/checks/base'
-require 'roo_on_rails/checks/multi'
+require 'roo_on_rails/checks/env_specific'
+require 'roo_on_rails/checks/git/origin'
+require 'roo_on_rails/checks/heroku/app_exists'
 
 module RooOnRails
   module Checks
@@ -7,13 +8,8 @@ module RooOnRails
       # Input context
       # - heroku.api_client: a connected PlatformAPI client
       # - heroku.app.{env}: an existing app name.
-      class PrebootEnabled < Base
-        All = Multi.new(variants: %w[staging production], of: self)
-
-        def initialize(env, **options)
-          super(options)
-          @env = env
-        end
+      class PrebootEnabled < EnvSpecific
+        requires Git::Origin, Heroku::AppExists
         
         def intro
           "Checking preboot status on #{bold app_name}"
@@ -35,7 +31,7 @@ module RooOnRails
         end
 
         def app_name
-          context.heroku.app[@env]
+          context.heroku.app[env]
         end
 
         def client

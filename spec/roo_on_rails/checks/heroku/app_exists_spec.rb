@@ -9,11 +9,16 @@ describe RooOnRails::Checks::Heroku::AppExists do
   let(:client) { double 'PlatformAPI' }
   let(:context) { Hashie::Mash.new }
 
-  subject { described_class.new('production', shell: shell, context: context) }
+  subject { described_class.new(env: 'production', shell: shell, context: context) }
 
   let(:perform) { silence_stream(STDOUT) { subject.run } }
 
   before do
+    context.deps = {
+      %w[RooOnRails::Checks::Git::Origin] => true,
+      %w[RooOnRails::Checks::Heroku::Token] => true,
+    }
+
     context.heroku!.api_client = client
     context.git_repo = 'fubar-app'
 

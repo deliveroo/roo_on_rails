@@ -1,13 +1,6 @@
 require 'thor'
 require 'hashie'
-require 'roo_on_rails/checks'
-require 'roo_on_rails/checks/git/origin'
-require 'roo_on_rails/checks/heroku/toolbelt_installed'
-require 'roo_on_rails/checks/heroku/toolbelt_working'
-require 'roo_on_rails/checks/heroku/login'
-require 'roo_on_rails/checks/heroku/token'
-require 'roo_on_rails/checks/heroku/app_exists'
-require 'roo_on_rails/checks/heroku/preboot_enabled'
+require 'roo_on_rails/checks/environment'
 
 module RooOnRails
   class Harness
@@ -19,20 +12,12 @@ module RooOnRails
     end
 
     def run
-      # TODO: use TSort for dependencies between checks
       [
-        Checks::Git::Origin,
-        Checks::Heroku::ToolbeltInstalled,
-        Checks::Heroku::ToolbeltWorking,
-        Checks::Heroku::Login,
-        Checks::Heroku::Token,
-        Checks::Heroku::AppExists::All,
-        Checks::Heroku::PrebootEnabled::All,
-      ].each do |c|
-        c.run(fix: @try_fix, context: @context)
-      end
+        Checks::Environment.new(env: 'staging',    fix: @try_fix, context: @context),
+        Checks::Environment.new(env: 'production', fix: @try_fix, context: @context),
+      ].each(&:run)
       self
-    rescue Checks::CommandFailed
+    rescue Shell::CommandFailed
       say 'A command failed to run, aborting', %i[bold red]
       exit 2
     rescue Checks::Failure
