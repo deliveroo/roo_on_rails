@@ -11,8 +11,7 @@ module RooOnRails
     end
 
     def run!(cmd)
-      success, _ = run(cmd)
-      raise CommandFailed.new(cmd) unless $?.success?
+      raise CommandFailed.new(cmd) unless run(cmd).first
     end
 
     def run?(cmd)
