@@ -85,7 +85,7 @@ module RooOnRails
       def resolve(deps)
         deps.each do |dep|
           context.deps ||= {}
-          context.deps[dep.signature] ||= dep.run
+          context.deps[dep.signature.join('/')] ||= dep.run
         end
       end
     end
