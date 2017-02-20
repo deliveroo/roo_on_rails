@@ -1,5 +1,5 @@
 require 'roo_on_rails/checks/base'
-require 'roo_on_rails/checks/heroku/toolbelt_working'
+require 'roo_on_rails/checks/heroku/login'
 require 'platform-api'
 
 module RooOnRails
@@ -8,7 +8,7 @@ module RooOnRails
       # Output context:
       # - heroku.api_client: a connected PlatformAPI client
       class Token < Base
-        requires ToolbeltWorking
+        requires Login
 
         def intro
           "Obtaining Heroku auth token..."
