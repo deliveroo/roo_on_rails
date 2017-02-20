@@ -12,7 +12,6 @@ describe RooOnRails::Checks::Git::Origin do
 
   let(:perform) { silence_stream(STDOUT) { subject.run } }
 
-
   context 'when the URL is valid' do
     before do
       shell.stub 'git config remote.origin.url',

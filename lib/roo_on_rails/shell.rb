@@ -16,8 +16,7 @@ module RooOnRails
     end
 
     def run?(cmd)
-      success, _ = run(cmd)
-      $?.success?
+      run(cmd).first
     end
   end
 end

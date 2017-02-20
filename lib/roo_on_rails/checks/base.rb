@@ -69,7 +69,7 @@ module RooOnRails
         raise Failure, msg
       end
 
-      def fail‼︎(msg)
+      def final_fail!(msg)
         say "\t✘ #{msg}", :red
         raise FinalFailure, msg
       end
@@ -85,14 +85,7 @@ module RooOnRails
       def resolve(deps)
         deps.each do |dep|
           context.deps ||= {}
-          context.deps[dep.signature] ||= 
-            begin
-              # sig = signature.join('/')
-              # dep_sig = dep.signature.join('/')
-              # say "┌ resolving #{sig} → #{dep_sig}"
-              dep.run
-              # say "└ resolved  #{sig} → #{dep_sig}"
-            end
+          context.deps[dep.signature] ||= dep.run
         end
       end
     end

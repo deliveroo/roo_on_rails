@@ -26,16 +26,12 @@ module RooOnRails
           all_apps = client.app.list.map { |a| a['name'] }
           matches = all_apps.select { |a| candidates.include?(a) }
 
-          unless matches.one?
-            say "\tcandidates: #{candidates.join(', ')}"
-          end
-
           if matches.empty?
             fail! "no apps with matching names detected"
           end
 
           if matches.many?
-            fail‼︎ "multiple matching apps detected: #{candidates.map { |c| bold c}.join(', ')}"
+            final_fail! "multiple matching apps detected: #{candidates.map { |c| bold c}.join(', ')}"
           end
 
           context.heroku.app![env] = matches.first
@@ -45,12 +41,12 @@ module RooOnRails
         private
 
         def name_stem
-          context.app_name_stem || context.git_repo.gsub('.', '')
+          context.app_name_stem || context.git_repo.delete('.')
         end
 
         def candidates
           [
-            [nil, 'roo', 'deliveroo'],
+            ['deliveroo', 'roo', nil],
             [name_stem],
             [env],
           ].tap { |a|
