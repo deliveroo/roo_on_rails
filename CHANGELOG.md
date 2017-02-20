@@ -1,3 +1,9 @@
+# v1.1.0 (2017-02-20)
+
+Features:
+
+- `roo_on_rails` command, with basic Heroku app checks
+
 # v1.0.1 (2017-01-20)
 
 Bug fixes:
