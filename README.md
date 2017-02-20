@@ -20,13 +20,35 @@ Remove the following configuration files:
 
 - `newrelic.yml` or `config/newrelic.yml`
 
+Also remove any other gem-specific configuration from your repository.
+
 And then execute:
 
     $ bundle
 
 Then re-run your test suite to make sure everything is shipshape.
 
+## Usage
+
+Run the following from your app's top-level directory:
+
+```
+bundle exec roo_on_rails
+```
+
+This will run a series of checks of your application's setup, as descirbed
+below.
+
+
 ## Features
+
+### App validation
+
+Running the `roo_on_rails` script currently checks for:
+
+- compliant Heroku app naming;
+- presence of the Heroku preboot flag.
+
 
 ### New Relic configuration
 
