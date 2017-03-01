@@ -61,8 +61,30 @@ We enforce configuration of New Relic.
    variables](https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration)
    is permitted.
 
-No further configuration is required as the gem confiures our standard settings.
+No further configuration is required for production apps as the gem configures our standard settings.
 
+However if you have Heroku's [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps) enabled then you will need to update `app.json` so that it lists `NEW_RELIC_LICENSE_KEY` in the `env` section, so that this key is copied from the parent app (only keys listed here will be created on the review app; either generated, if that is specified, or otherwise copied).
+
+More documentation is available [directly from heroku](https://devcenter.heroku.com/articles/github-integration-review-apps#inheriting-config-vars) but the block below has been helpful in other apps:
+
+```json
+  "env": {
+    "NEW_RELIC_LICENSE_KEY": {
+      "description": "The New Relic licence key",
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "description": "A secret basis for the key which verifies the integrity of signed cookies.",
+      "generator": "secret"
+    },
+    "RACK_ENV": {
+      "description": "The name of the environment for Rack."
+    },
+    "RAILS_ENV": {
+      "description": "The name of the environment for Rails."
+    }
+  },
+```
 
 ## Contributing
 
