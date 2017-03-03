@@ -20,11 +20,12 @@ module RooOnRails
           fail! 'no token found' unless token && !token.empty?
 
           oauth_client = Octokit::Client.new(access_token: token)
-          oauth_client.user
+          oauth_client.user # idempotent call to check access
+
           context.github!.api_client = oauth_client
           pass "connected to GitHub's API"
         rescue Octokit::Error => e
-          final_fail! "#{e.class}: #{e.message}"
+          fail! "#{e.class}: #{e.message}"
         end
 
         def fix
@@ -67,7 +68,7 @@ module RooOnRails
 
         def two_factor_headers
           @two_factor_headers ||= begin
-            basic_client.user # idempotent call just to check access
+            basic_client.user # idempotent call to check access
             {}
           rescue Octokit::OneTimePasswordRequired
             otp = ask 'Enter your GitHub 2FA code:'

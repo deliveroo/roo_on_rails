@@ -22,6 +22,7 @@ Metrics/BlockLength:
     - 'spec/**/*.rb'
     - 'Gemfile'
     - 'Guardfile'
+    - '*.gemspec'
 
 Metrics/LineLength:
   Max: 100
