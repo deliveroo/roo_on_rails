@@ -38,6 +38,7 @@ module RooOnRails
         private
 
         def create_access_token
+          delete_existing_access_token
           result = basic_client.create_authorization(
             scopes: %w(repo),
             note: token_name,
@@ -45,9 +46,14 @@ module RooOnRails
             headers: two_factor_headers
           )
           result[:token]
-        rescue Octokit::UnprocessableEntity => e
-          raise unless e.errors.any? { |err| err[:code] == 'already_exists' }
-          final_fail! "Please delete '#{token_name}' from https://github.com/settings/tokens"
+        end
+
+        def delete_existing_access_token
+          authorizations = basic_client.authorizations(headers: two_factor_headers)
+          authorization = authorizations.find { |a| a[:note] == token_name }
+          return unless authorization
+
+          basic_client.delete_authorization(authorization[:id], headers: two_factor_headers)
         end
 
         def basic_client
@@ -60,11 +66,13 @@ module RooOnRails
         end
 
         def two_factor_headers
-          basic_client.user # idempotent call just to check access
-          {}
-        rescue Octokit::OneTimePasswordRequired
-          otp = ask 'Enter your GitHub 2FA code:'
-          { 'X-GitHub-OTP' => otp }
+          @two_factor_headers ||= begin
+            basic_client.user # idempotent call just to check access
+            {}
+          rescue Octokit::OneTimePasswordRequired
+            otp = ask 'Enter your GitHub 2FA code:'
+            { 'X-GitHub-OTP' => otp }
+          end
         end
 
         def token_name
