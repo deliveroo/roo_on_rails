@@ -12,37 +12,33 @@ module RooOnRails
         private_constant :TOKEN_FILE
 
         def intro
-          'Obtaining GitHub access token...'
+          'Obtaining GitHub auth token...'
         end
 
         def call
-          fail! 'no token found' unless File.exist?(TOKEN_FILE)
+          token = File.exist?(TOKEN_FILE) && File.read(TOKEN_FILE)
+          fail! 'no token found' unless token && !token.empty?
 
-          token = File.read(TOKEN_FILE)
-
-          puts token
-          final_fail! 'No token!' if token.nil? || token.empty?
-
-          # status, token = shell.run 'heroku auth:token'
-          # fail! 'could not get a token' unless status
-
-          # context.heroku!.api_client = Octokit.connect_oauth(token.strip)
-          # pass "connected to GitHub's API"
+          oauth_client = Octokit::Client.new(access_token: token)
+          oauth_client.user
+          context.github!.api_client = oauth_client
+          pass "connected to GitHub's API"
+        rescue Octokit::Error => e
+          final_fail! "#{e.class}: #{e.message}"
         end
 
         def fix
           token = create_access_token
-
           FileUtils.mkpath(File.dirname(TOKEN_FILE))
           File.write(TOKEN_FILE, token)
         rescue Octokit::Error => e
-          final_fail! e.message
+          final_fail! "#{e.class}: #{e.message}"
         end
 
         private
 
         def create_access_token
-          result = client.create_authorization(
+          result = basic_client.create_authorization(
             scopes: %w(repo),
             note: token_name,
             note_url: 'https://github.com/deliveroo/roo_on_rails',
@@ -54,8 +50,17 @@ module RooOnRails
           final_fail! "Please delete '#{token_name}' from https://github.com/settings/tokens"
         end
 
+        def basic_client
+          @basic_client ||= begin
+            username = ask 'Enter your GitHub username:'
+            password = ask 'Enter your GitHub password (typing will be hidden):', echo: false
+            say # line break after non-echoed password
+            Octokit::Client.new(login: username, password: password)
+          end
+        end
+
         def two_factor_headers
-          client.user
+          basic_client.user # idempotent call just to check access
           {}
         rescue Octokit::OneTimePasswordRequired
           otp = ask 'Enter your GitHub 2FA code:'
@@ -64,15 +69,6 @@ module RooOnRails
 
         def token_name
           "Roo on Rails @ #{Socket.gethostname}"
-        end
-
-        def client
-          @client ||= begin
-            username = ask 'Enter your GitHub username:'
-            password = ask 'Enter your GitHub password (typing will be hidden):', echo: false
-            say # line break after non-echoed password
-            Octokit::Client.new(login: username, password: password)
-          end
         end
       end
     end
