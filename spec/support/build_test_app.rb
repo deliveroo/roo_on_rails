@@ -16,11 +16,16 @@ module ROR
 
       def shell_run(command)
         say_status 'running', command.gsub(Dir.pwd, '$PWD')
-        %x{#{command}}
+        output = %x{#{command}}
         raise 'command failed' unless $?.success?
+        output
       end
 
-      def ensure_scaffold
+      def rails_command(command)
+        shell_run "cd #{SCAFFOLD_DIR} && rails #{command}"
+      end
+
+      def ensure_scaffold(keep_scaffold_directory = false)
         return self if SCAFFOLD_PATH.exist?
         SCAFFOLD_DIR.rmtree if SCAFFOLD_DIR.exist?
         TEST_DIR.mkpath
@@ -39,8 +44,8 @@ module ROR
           shell_run "cd #{SCAFFOLD_DIR} && bundle install --path=#{BUNDLE_CACHE}"
         end
 
+        SCAFFOLD_DIR.rmtree unless keep_scaffold_directory
         shell_run "tar -C #{SCAFFOLD_DIR} -cf #{SCAFFOLD_PATH} ."
-        SCAFFOLD_DIR.rmtree # make this conditional so results can be inspected
         self
       end
 
@@ -67,10 +72,11 @@ module ROR
       let(:app_id) { '%s.%s' % [Time.now.strftime('%F.%H%M%S'), SecureRandom.hex(4)] }
       let(:app_path) { TEST_DIR.join(app_id) }
       let(:app_helper) { Helper.new }
+      let(:app_options) { }
 
 
       before do
-        app_helper.ensure_scaffold.unpack_scaffold_at(app_path)
+        app_helper.ensure_scaffold(app_options).unpack_scaffold_at(app_path)
       end
 
       after do
