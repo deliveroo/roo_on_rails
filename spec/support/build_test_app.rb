@@ -28,6 +28,7 @@ module ROR
         shell_run "rails new #{SCAFFOLD_DIR} #{RAILS_NEW_OPTIONS}"
 
         append_to_file SCAFFOLD_DIR.join('Gemfile'), <<~EOF
+          gem 'puma', '~> 3.0'
           gem 'roo_on_rails', path: '../..'
         EOF
 
