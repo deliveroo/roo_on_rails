@@ -5,3 +5,4 @@ gemspec
 
 gem 'guard'
 gem 'guard-rspec'
+gem 'appraisal'

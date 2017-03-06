@@ -32,13 +32,13 @@ module ROR
 
         shell_run "rails new #{SCAFFOLD_DIR} #{RAILS_NEW_OPTIONS}"
 
-        append_to_file SCAFFOLD_DIR.join('Gemfile'), <<~EOF
+        append_to_file SCAFFOLD_DIR.join('Gemfile'), %{
+          gem 'puma', '~> 3.0'
           gem 'roo_on_rails', path: '../..'
-        EOF
+        }
 
-        create_file SCAFFOLD_DIR.join('.env'), <<~EOF
-          NEW_RELIC_LICENSE_KEY=dead-0000-beef
-        EOF
+        create_file SCAFFOLD_DIR.join('.env'),
+          'NEW_RELIC_LICENSE_KEY=dead-0000-beef'
 
         Bundler.with_clean_env do
           shell_run "cd #{SCAFFOLD_DIR} && bundle install --path=#{BUNDLE_CACHE}"
