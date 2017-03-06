@@ -6,8 +6,8 @@ module RooOnRails
         require "rack/timeout/base"
         require "roo_on_rails/rack/safe_timeouts"
 
-        ::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 0).to_i
-        ::Rack::Timeout.wait_timeout = ENV.fetch('RACK_WAIT_TIMEOUT', 0).to_i
+        ::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i
+        ::Rack::Timeout.wait_timeout = ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
         ::Rack::Timeout::Logger.level = Logger::WARN
 
         Rails.application.config.middleware.insert_before(
