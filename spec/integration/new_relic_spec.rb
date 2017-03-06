@@ -69,9 +69,9 @@ describe 'New Relic integration' do
     %w[. ./config].each do |path|
       context "in directory #{path}" do
         before do
-          app_helper.create_file app_path.join(path).join('newrelic.yml'), <<~EOF
+          app_helper.create_file app_path.join(path).join('newrelic.yml'), %{
             # fake new relic config file
-          EOF
+          }
         end
       
         include_examples 'abort early', /newrelic.yml detected/
