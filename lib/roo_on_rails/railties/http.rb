@@ -22,7 +22,7 @@ module RooOnRails
           RooOnRails::Rack::SafeTimeouts
         )
 
-        app.config.middleware.insert_before(::Rack::Sendfile, ::Rack::Deflater)
+        app.config.middleware.use ::Rack::Deflater
 
         app.config.use_ssl = true unless Rails.env.test?
       end
