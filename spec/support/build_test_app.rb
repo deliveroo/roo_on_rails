@@ -21,8 +21,8 @@ module ROR
         output
       end
 
-      def rails_command(command)
-        shell_run "cd #{SCAFFOLD_DIR} && rails #{command}"
+      def rake_command(command)
+        shell_run "cd #{SCAFFOLD_DIR} && rake #{command}"
       end
 
       def ensure_scaffold(keep_scaffold_directory = false)

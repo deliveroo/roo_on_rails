@@ -7,7 +7,7 @@ describe 'Http rack setup' do
   before { app.wait_start }
 
   context 'When booting' do
-    let(:middleware) { app_helper.rails_command('middleware') }
+    let(:middleware) { app_helper.rake_command('middleware') }
     it 'inserts rack timeout into the middleware stack' do
       expect(middleware).to include 'Rack::Timeout'
     end
