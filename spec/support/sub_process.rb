@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'timeout'
+
 
 # turn this on to get verbose tests
 VERBOSE = ENV.fetch('VERBOSE_ACCEPTANCE_TESTS', 'NO') == 'YES'
