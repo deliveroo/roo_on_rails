@@ -6,6 +6,7 @@ PATH
       hashie (~> 3.4)
       newrelic_rpm (~> 3.17)
       platform-api (~> 0.8)
+      rack-timeout
       rails (>= 3.2.22, < 5.1)
 
 GEM
@@ -70,12 +71,10 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hashie (3.5.5)
-    heroics (0.0.17)
+    heroics (0.0.21)
       erubis (~> 2.0)
       excon
-      moneta
       multi_json (>= 1.9.2)
-      netrc
     hike (1.2.3)
     i18n (0.8.1)
     journey (1.0.4)
@@ -90,10 +89,8 @@ GEM
       treetop (~> 1.4.8)
     method_source (0.8.2)
     mime-types (1.25.1)
-    moneta (0.8.1)
     multi_json (1.12.1)
     nenv (0.3.0)
-    netrc (0.11.0)
     newrelic_rpm (3.18.1.330)
     notiffany (0.1.1)
       nenv (~> 0.1)
@@ -115,6 +112,7 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-timeout (0.4.2)
     rails (3.2.22.5)
       actionmailer (= 3.2.22.5)
       actionpack (= 3.2.22.5)
@@ -180,4 +178,4 @@ DEPENDENCIES
   thor (~> 0.19)
 
 BUNDLED WITH
-   1.14.5
+   1.14.6
