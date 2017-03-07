@@ -1,5 +1,5 @@
 PATH
-  remote: ..
+  remote: ../
   specs:
     roo_on_rails (1.1.0)
       dotenv-rails (~> 2.1)
