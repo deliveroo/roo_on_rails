@@ -53,7 +53,6 @@ module RooOnRails
 
         def ensure_coverage_status_check!(contexts)
           return if (contexts & coverage_contexts) == coverage_contexts
-          binding.pry
           fail! 'no code coverage status checks'
         end
 
