@@ -13,9 +13,8 @@ module RooOnRails
         end
 
         def call
-          ensure_strict!
-          ensure_ci!
-          ensure_reviews!
+          ensure_status_checks!
+          ensure_code_reviews!
           ensure_no_push!
           pass 'branch protection is sufficient'
         end
@@ -34,17 +33,15 @@ module RooOnRails
 
         private
 
-        def ensure_strict!
+        def ensure_status_checks!
           status_checks = protection[:required_status_checks] || {}
           fail! 'status checks do not include admins' unless status_checks[:include_admins]
-        end
 
-        def ensure_ci!
-          contexts = protection.dig(:required_status_checks, :contexts) || []
+          contexts = status_checks[:contexts] || []
           fail! 'CI missing from status checks' unless contexts.include?(ci_context)
         end
 
-        def ensure_reviews!
+        def ensure_code_reviews!
           reviews = protection[:required_pull_request_reviews] || {}
           fail! 'code reviews do not include admins' unless reviews[:include_admins]
         end
