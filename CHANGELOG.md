@@ -1,10 +1,10 @@
 # Unreleased
 
-Features: 
+Features:
 
  - Add Rack::Timeout
- - Configures SSL for rails
- - Add Rack::Deflater 
+ - Add Rack::SslEnforcer
+ - Add Rack::Deflater
 
 # v1.1.0 (2017-02-20)
 
@@ -23,4 +23,3 @@ Bug fixes:
 Features:
 
 - Automatic New Relic configuration, with safeguards
-

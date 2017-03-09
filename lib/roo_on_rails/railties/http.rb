@@ -4,13 +4,15 @@ module RooOnRails
       initializer 'roo_on_rails.http' do |app|
         $stderr.puts 'initializer roo_on_rails.http'
         require "rack/timeout/base"
+        require "rack/ssl-enforcer"
+
         require "roo_on_rails/rack/safe_timeouts"
 
         ::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i
         ::Rack::Timeout.wait_timeout = ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
         ::Rack::Timeout::Logger.level = Logger::WARN
 
-        Rails.application.config.middleware.insert_before(
+        app.config.middleware.insert_before(
           ::Rack::Runtime,
           ::Rack::Timeout
         )
@@ -24,7 +26,11 @@ module RooOnRails
 
         app.config.middleware.use ::Rack::Deflater
 
-        app.config.use_ssl = true unless Rails.env.test?
+
+        app.config.middleware.insert_before(
+          ActionDispatch::Cookies,
+          ::Rack::SslEnforcer
+        )
       end
     end
   end

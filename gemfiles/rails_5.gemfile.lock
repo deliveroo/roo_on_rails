@@ -6,6 +6,7 @@ PATH
       hashie (~> 3.4)
       newrelic_rpm (~> 3.17)
       platform-api (~> 0.8)
+      rack-ssl-enforcer
       rack-timeout
       rails (>= 3.2.22, < 5.1)
 
@@ -123,6 +124,7 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     rack (2.0.1)
+    rack-ssl-enforcer (0.2.9)
     rack-test (0.6.3)
       rack (>= 1.0)
     rack-timeout (0.4.2)

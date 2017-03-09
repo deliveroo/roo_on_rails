@@ -17,5 +17,8 @@ describe 'Http rack setup' do
     it 'inserts safe timeout into the middleware stack' do
       expect(middleware).to include 'Rack::Deflater'
     end
+    it 'inserts rack enforcer into the middleware stack' do
+      expect(middleware).to include 'Rack::SslEnforcer'
+    end
   end
 end
