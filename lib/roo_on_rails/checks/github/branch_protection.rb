@@ -38,7 +38,23 @@ module RooOnRails
           fail! 'status checks do not include admins' unless status_checks[:include_admins]
 
           contexts = status_checks[:contexts] || []
-          fail! 'CI missing from status checks' unless contexts.include?(ci_context)
+          ensure_ci_status_check!(contexts)
+          ensure_analysis_status_check!(contexts)
+          ensure_coverage_status_check!(contexts)
+        end
+
+        def ensure_ci_status_check!(contexts)
+          fail! 'no CI status check' unless contexts.include?(ci_context)
+        end
+
+        def ensure_analysis_status_check!(contexts)
+          fail! 'no code analysis status check' unless contexts.include?(analysis_context)
+        end
+
+        def ensure_coverage_status_check!(contexts)
+          return if (contexts & coverage_contexts) == coverage_contexts
+          binding.pry
+          fail! 'no code coverage status checks'
         end
 
         def ensure_code_reviews!
@@ -57,7 +73,11 @@ module RooOnRails
           status_checks = protection[:required_status_checks] || {}
           status_checks.merge(
             include_admins: true,
-            contexts: (status_checks[:contexts] || []) | [ci_context]
+            contexts: (status_checks[:contexts] || []) | [
+              ci_context,
+              analysis_context,
+              *coverage_contexts
+            ]
           )
         end
 
@@ -75,6 +95,14 @@ module RooOnRails
           if Pathname.new('.travis.yml').exist? then 'continuous-integration/travis-ci'
           else 'ci/circle-ci'
           end
+        end
+
+        def analysis_context
+          'codeclimate'
+        end
+
+        def coverage_contexts
+          %w(codecov/patch codecov/project)
         end
 
         def protection
