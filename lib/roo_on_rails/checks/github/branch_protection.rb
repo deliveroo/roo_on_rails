@@ -8,12 +8,6 @@ module RooOnRails
       class BranchProtection < Base
         requires GitHub::Token, Git::Origin
 
-        CI_CONTEXTS = %w(
-          ci/circle-ci
-          continuous-integration/travis-ci
-        ).freeze
-        private_constant :CI_CONTEXTS
-
         def intro
           'Checking if GitHub master branch is protected...'
         end
@@ -23,30 +17,17 @@ module RooOnRails
           ensure_ci!
           ensure_reviews!
           ensure_no_push!
-          pass 'branch protection enabled'
+          pass 'branch protection is sufficient'
         end
 
         def fix
-          old_status_checks = protection[:required_status_checks] || {}
-          new_status_checks = old_status_checks.merge(
-            strict: true,
-            include_admins: true,
-            contexts: (old_status_checks[:contexts] || []) | [ci_context]
-          )
-
-          old_reviews = protection[:required_pull_request_reviews] || {}
-          new_reviews = old_reviews.merge(include_admins: true)
-
-          old_restrictions = protection[:restrictions] || {}
-          new_restrictions = old_restrictions.merge(users: [], teams: [])
-
           client.protect_branch(
             repo,
             branch,
             options.merge(
-              required_status_checks: new_status_checks,
-              required_pull_request_reviews: new_reviews,
-              restrictions: new_restrictions
+              required_status_checks: fixed_required_status_checks,
+              required_pull_request_reviews: fixed_pull_request_reviews,
+              restrictions: fixed_restrictions
             )
           )
         end
@@ -55,13 +36,12 @@ module RooOnRails
 
         def ensure_strict!
           status_checks = protection[:required_status_checks] || {}
-          fail! 'branch protection is not strict' unless status_checks[:strict]
-          fail! 'branch protection does not include admins' unless status_checks[:include_admins]
+          fail! 'status checks do not include admins' unless status_checks[:include_admins]
         end
 
         def ensure_ci!
           contexts = protection.dig(:required_status_checks, :contexts) || []
-          fail! 'ci branch protection missing' unless (CI_CONTEXTS & contexts).any?
+          fail! 'CI missing from status checks' unless contexts.include?(ci_context)
         end
 
         def ensure_reviews!
@@ -70,9 +50,28 @@ module RooOnRails
         end
 
         def ensure_no_push!
-          users = protection.dig(:restrictions, :users) || []
-          teams = protection.dig(:restrictions, :teams) || []
+          users = protection.dig(:restrictions, :users)
+          teams = protection.dig(:restrictions, :teams)
+          fail! 'push restrictions should be enabled' if users.nil? || teams.nil?
           fail! 'no users or teams should be allowed to push to master' if users.any? || teams.any?
+        end
+
+        def fixed_required_status_checks
+          status_checks = protection[:required_status_checks] || {}
+          status_checks.merge(
+            include_admins: true,
+            contexts: (status_checks[:contexts] || []) | [ci_context]
+          )
+        end
+
+        def fixed_pull_request_reviews
+          reviews = protection[:required_pull_request_reviews] || {}
+          reviews.merge(include_admins: true)
+        end
+
+        def fixed_restrictions
+          restrictions = protection[:restrictions] || {}
+          restrictions.merge(users: [], teams: [])
         end
 
         def ci_context
