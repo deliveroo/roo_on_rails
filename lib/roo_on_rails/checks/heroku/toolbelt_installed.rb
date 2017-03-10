@@ -5,11 +5,11 @@ module RooOnRails
     module Heroku
       class ToolbeltInstalled < Base
         def intro
-          "Checking if the Heroku Toolbelt is installed..."
+          'Checking if the Heroku Toolbelt is installed...'
         end
 
         def call
-          status, path = shell.run "which heroku"
+          status, path = shell.run 'which heroku'
           if status
             pass "found #{bold path.strip} binary"
           else
@@ -20,4 +20,3 @@ module RooOnRails
     end
   end
 end
-

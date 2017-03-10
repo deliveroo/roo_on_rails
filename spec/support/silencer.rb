@@ -1,5 +1,5 @@
 module Kernel
-  module_function
+  extend self
 
   # Taken from Rails 4. Not thread safe.
   # File activesupport/lib/active_support/core_ext/kernel/reporting.rb, line 41

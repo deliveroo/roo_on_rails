@@ -9,14 +9,14 @@ describe 'New Relic integration' do
   shared_examples 'loads' do
     it 'loads New Relic' do
       app.wait_start
-      expect(app).to have_log /NewRelic.*Finished instrumentation/
+      expect(app).to have_log(/NewRelic.*Finished instrumentation/)
     end
   end
 
   shared_examples 'does not load' do
     it 'does not load New Relic' do
       app.wait_start
-      expect(app).not_to have_log /NewRelic.*Finished instrumentation/
+      expect(app).not_to have_log(/NewRelic.*Finished instrumentation/)
     end
 
     it 'does not abort' do
@@ -27,7 +27,7 @@ describe 'New Relic integration' do
 
   shared_examples 'abort early' do |message|
     it 'fails to load' do
-      app.wait_log /Exiting/
+      app.wait_log(/Exiting/)
       app.stop
       expect(app.status).not_to be_success
     end
@@ -37,7 +37,6 @@ describe 'New Relic integration' do
     end
   end
 
-
   context 'with correct setup' do
     include_examples 'loads'
   end
@@ -46,7 +45,7 @@ describe 'New Relic integration' do
     before do
       app_helper.comment_lines app_path.join('.env'), /NEW_RELIC_LICENSE_KEY/
     end
-  
+
     context 'in the test environment' do
       let(:app_env) { 'test' }
 
@@ -64,16 +63,15 @@ describe 'New Relic integration' do
     end
   end
 
-
   context 'when a newrelic.yml exists' do
-    %w[. ./config].each do |path|
+    %w(. ./config).each do |path|
       context "in directory #{path}" do
         before do
-          app_helper.create_file app_path.join(path).join('newrelic.yml'), %{
+          app_helper.create_file app_path.join(path).join('newrelic.yml'), %(
             # fake new relic config file
-          }
+          )
         end
-      
+
         include_examples 'abort early', /newrelic.yml detected/
       end
     end

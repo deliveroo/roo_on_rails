@@ -4,7 +4,6 @@
 #
 require 'yaml'
 
-
 RUBIES = YAML.load_file('.travis.yml')['rvm']
 APPRAISALS = `appraisal list`.strip.split(/\s+/)
 
@@ -14,7 +13,7 @@ RUBIES.each do |ruby|
   system 'rbenv version'
   system 'rbenv exec ruby -v'
   system 'rbenv exec bundle check || rbenv exec bundle install'
-  system "rbenv exec appraisal install"
+  system 'rbenv exec appraisal install'
 end
 
 # tests

@@ -9,15 +9,15 @@ module ROR
     TEST_DIR = ROOT.join('tmp')
     SCAFFOLD_DIR = ROOT.join('vendor/base_test_app')
     SCAFFOLD_PATH = ROOT.join('vendor/base_test_app.tar')
-    RAILS_NEW_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'
+    RAILS_NEW_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'.freeze
 
     class Helper < Thor::Group
       include Thor::Actions
 
       def shell_run(command)
         say_status 'running', command.gsub(Dir.pwd, '$PWD')
-        %x{#{command}}
-        raise 'command failed' unless $?.success?
+        `#{command}`
+        raise 'command failed' unless $CHILD_STATUS.success?
       end
 
       def ensure_scaffold
@@ -27,13 +27,13 @@ module ROR
 
         shell_run "rails new #{SCAFFOLD_DIR} #{RAILS_NEW_OPTIONS}"
 
-        append_to_file SCAFFOLD_DIR.join('Gemfile'), %{
+        append_to_file SCAFFOLD_DIR.join('Gemfile'), %(
           gem 'puma', '~> 3.0'
           gem 'roo_on_rails', path: '../..'
-        }
+        )
 
         create_file SCAFFOLD_DIR.join('.env'),
-          'NEW_RELIC_LICENSE_KEY=dead-0000-beef'
+                    'NEW_RELIC_LICENSE_KEY=dead-0000-beef'
 
         Bundler.with_clean_env do
           shell_run "cd #{SCAFFOLD_DIR} && bundle install --path=#{BUNDLE_CACHE}"
@@ -62,12 +62,10 @@ module ROR
       end
     end
 
-
     def build_test_app
-      let(:app_id) { '%s.%s' % [Time.now.strftime('%F.%H%M%S'), SecureRandom.hex(4)] }
+      let(:app_id) { "#{Time.now.strftime('%F.%H%M%S')}.#{SecureRandom.hex(4)}" }
       let(:app_path) { TEST_DIR.join(app_id) }
       let(:app_helper) { Helper.new }
-
 
       before do
         app_helper.ensure_scaffold.unpack_scaffold_at(app_path)
@@ -79,7 +77,6 @@ module ROR
     end
   end
 end
-
 
 RSpec.configure do |config|
   config.extend ROR::BuildTestApp

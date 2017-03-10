@@ -11,12 +11,12 @@ module RooOnRails
         requires Login
 
         def intro
-          "Obtaining Heroku auth token..."
+          'Obtaining Heroku auth token...'
         end
 
         def call
-          status, token = shell.run "heroku auth:token"
-          fail! "could not get a token" unless status
+          status, token = shell.run 'heroku auth:token'
+          fail! 'could not get a token' unless status
 
           context.heroku!.api_client = PlatformAPI.connect_oauth(token.strip)
           pass "connected to Heroku's API"

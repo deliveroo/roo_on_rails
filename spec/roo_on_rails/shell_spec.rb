@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'roo_on_rails/shell'
 
 describe RooOnRails::Shell do
-  
   describe '#run' do
     let(:command) { 'echo 42 ; echo 43 >&2' }
     let(:result) { subject.run(command) }
@@ -24,7 +23,6 @@ describe RooOnRails::Shell do
     end
   end
 
-
   describe 'run!' do
     let(:perform) { subject.run!(command) }
 
@@ -38,7 +36,6 @@ describe RooOnRails::Shell do
       it { expect { perform }.to raise_error(described_class::CommandFailed) }
     end
   end
-
 
   describe 'run?' do
     let(:result) { subject.run?(command) }

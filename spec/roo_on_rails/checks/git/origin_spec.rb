@@ -6,7 +6,7 @@ describe RooOnRails::Checks::Git::Origin, type: :check do
   context 'when the URL is valid' do
     before do
       shell.stub 'git config remote.origin.url',
-        output: "git@github.com:deliveroo/roo_on_rails.git\n"
+                 output: "git@github.com:deliveroo/roo_on_rails.git\n"
     end
 
     it_expects_check_to_pass

@@ -7,7 +7,7 @@ module RooOnRails
   module Checks
     module Heroku
       # Check if a corresponding app exists on Heroku (for a given environment)
-      # 
+      #
       # Input context
       # - git_repo: the name of the repository
       # - heroku.api_client: a connected PlatformAPI client
@@ -26,12 +26,11 @@ module RooOnRails
           all_apps = client.app.list.map { |a| a['name'] }
           matches = all_apps.select { |a| candidates.include?(a) }
 
-          if matches.empty?
-            fail! "no apps with matching names detected"
-          end
+          fail! 'no apps with matching names detected' if matches.empty?
 
           if matches.many?
-            final_fail! "multiple matching apps detected: #{candidates.map { |c| bold c}.join(', ')}"
+            app_names = candidates.map { |c| bold c }.join(', ')
+            final_fail! "multiple matching apps detected: #{app_names}"
           end
 
           context.heroku.app![env] = matches.first
@@ -48,12 +47,8 @@ module RooOnRails
           [
             ['deliveroo', 'roo', nil],
             [name_stem],
-            [env],
-          ].tap { |a|
-            a.replace a.first.product(*a[1..-1])
-          }.map { |c|
-            c.compact.join('-')
-          }
+            [env]
+          ].tap { |a| a.replace a.first.product(*a[1..-1]) }.map { |c| c.compact.join('-') }
         end
 
         def client

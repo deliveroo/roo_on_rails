@@ -16,7 +16,15 @@ module SpecSupportCheck
   module Dsl
     def it_expects_check_to_fail
       it { expect { perform }.to raise_error(RooOnRails::Checks::Failure) }
-      it { expect { perform rescue nil }.not_to change { context } }
+      it do
+        expect do
+          begin
+                   perform
+                 rescue
+                   nil
+                 end
+        end.not_to change { context }
+      end
     end
 
     def it_expects_check_to_pass

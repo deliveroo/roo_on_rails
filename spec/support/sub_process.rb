@@ -1,7 +1,6 @@
 require 'spec_helper'
 require 'timeout'
 
-
 # turn this on to get verbose tests
 VERBOSE = ENV.fetch('VERBOSE_ACCEPTANCE_TESTS', 'NO') == 'YES'
 
@@ -27,12 +26,12 @@ module ROR
       @loglines = []
       @status = nil
       rd, wr = IO.pipe
-      if @pid = fork
+      if (@pid = fork)
         # parent
         wr.close
         @reader = Thread.new { _read_log(rd) }
       else
-        _log "forked (##{$$})"
+        _log "forked (##{$PROCESS_ID})"
         # child
         rd.close
         $stdin.reopen('/dev/null')
@@ -57,9 +56,9 @@ module ROR
       _log "stopping (##{@pid})"
       Process.kill('TERM', @pid)
 
-      Timeout::timeout(10) do
+      Timeout.timeout(10) do
         sleep(10e-3) until Process.wait(@pid, Process::WNOHANG)
-        @status = $?
+        @status = $CHILD_STATUS
       end
 
       @pid = nil
@@ -80,7 +79,7 @@ module ROR
     # the process has stoped cleanly
     def wait_stop
       return self unless @stop_regexp && @pid
-      _log "waiting for stop marker"
+      _log 'waiting for stop marker'
       wait_log @stop_regexp
       _log 'stopped'
       self
@@ -93,7 +92,7 @@ module ROR
         _log 'wait after SIGKILL'
         Process.wait(@pid)
       end
-      @reader.join if @reader
+      @reader&.join
       @pid = @reader = nil
       self
     end
@@ -101,7 +100,7 @@ module ROR
     # wait until a log line is seen that matches `regexp`, up to a timeout
     def wait_log(regexp)
       cursor = 0
-      Timeout::timeout(10) do
+      Timeout.timeout(10) do
         loop do
           line = @loglines[cursor]
           sleep(10e-3) if line.nil?
@@ -119,7 +118,7 @@ module ROR
     private
 
     def _read_log(io)
-      while line = io.gets
+      while (line = io.gets)
         if VERBOSE
           $stderr.write "\t->> #{line}"
           $stderr.flush
@@ -134,4 +133,3 @@ module ROR
     end
   end
 end
-

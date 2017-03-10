@@ -15,7 +15,6 @@ module RooOnRails
         dependencies.any? ? @requires.merge(dependencies) : @requires
       end
 
-
       def initialize(options = {})
         @options = options.dup
         @fix     = @options.delete(:fix) { false }
@@ -29,11 +28,11 @@ module RooOnRails
         call
         true
       rescue Failure => e
-        raise if e === FinalFailure
+        raise if e.is_a?(FinalFailure)
         raise unless @fix
-        say "\t· attempting to fix", %i[yellow]
+        say "\t· attempting to fix", %i(yellow)
         fix
-        say "\t· re-checking", %i[yellow]
+        say "\t· re-checking", %i(yellow)
         call
       end
 
@@ -43,9 +42,9 @@ module RooOnRails
 
       # Returns prerequisite checks. Can be overriden.
       def dependencies
-        self.class.requires.map { |k|
+        self.class.requires.map do |k|
           k.new(fix: @fix, context: @context, shell: @shell, **@options)
-        }
+        end
       end
 
       def intro

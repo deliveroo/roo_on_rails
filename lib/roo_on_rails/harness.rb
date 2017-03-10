@@ -14,14 +14,14 @@ module RooOnRails
     def run
       [
         Checks::Environment.new(env: 'staging',    fix: @try_fix, context: @context),
-        Checks::Environment.new(env: 'production', fix: @try_fix, context: @context),
+        Checks::Environment.new(env: 'production', fix: @try_fix, context: @context)
       ].each(&:run)
       self
     rescue Shell::CommandFailed
-      say 'A command failed to run, aborting', %i[bold red]
+      say 'A command failed to run, aborting', %i(bold red)
       exit 2
     rescue Checks::Failure
-      say 'A check failed, exiting', %i[bold red]
+      say 'A check failed, exiting', %i(bold red)
       exit 1
     end
   end

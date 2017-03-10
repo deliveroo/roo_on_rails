@@ -4,4 +4,3 @@ module RooOnRails
     FinalFailure = Class.new(Failure)
   end
 end
-

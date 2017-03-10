@@ -18,17 +18,15 @@ module RooOnRails
 
       license_key = ENV['NEW_RELIC_LICENSE_KEY']
 
-      if %w[ test development ].exclude?(Rails.env.to_s) and license_key == 'override-me'
+      if %w(test development).exclude?(Rails.env.to_s) && (license_key == 'override-me')
         abort 'Aborting: NEW_RELIC_LICENSE_KEY must be set in production environments'
       end
-       
-      if license_key.nil?
-        abort 'Aborting: NEW_RELIC_LICENSE_KEY is required'
-      end
 
-      path = %w[newrelic.yml config/newrelic.yml].map { |p|
-        Pathname.new(p) 
-      }.find(&:exist?)
+      abort 'Aborting: NEW_RELIC_LICENSE_KEY is required' if license_key.nil?
+
+      path = %w(newrelic.yml config/newrelic.yml).map do |p|
+        Pathname.new(p)
+      end.find(&:exist?)
       if path
         abort "Aborting: newrelic.yml detected in '#{path.parent.realpath}', should not exist"
       end
@@ -38,4 +36,3 @@ module RooOnRails
     end
   end
 end
-
