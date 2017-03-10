@@ -18,7 +18,7 @@ describe RooOnRails::Checks::GitHub::Token, type: :check do
 
         it_expects_check_to_pass
         it 'should set the github.api_client context property' do
-          expect { perform }.to change { context.github&.api_client }
+          expect { perform }.to change { context.github && context.github.api_client }
             .from(nil)
             .to(kind_of(Octokit::Client))
         end
