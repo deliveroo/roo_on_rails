@@ -92,7 +92,7 @@ module ROR
         _log 'wait after SIGKILL'
         Process.wait(@pid)
       end
-      @reader&.join
+      @reader.join if @reader
       @pid = @reader = nil
       self
     end
