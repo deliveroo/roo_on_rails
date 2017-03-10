@@ -1,10 +1,12 @@
 require 'roo_on_rails/checks/env_specific'
+require 'roo_on_rails/checks/github/branch_protection'
 require 'roo_on_rails/checks/heroku/app_exists'
 require 'roo_on_rails/checks/heroku/preboot_enabled'
 
 module RooOnRails
   module Checks
     class Environment < EnvSpecific
+      requires GitHub::BranchProtection
       requires Heroku::PrebootEnabled
 
       def call
@@ -19,4 +21,3 @@ module RooOnRails
     end
   end
 end
-
