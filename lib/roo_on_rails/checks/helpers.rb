@@ -13,7 +13,7 @@ module RooOnRails
       def self.included(by)
         by.class_eval do
           extend Forwardable
-          delegate %i[say set_color] => :'RooOnRails::Checks::Helpers::Receiver.instance'
+          delegate %i[ask say set_color] => :'RooOnRails::Checks::Helpers::Receiver.instance'
         end
       end
 
