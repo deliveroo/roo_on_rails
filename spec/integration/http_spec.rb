@@ -14,8 +14,15 @@ describe 'Http rack setup' do
     it 'inserts safe timeout into the middleware stack' do
       expect(middleware).to include 'RooOnRails::Rack::SafeTimeouts'
     end
-    it 'inserts safe timeout into the middleware stack' do
+    it 'inserts deflate into the middleware stack' do
       expect(middleware).to include 'Rack::Deflater'
+    end
+    context 'if ROO_ON_RAILS_RACK_DEFLATE is set' do
+      before { ENV['ROO_ON_RAILS_RACK_DEFLATE'] = 'NO' }
+      after { ENV['ROO_ON_RAILS_RACK_DEFLATE'] = nil }
+      it 'does not insert deflate into the middleware stack' do
+        expect(middleware).not_to include 'Rack::Deflater'
+      end
     end
     it 'inserts rack enforcer into the middleware stack' do
       expect(middleware).to include 'Rack::SslEnforcer'

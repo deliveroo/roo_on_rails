@@ -24,7 +24,9 @@ module RooOnRails
           RooOnRails::Rack::SafeTimeouts
         )
 
-        app.config.middleware.use ::Rack::Deflater
+        if ENV.fetch('ROO_ON_RAILS_RACK_DEFLATE', 'YES').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
+          app.config.middleware.use ::Rack::Deflater
+        end
 
         app.config.middleware.insert_before(
           ActionDispatch::Cookies,
