@@ -17,7 +17,7 @@ describe 'Http rack setup' do
     it 'inserts deflate into the middleware stack' do
       expect(middleware).to include 'Rack::Deflater'
     end
-    context 'if ROO_ON_RAILS_RACK_DEFLATE is set' do
+    context 'if ROO_ON_RAILS_RACK_DEFLATE is set to NO' do
       before { ENV['ROO_ON_RAILS_RACK_DEFLATE'] = 'NO' }
       after { ENV['ROO_ON_RAILS_RACK_DEFLATE'] = nil }
       it 'does not insert deflate into the middleware stack' do
