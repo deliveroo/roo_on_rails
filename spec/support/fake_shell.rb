@@ -15,4 +15,3 @@ class FakeShell < RooOnRails::Shell
     return [success, output]
   end
 end
-

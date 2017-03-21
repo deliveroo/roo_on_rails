@@ -95,6 +95,21 @@ We'll insert the following middlewares into the rails stack:
 2. `Rack::SslEnforcer`: enforces HTTPS.
 3. `Rack::Deflater`: compresses responses from the application, can be disabled with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 
+### Sidekiq
+
+Unless `SIDEKIQ_ENABLED` is set to false we'll check for the existance of sidekiq gems. Please ensure the following lines are included in your project Gemfile.
+
+```
+gem 'sidekiq-scheduler'
+gem 'sidekiq-unique-jobs'
+source 'https://gems.contribsys.com/' do
+  gem 'sidekiq-pro'
+end
+```
+
+Sidekiq pro requires some autentication to be installed. Please get the key from your Tech Lead (or password manager of choice).
+bundle config gems.contribsys.com ~sidekiq-pro-key~
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/deliveroo/roo_on_rails.

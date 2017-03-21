@@ -73,6 +73,7 @@ module ROR
       let(:app_path) { TEST_DIR.join(app_id) }
       let(:app_helper) { Helper.new }
       let(:app_options) { }
+      let(:scaffold_path) { SCAFFOLD_DIR }
 
 
       before do
