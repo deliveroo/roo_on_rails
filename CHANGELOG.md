@@ -1,3 +1,9 @@
+# HEAD
+
+Features:
+
+- Sets database statement timeout to 200ms by default (#10).
+
 # v1.2.0 (2017-03-21)
 
 Features:
