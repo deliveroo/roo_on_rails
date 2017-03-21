@@ -1,11 +1,13 @@
 PATH
-  remote: ..
+  remote: ../
   specs:
     roo_on_rails (1.1.0)
       dotenv-rails (~> 2.1)
       hashie (~> 3.4)
       newrelic_rpm (~> 3.17)
       platform-api (~> 0.8)
+      rack-ssl-enforcer
+      rack-timeout
       rails (>= 3.2.22, < 5.1)
 
 GEM
@@ -80,12 +82,10 @@ GEM
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
     hashie (3.5.5)
-    heroics (0.0.17)
+    heroics (0.0.21)
       erubis (~> 2.0)
       excon
-      moneta
       multi_json (>= 1.9.2)
-      netrc
     i18n (0.8.1)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -102,10 +102,8 @@ GEM
     mime-types-data (3.2016.0521)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
-    moneta (0.8.1)
     multi_json (1.12.1)
     nenv (0.3.0)
-    netrc (0.11.0)
     newrelic_rpm (3.18.1.330)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
@@ -122,8 +120,10 @@ GEM
       byebug (~> 9.0)
       pry (~> 0.10)
     rack (1.6.5)
+    rack-ssl-enforcer (0.2.9)
     rack-test (0.6.3)
       rack (>= 1.0)
+    rack-timeout (0.4.2)
     rails (4.2.8)
       actionmailer (= 4.2.8)
       actionpack (= 4.2.8)
@@ -196,4 +196,4 @@ DEPENDENCIES
   thor (~> 0.19)
 
 BUNDLED WITH
-   1.14.5
+   1.14.6

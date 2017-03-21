@@ -85,6 +85,16 @@ More documentation is available [directly from heroku](https://devcenter.heroku.
     }
   },
 ```
+::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i
+::Rack::Timeout.wait_timeout = ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
+
+### HTTP middlewares
+
+We'll insert the following middlewares into the rails stack:
+
+1. Rack::Timeout - sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT` (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise
+2. Rack::SslEnforcer - forces HTTPS
+3. Rack::Deflater - compresses responses from the application, can be disabled with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES')
 
 ## Contributing
 
@@ -94,4 +104,3 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/delive
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
