@@ -47,7 +47,8 @@ below.
 Running the `roo_on_rails` script currently checks for:
 
 - compliant Heroku app naming;
-- presence of the Heroku preboot flag.
+- presence of the Heroku preboot flag;
+- correct Github master branch protection.
 
 
 ### New Relic configuration
@@ -68,33 +69,31 @@ However if you have Heroku's [review apps](https://devcenter.heroku.com/articles
 More documentation is available [directly from heroku](https://devcenter.heroku.com/articles/github-integration-review-apps#inheriting-config-vars) but the block below has been helpful in other apps:
 
 ```json
-  "env": {
-    "NEW_RELIC_LICENSE_KEY": {
-      "description": "The New Relic licence key",
-      "required": true
-    },
-    "SECRET_KEY_BASE": {
-      "description": "A secret basis for the key which verifies the integrity of signed cookies.",
-      "generator": "secret"
-    },
-    "RACK_ENV": {
-      "description": "The name of the environment for Rack."
-    },
-    "RAILS_ENV": {
-      "description": "The name of the environment for Rails."
-    }
+"env": {
+  "NEW_RELIC_LICENSE_KEY": {
+    "description": "The New Relic licence key",
+    "required": true
   },
+  "SECRET_KEY_BASE": {
+    "description": "A secret basis for the key which verifies the integrity of signed cookies.",
+    "generator": "secret"
+  },
+  "RACK_ENV": {
+    "description": "The name of the environment for Rack."
+  },
+  "RAILS_ENV": {
+    "description": "The name of the environment for Rails."
+  }
+},
 ```
-::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i
-::Rack::Timeout.wait_timeout = ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
 
-### HTTP middlewares
+### Rack middleware
 
 We'll insert the following middlewares into the rails stack:
 
-1. Rack::Timeout - sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT` (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise
-2. Rack::SslEnforcer - forces HTTPS
-3. Rack::Deflater - compresses responses from the application, can be disabled with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES')
+1. `Rack::Timeout`: sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT` (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
+2. `Rack::SslEnforcer`: enforces HTTPS.
+3. `Rack::Deflater`: compresses responses from the application, can be disabled with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 
 ## Contributing
 
