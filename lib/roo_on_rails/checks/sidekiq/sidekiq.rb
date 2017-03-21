@@ -5,14 +5,14 @@ module RooOnRails
   module Checks
     module Sidekiq
       class Sidekiq < Base
-        WORKER_PROCFILE_LINE='worker: RAILS_MAX_THREADS=$SIDEKIQ_DB_POOL_SIZE DB_REAPING_FREQUENCY=$SIDEKIQ_DB_REAPING_FREQUENCY bundle exec sidekiq'
+        WORKER_PROCFILE_LINE = 'worker: RAILS_MAX_THREADS=$SIDEKIQ_DB_POOL_SIZE DB_REAPING_FREQUENCY=$SIDEKIQ_DB_REAPING_FREQUENCY bundle exec sidekiq'.freeze
 
         def intro
-          "Checking Sidekiq Setup..."
+          'Checking Sidekiq Setup...'
         end
 
         def call
-          unless ENV.fetch('SIDEKIQ_ENBALED', 'true').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
+          unless ENV.fetch('SIDEKIQ_ENBALED', 'true').to_s.match?(/\A(YES|TRUE|ON|1)\Z/i)
             pass 'SIDEKIQ_ENBALED is set to false'
             return
           end
@@ -23,14 +23,14 @@ module RooOnRails
         def check_for_sidekiq
           _, gems = shell.run 'bundle list | grep sidekiq'
           unless gems.include?('sidekiq')
-            fail! "Sidekiq is not installed, see the README: https://github.com/deliveroo/roo_on_rails#sidekiq"
+            fail! 'Sidekiq is not installed, see the README: https://github.com/deliveroo/roo_on_rails#sidekiq'
           end
         end
 
         def check_for_procfile
-          return if File.exists?('Procfile') && File.read('Procfile').include?('worker')
-          say "No Procfile with workers entry found. Adding one"
-          if File.exists?('Procfile')
+          return if File.exist?('Procfile') && File.read('Procfile').include?('worker')
+          say 'No Procfile with workers entry found. Adding one'
+          if File.exist?('Procfile')
             raise 'appending'
             append_to_file 'Procfile', "\n#{WORKER_PROCFILE_LINE}"
           else
