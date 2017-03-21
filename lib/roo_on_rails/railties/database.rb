@@ -4,7 +4,10 @@ module RooOnRails
       initializer 'roo_on_rails.database', after: 'active_record.initialize_database' do |_app|
         $stderr.puts 'initializer roo_on_rails.database'
 
-        ActiveRecord::Base.configurations[Rails.env]['timeout'] = ENV.fetch('DATABASE_TIMEOUT', 200)
+        config = ActiveRecord::Base.configurations[Rails.env]
+        config['variables'] ||= {}
+        config['variables']['statement_timeout'] = ENV.fetch('DATABASE_STATEMENT_TIMEOUT', 200)
+
         ActiveRecord::Base.establish_connection
       end
     end
