@@ -1,7 +1,7 @@
 module RooOnRails
   module Railties
     class Database < Rails::Railtie
-      initializer 'roo_on_rails.database', after: 'active_record.initialize_database' do |_app|
+      initializer 'roo_on_rails.database', after: 'active_record.initialize_database' do
         $stderr.puts 'initializer roo_on_rails.database'
 
         config = ActiveRecord::Base.configurations[Rails.env]

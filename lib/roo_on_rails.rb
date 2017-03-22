@@ -9,4 +9,5 @@ if defined?(Rails)
   require 'roo_on_rails/railties/new_relic'
   require 'roo_on_rails/railties/database'
   require 'roo_on_rails/railties/http'
+  require 'roo_on_rails/railties/rake_tasks'
 end

@@ -9,7 +9,7 @@ module ROR
     TEST_DIR = ROOT.join('tmp')
     SCAFFOLD_DIR = ROOT.join('vendor/base_test_app')
     SCAFFOLD_PATH = ROOT.join('vendor/base_test_app.tar')
-    RAILS_NEW_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'
+    RAILS_NEW_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle --database=postgresql'
 
     class Helper < Thor::Group
       include Thor::Actions
