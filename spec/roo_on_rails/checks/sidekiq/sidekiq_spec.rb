@@ -19,20 +19,24 @@ describe RooOnRails::Checks::Sidekiq::Sidekiq, type: :check do
            * sidekiq-unique-jobs (4.0.18)
           }
         end
-        it_expects_check_to_pass
 
         describe 'Procfile' do
-          after do
-            File.delete('Procfile')
-          end
-          let(:procfile_contents) do
-            File.read('Procfile')
-          end
-
           context "if there's not a Procfile" do
-            it 'adds a Procfile' do
-              expect(procfile_contents).not_to include 'web: rails s'
-              expect(procfile_contents).to include described_class::WORKER_PROCFILE_LINE
+            it_expects_check_to_fail
+            context 'when fixing' do
+              let(:perform) { silence_stream(STDOUT) { subject.fix } }
+
+              let(:procfile_contents) do
+                File.read('Procfile')
+              end
+
+              it_expects_check_to_pass
+
+              it 'adds a Procfile' do
+                expect(procfile_contents).not_to include 'web: rails s'
+                expect(procfile_contents).to include described_class::WORKER_PROCFILE_LINE
+                File.delete('Procfile')
+              end
             end
           end
         end

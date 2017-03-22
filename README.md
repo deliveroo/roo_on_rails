@@ -100,15 +100,22 @@ We'll insert the following middlewares into the rails stack:
 Unless `SIDEKIQ_ENABLED` is set to false we'll check for the existance of sidekiq gems. Please ensure the following lines are included in your project Gemfile.
 
 ```
-gem 'sidekiq-scheduler'
-gem 'sidekiq-unique-jobs'
+source 'https://rubygems.org' do
+  gem 'sidekiq-scheduler'
+  gem 'sidekiq-unique-jobs'
+end
 source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro'
 end
 ```
 
-Sidekiq pro requires some autentication to be installed. Please get the key from your Tech Lead (or password manager of choice).
+Sidekiq pro requires some authentication to be installed. Please get the key from your Tech Lead (or password manager of choice).
+
+```
 bundle config gems.contribsys.com ~sidekiq-pro-key~
+```
+
+When configued the
 
 ## Contributing
 

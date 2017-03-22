@@ -1,6 +1,6 @@
-require 'roo_on_rails/sidekiq_sla_metric'
+require 'roo_on_rails/sidekiq/sla_metric'
 require 'sidekiq'
-RSpec.describe RooOnRails::SidekiqSlaMetric do
+RSpec.describe RooOnRails::Sidekiq::SlaMetric do
   let(:sidekiq_queues) do
     [
       double(name: 'within1minute', latency: latency)
