@@ -11,9 +11,9 @@ module RooOnRails
         end
 
         def call
-          fail! "No sidekiq settings found" unless File.exist?('config/sidekiq.yml')
+          fail! 'No sidekiq settings found' unless File.exist?('config/sidekiq.yml')
           return if File.read('config/sidekiq.yml') == yaml_template
-          final_fail! "Custom sidekiq settings found."
+          final_fail! 'Custom sidekiq settings found.'
         end
 
         def fix

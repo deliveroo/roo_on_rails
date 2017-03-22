@@ -1,10 +1,12 @@
 PATH
   remote: ../
   specs:
-    roo_on_rails (1.1.0)
+    roo_on_rails (1.2.0)
       dotenv-rails (~> 2.1)
       hashie (~> 3.4)
+      hirefire-resource
       newrelic_rpm (~> 3.17)
+      octokit
       platform-api (~> 0.8)
       rack-ssl-enforcer
       rack-timeout
@@ -50,6 +52,8 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
     appraisal (2.1.0)
       bundler
       rake
@@ -57,15 +61,23 @@ GEM
     arel (7.1.4)
     builder (3.2.3)
     byebug (9.0.6)
+    codecov (0.1.10)
+      json
+      simplecov
+      url
     coderay (1.1.1)
     concurrent-ruby (1.0.5)
+    connection_pool (2.2.1)
     diff-lcs (1.3)
+    docile (1.1.5)
     dotenv (2.2.0)
     dotenv-rails (2.2.0)
       dotenv (= 2.2.0)
       railties (>= 3.2, < 5.1)
     erubis (2.7.0)
     excon (0.55.0)
+    faraday (0.11.0)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.17)
     formatador (0.2.5)
     globalid (0.3.7)
@@ -89,7 +101,9 @@ GEM
       erubis (~> 2.0)
       excon
       multi_json (>= 1.9.2)
+    hirefire-resource (0.4.0)
     i18n (0.8.1)
+    json (2.0.3)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -99,6 +113,7 @@ GEM
     lumberjack (1.0.11)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    memfs (1.0.0)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -106,6 +121,7 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.10.1)
     multi_json (1.12.1)
+    multipart-post (2.0.0)
     nenv (0.3.0)
     newrelic_rpm (3.18.1.330)
     nio4r (1.2.1)
@@ -114,6 +130,8 @@ GEM
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    octokit (4.6.2)
+      sawyer (~> 0.8.0, >= 0.5.3)
     platform-api (0.8.0)
       heroics (~> 0.0.17)
     pry (0.10.4)
@@ -123,7 +141,10 @@ GEM
     pry-byebug (3.4.2)
       byebug (~> 9.0)
       pry (~> 0.10)
+    public_suffix (2.0.5)
     rack (2.0.1)
+    rack-protection (1.5.3)
+      rack
     rack-ssl-enforcer (0.2.9)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -155,6 +176,7 @@ GEM
     rb-fsevent (0.9.8)
     rb-inotify (0.9.8)
       ffi (>= 0.5.0)
+    redis (3.3.3)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -169,7 +191,20 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     ruby_dep (1.5.0)
+    sawyer (0.8.1)
+      addressable (>= 2.3.5, < 2.6)
+      faraday (~> 0.8, < 1.0)
     shellany (0.0.1)
+    sidekiq (4.2.9)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      rack-protection (>= 1.5.0)
+      redis (~> 3.2, >= 3.2.1)
+    simplecov (0.14.1)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.0)
     slop (3.6.0)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
@@ -182,6 +217,7 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    url (0.3.2)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
@@ -192,13 +228,17 @@ PLATFORMS
 DEPENDENCIES
   appraisal
   bundler (~> 1.13)
+  codecov
   guard
   guard-rspec
+  memfs
   pry-byebug
   rails (~> 5.0)
   rake (~> 10.0)
   roo_on_rails!
   rspec (~> 3.0)
+  sidekiq
+  simplecov
   thor (~> 0.19)
 
 BUNDLED WITH
