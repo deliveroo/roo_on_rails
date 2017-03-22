@@ -5,7 +5,7 @@ require 'active_support'
 require 'active_support/core_ext/numeric'
 module RooOnRails
   module Sidekiq
-    module SlaMetric
+    class SlaMetric
       def self.queue
         queues = ::Sidekiq::Queue.all.map { |q| SidekiqQueueMetrics.new(q) }
         global_stats = SidekiqWorkerCount.new(queues)

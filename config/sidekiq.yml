@@ -1,0 +1,1 @@
+<%= RooOnRails::Sidekiq::Settings.settings_template %>
