@@ -1,3 +1,10 @@
+# HEAD
+
+Fixes:
+
+- Use correct GitHub context name for CircleCI (#12)
+- Do not depend on sort order for Codecov GitHub contexts (#12)
+
 # v1.2.0 (2017-03-21)
 
 Features:
