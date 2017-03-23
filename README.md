@@ -98,6 +98,8 @@ We'll insert the following middlewares into the rails stack:
 
 The database statement timeout will be set to a low value by default. Use `DATABASE_STATEMENT_TIMEOUT` (milliseconds, default 200) to customise.
 
+_Note: This configuration is not supported in Rails 3 and will be skipped. Set statement timeouts directly in the database._
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/deliveroo/roo_on_rails.
