@@ -52,7 +52,7 @@ module RooOnRails
         end
 
         def ensure_coverage_status_check!(contexts)
-          return if (contexts & coverage_contexts) == coverage_contexts
+          return if (contexts & coverage_contexts).sort == coverage_contexts.sort
           fail! 'no code coverage status checks'
         end
 
@@ -92,7 +92,7 @@ module RooOnRails
 
         def ci_context
           if Pathname.new('.travis.yml').exist? then 'continuous-integration/travis-ci'
-          else 'ci/circle-ci'
+          else 'ci/circleci'
           end
         end
 
