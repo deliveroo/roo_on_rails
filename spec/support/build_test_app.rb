@@ -60,10 +60,31 @@ module ROR
         self
       end
 
+      def create_databases
+        set_postgres_username
+        rake_command 'db:create'
+        self
+      end
+
+      def drop_databases
+        rake_command 'db:drop'
+        self
+      end
+
       def clear_scaffold
         say_status 'removing', 'scaffold app cache'
         SCAFFOLD_DIR.rmtree if SCAFFOLD_DIR.exist?
         SCAFFOLD_PATH.delete if SCAFFOLD_PATH.exist?
+      end
+
+      private
+
+      def set_postgres_username
+        config_file = SCAFFOLD_DIR.join('config', 'database.yml')
+        config = YAML.load_file(config_file)
+        config['development']['username'] = 'postgres'
+        config['test']['username'] = 'postgres'
+        File.write(config_file, config.to_yaml)
       end
     end
 
@@ -76,11 +97,14 @@ module ROR
 
 
       before do
-        app_helper.ensure_scaffold(app_options).unpack_scaffold_at(app_path)
+        app_helper.ensure_scaffold(app_options)
+                  .unpack_scaffold_at(app_path)
+                  .create_databases
       end
 
       after do
-        app_helper.clear_test_app_at(app_path)
+        app_helper.drop_databases
+                  .clear_test_app_at(app_path)
       end
     end
   end

@@ -9,14 +9,11 @@ describe 'Database setup' do
   before { app.wait_start }
 
   context 'When booting', rails_min_version: 4.0 do
-    before { app_helper.rake_command('db:create') }
-    after { app_helper.rake_command('db:drop') }
-
     let(:statement_timeout) { app_helper.rake_command('db:statement_timeout') }
 
     context 'when DATABASE_STATEMENT_TIMEOUT is not set' do
       it 'sets the statement timeout to 200ms' do
-        expect(statement_timeout).to include '200ms'
+        expect(statement_timeout.split("\n").last).to eq '200ms'
       end
     end
 
@@ -25,7 +22,7 @@ describe 'Database setup' do
       after { ENV['DATABASE_STATEMENT_TIMEOUT'] = nil }
 
       it 'sets the statement timeout to the value in ms' do
-        expect(statement_timeout).to include '750ms'
+        expect(statement_timeout.split("\n").last).to eq '750ms'
       end
     end
   end
