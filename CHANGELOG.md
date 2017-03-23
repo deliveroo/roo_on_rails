@@ -4,6 +4,11 @@ Features:
 
 - Sets database statement timeout to 200ms by default (#10).
 
+Fixes:
+
+- Use correct GitHub context name for CircleCI (#12)
+- Do not depend on sort order for Codecov GitHub contexts (#12)
+
 # v1.2.0 (2017-03-21)
 
 Features:
