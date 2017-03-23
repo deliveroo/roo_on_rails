@@ -8,7 +8,7 @@ describe 'Database setup' do
 
   before { app.wait_start }
 
-  context 'When booting' do
+  context 'When booting', rails_min_version: 4.0 do
     before { app_helper.rake_command('db:create') }
     after { app_helper.rake_command('db:drop') }
 
