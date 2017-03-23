@@ -1,5 +1,9 @@
 # HEAD
 
+Features:
+
+- Sets database statement timeout to 200ms by default (#10).
+
 Fixes:
 
 - Use correct GitHub context name for CircleCI (#12)
