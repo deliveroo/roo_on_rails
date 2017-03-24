@@ -22,7 +22,10 @@ module RooOnRails
         end
 
         def yaml_template
-          '<%= RooOnRails::Sidekiq::Settings.settings_template %>'
+          %Q{
+<% require 'roo_on_rails/sidekiq/settings' %>
+<%= RooOnRails::Sidekiq::Settings.settings_template %>
+          }.strip
         end
       end
     end

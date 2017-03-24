@@ -5,7 +5,6 @@ require 'roo_on_rails/checks/heroku/preboot_enabled'
 require 'roo_on_rails/checks/heroku/app_exists'
 require 'roo_on_rails/checks/sidekiq/settings'
 
-
 module RooOnRails
   module Checks
     class Environment < EnvSpecific
