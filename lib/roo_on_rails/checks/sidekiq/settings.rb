@@ -1,3 +1,4 @@
+require 'roo_on_rails/checks/sidekiq/sidekiq'
 require 'roo_on_rails/checks/base'
 require 'thor'
 
