@@ -29,9 +29,9 @@ module RooOnRails
         def permitted_latency
           prefix, number, unit = queue.name.partition(/[0-9]+/)
           case prefix
-          when 'monitoring', 'realtime' then 10.seconds
-          when 'default' then 1.day
-          when 'within' then number.to_i.public_send(unit.to_sym)
+          when 'monitoring', 'realtime' then 10.seconds.to_i
+          when 'default' then 1.day.to_i
+          when 'within' then number.to_i.public_send(unit.to_sym).to_i
           else raise "Cannot determine permitted latency for queue #{queue.name}"
           end
         end
