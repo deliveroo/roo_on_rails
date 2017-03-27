@@ -25,12 +25,20 @@ module ROR
         shell_run "cd #{SCAFFOLD_DIR} && rake #{command}"
       end
 
+      def rails_new_options
+        if ENV.fetch('RAILS_API_MODE', 0).to_i == 1
+          RAILS_NEW_OPTIONS + ' --api'
+        else
+          RAILS_NEW_OPTIONS
+        end
+      end
+
       def ensure_scaffold(keep_scaffold_directory = false)
         return self if SCAFFOLD_PATH.exist?
         SCAFFOLD_DIR.rmtree if SCAFFOLD_DIR.exist?
         TEST_DIR.mkpath
 
-        shell_run "rails new #{SCAFFOLD_DIR} #{RAILS_NEW_OPTIONS}"
+        shell_run "rails new #{SCAFFOLD_DIR} #{rails_new_options}"
 
         append_to_file SCAFFOLD_DIR.join('Gemfile'), %{
           gem 'puma', '~> 3.0'

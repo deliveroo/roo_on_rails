@@ -9,6 +9,9 @@ gemfile:
   - gemfiles/rails_3.gemfile
   - gemfiles/rails_4.gemfile
   - gemfiles/rails_5.gemfile
+env:
+  - RAILS_API_MODE=1
+  - RAILS_API_MODE=0
 install:
   - bundle install --jobs=3 --retry=3 --path=vendor/bundle
 cache:
@@ -22,4 +25,9 @@ matrix:
   allow_failures:
     - rvm: ruby-head
     - rvm: 2.4.0
+      gemfile: gemfiles/rails_3.gemfile
+  exclude:
+    - env: RAILS_API_MODE=1
+      gemfile: gemfiles/rails_4.gemfile
+    - env: RAILS_API_MODE=1
       gemfile: gemfiles/rails_3.gemfile
