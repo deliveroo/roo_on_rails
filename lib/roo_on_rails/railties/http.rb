@@ -19,8 +19,8 @@ module RooOnRails
 
         # This needs to be inserted low in the stack, before Rails returns the
         # thread-current connection to the pool.
-        app.config.middleware.insert_before(
-          ActionDispatch::Cookies,
+        app.config.middleware.insert_after(
+          ActionDispatch::Callbacks,
           RooOnRails::Rack::SafeTimeouts
         )
 
@@ -28,8 +28,8 @@ module RooOnRails
           app.config.middleware.use ::Rack::Deflater
         end
 
-        app.config.middleware.insert_before(
-          ActionDispatch::Cookies,
+        app.config.middleware.insert_after(
+          ActionDispatch::Callbacks,
           ::Rack::SslEnforcer
         )
       end
