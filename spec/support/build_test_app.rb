@@ -7,7 +7,7 @@ module ROR
     ROOT = Pathname.new('../../..').expand_path(__FILE__)
     BUNDLE_CACHE = ROOT.join('vendor/bundle')
     TEST_DIR = ROOT.join('tmp/scaffold')
-    RAILS_NEW_BASE_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'
+    RAILS_NEW_BASE_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'.freeze
 
     class Helper < Thor::Group
       include Thor::Actions
@@ -16,7 +16,7 @@ module ROR
         super()
 
         @database = database
-        @keep_scaffold = false
+        @keep_scaffold = keep_scaffold
       end
 
       def shell_run(command)
@@ -43,7 +43,7 @@ module ROR
 
         # comment_lines scaffold_dir.join('config/database.yml').to_s,
         #   /^\s+username:/
-          
+
         Bundler.with_clean_env do
           shell_run "cd #{scaffold_dir} && bundle install --path=#{BUNDLE_CACHE}"
         end
