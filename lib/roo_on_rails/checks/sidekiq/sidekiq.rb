@@ -5,7 +5,7 @@ module RooOnRails
   module Checks
     module Sidekiq
       class Sidekiq < Base
-        WORKER_PROCFILE_LINE = "worker: RAILS_MAX_THREADS=$SIDEKIQ_DB_POOL_SIZE \
+        WORKER_PROCFILE_LINE = "worker: RAILS_MAX_THREADS=($SIDEKIQ_THREADS + 1) \
                                 DB_REAPING_FREQUENCY=$SIDEKIQ_DB_REAPING_FREQUENCY \
                                 bundle exec sidekiq".freeze
 
@@ -18,7 +18,6 @@ module RooOnRails
             pass 'SIDEKIQ_ENABLED is set to false'
             return
           end
-          check_for_sidekiq
           check_for_procfile
         end
 

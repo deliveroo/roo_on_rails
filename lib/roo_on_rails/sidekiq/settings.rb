@@ -1,4 +1,3 @@
-require 'yaml'
 module RooOnRails
   module Sidekiq
     class Settings
@@ -16,13 +15,6 @@ module RooOnRails
 
       def self.concurrency
         ENV.fetch('SIDEKIQ_THREADS', 25)
-      end
-
-      def self.settings_template
-        {
-          concurrency: concurrency,
-          queues: queues
-        }.to_yaml
       end
     end
   end

@@ -11,6 +11,7 @@ PATH
       rack-ssl-enforcer
       rack-timeout
       rails (>= 3.2.22, < 5.1)
+      sidekiq
 
 GEM
   remote: https://rubygems.org/

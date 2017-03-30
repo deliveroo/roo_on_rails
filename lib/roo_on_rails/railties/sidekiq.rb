@@ -5,6 +5,7 @@ module RooOnRails
         require 'hirefire-resource'
         $stderr.puts 'initializer roo_on_rails.sidekiq'
         break unless ENV.fetch('SIDEKIQ_ENABLED', 'true').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
+        config_sidekiq(app)
         config_hirefire(app)
       end
 
@@ -14,6 +15,14 @@ module RooOnRails
           return
         end
         add_middleware(app)
+      end
+
+
+      def config_sidekiq(app)
+        ::Sidekiq.configure_server do |x|
+          x.options[:concurrency] = RooOnRails::Sidekiq::Settings.queues
+          x.options[:queues] = RooOnRails::Sidekiq::Settings.queues
+        end
       end
 
       def add_middleware(app)

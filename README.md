@@ -103,25 +103,17 @@ _Note: This configuration is not supported in Rails 3 and will be skipped. Set s
 
 ### Sidekiq
 
-Unless `SIDEKIQ_ENABLED` is set to false we'll check for the existance of sidekiq gems. Please ensure the following lines are included in your project Gemfile.
+When `SIDEKIQ_ENABLED` is set we'll:
 
-```
-source 'https://rubygems.org' do
-  gem 'sidekiq-scheduler'
-  gem 'sidekiq-unique-jobs'
-end
-source 'https://gems.contribsys.com/' do
-  gem 'sidekiq-pro'
-end
-```
+ - check for the existence of a worker line in your Procfile
+ - add SLA style queues to your worker list
+ - check for a HIREFIRE_TOKEN and if it's set enable SLA based autoscaling
 
-Sidekiq pro requires some authentication to be installed. Please get the key from your Tech Lead (or password manager of choice).
+The following ENV are available:
 
-```
-bundle config gems.contribsys.com ~sidekiq-pro-key~
-```
-
-When configued the
+ - `SIDEKIQ_ENABLED`
+ - `SIDEKIQ_THREADS` (default: 25) - Sets sidkiq concurrency value
+ - `SIDEKIQ_DB_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the amount of time in seconds rails will wait before attempting to find and recover connections from dead threads
 
 ## Contributing
 
