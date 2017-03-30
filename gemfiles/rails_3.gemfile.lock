@@ -68,7 +68,7 @@ GEM
     excon (0.55.0)
     faraday (0.11.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.9.17)
+    ffi (1.9.18)
     formatador (0.2.5)
     guard (2.14.1)
       formatador (>= 0.2.4)

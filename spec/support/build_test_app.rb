@@ -6,13 +6,18 @@ module ROR
   module BuildTestApp
     ROOT = Pathname.new('../../..').expand_path(__FILE__)
     BUNDLE_CACHE = ROOT.join('vendor/bundle')
-    TEST_DIR = ROOT.join('tmp')
-    SCAFFOLD_DIR = ROOT.join('vendor/base_test_app')
-    SCAFFOLD_PATH = ROOT.join('vendor/base_test_app.tar')
-    RAILS_NEW_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'
+    TEST_DIR = ROOT.join('tmp/scaffold')
+    RAILS_NEW_BASE_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'.freeze
 
     class Helper < Thor::Group
       include Thor::Actions
+
+      def initialize(database: 'sqlite3', keep_scaffold: false)
+        super()
+
+        @database = database
+        @keep_scaffold = keep_scaffold
+      end
 
       def shell_run(command)
         say_status 'running', command.gsub(Dir.pwd, '$PWD')
@@ -21,37 +26,38 @@ module ROR
         output
       end
 
-      def rake_command(command)
-        shell_run "cd #{SCAFFOLD_DIR} && rake #{command}"
-      end
-
-      def ensure_scaffold(keep_scaffold_directory = false)
-        return self if SCAFFOLD_PATH.exist?
-        SCAFFOLD_DIR.rmtree if SCAFFOLD_DIR.exist?
+      def ensure_scaffold
+        return self if scaffold_path.exist?
+        scaffold_dir.rmtree if scaffold_dir.exist?
         TEST_DIR.mkpath
 
-        shell_run "rails new #{SCAFFOLD_DIR} #{RAILS_NEW_OPTIONS}"
+        shell_run "rails new #{scaffold_dir} #{rails_new_options}"
 
-        append_to_file SCAFFOLD_DIR.join('Gemfile'), %{
+        append_to_file scaffold_dir.join('Gemfile'), %{
           gem 'puma', '~> 3.0'
-          gem 'roo_on_rails', path: '../..'
+          gem 'roo_on_rails', path: '../../..'
         }
 
-        create_file SCAFFOLD_DIR.join('.env'),
+        create_file scaffold_dir.join('.env'),
           'NEW_RELIC_LICENSE_KEY=dead-0000-beef'
 
+        # comment_lines scaffold_dir.join('config/database.yml').to_s,
+        #   /^\s+username:/
+
         Bundler.with_clean_env do
-          shell_run "cd #{SCAFFOLD_DIR} && bundle install --path=#{BUNDLE_CACHE}"
+          shell_run "cd #{scaffold_dir} && bundle install --path=#{BUNDLE_CACHE}"
         end
 
-        SCAFFOLD_DIR.rmtree unless keep_scaffold_directory
-        shell_run "tar -C #{SCAFFOLD_DIR} -cf #{SCAFFOLD_PATH} ."
+        shell_run "tar -C #{scaffold_dir} -cf #{scaffold_path} ."
+        scaffold_dir.rmtree unless @keep_scaffold
         self
+      rescue => e
+        binding.pry
       end
 
       def unpack_scaffold_at(path)
         path.mkpath
-        shell_run "tar -C #{path} -xf #{SCAFFOLD_PATH}"
+        shell_run "tar -C #{path} -xf #{scaffold_path}"
         self
       end
 
@@ -60,10 +66,27 @@ module ROR
         self
       end
 
-      def clear_scaffold
-        say_status 'removing', 'scaffold app cache'
-        SCAFFOLD_DIR.rmtree if SCAFFOLD_DIR.exist?
-        SCAFFOLD_PATH.delete if SCAFFOLD_PATH.exist?
+      def self.clear_scaffolds
+        new.say_status 'removing', 'scaffold app cache'
+        TEST_DIR.rmtree if TEST_DIR.exist?
+      end
+
+      private
+
+      def id
+        @id ||= Digest::MD5.hexdigest(rails_new_options)
+      end
+
+      def rails_new_options
+        "#{RAILS_NEW_BASE_OPTIONS} --database=#{@database}"
+      end
+
+      def scaffold_dir
+        TEST_DIR.join("app-#{id}")
+      end
+
+      def scaffold_path
+        TEST_DIR.join("app-#{id}.tar")
       end
     end
 
@@ -71,13 +94,12 @@ module ROR
     def build_test_app
       let(:app_id) { '%s.%s' % [Time.now.strftime('%F.%H%M%S'), SecureRandom.hex(4)] }
       let(:app_path) { TEST_DIR.join(app_id) }
-      let(:app_helper) { Helper.new }
-      let(:app_options) { }
-      let(:scaffold_path) { SCAFFOLD_DIR }
+      let(:app_helper) { Helper.new(app_options) }
+      let(:app_options) { {} }
 
 
       before do
-        app_helper.ensure_scaffold(app_options).unpack_scaffold_at(app_path)
+        app_helper.ensure_scaffold.unpack_scaffold_at(app_path)
       end
 
       after do
@@ -92,6 +114,6 @@ RSpec.configure do |config|
   config.extend ROR::BuildTestApp
 
   config.before(:suite) do
-    ROR::BuildTestApp::Helper.new.clear_scaffold
+    ROR::BuildTestApp::Helper.clear_scaffolds
   end
 end
