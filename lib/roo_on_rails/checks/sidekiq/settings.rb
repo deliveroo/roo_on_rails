@@ -12,7 +12,7 @@ module RooOnRails
         end
 
         def call
-          final_fail! 'Sidekiq settings file found.' if File.exist?('config/sidekiq.yml')
+          fail! 'Custom Sidekiq settings found.' if File.exist?('config/sidekiq.yml')
         end
       end
     end
