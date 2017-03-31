@@ -112,7 +112,7 @@ When `SIDEKIQ_ENABLED` is set we'll:
 The following ENV are available:
 
  - `SIDEKIQ_ENABLED`
- - `SIDEKIQ_THREADS` (default: 25) - Sets sidkiq concurrency value
+ - `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
  - `SIDEKIQ_DB_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the amount of time in seconds rails will wait before attempting to find and recover connections from dead threads
 
 ## Contributing
