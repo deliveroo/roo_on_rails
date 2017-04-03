@@ -1,4 +1,5 @@
 require 'sidekiq'
+require 'roo_on_rails/sidekiq/settings'
 module RooOnRails
   module Railties
     class Sidekiq < Rails::Railtie
@@ -20,7 +21,7 @@ module RooOnRails
 
       def config_sidekiq
         ::Sidekiq.configure_server do |x|
-          x.options[:concurrency] = RooOnRails::Sidekiq::Settings.concurrency
+          x.options[:concurrency] = RooOnRails::Sidekiq::Settings.concurrency.to_i
           x.options[:queues] = RooOnRails::Sidekiq::Settings.queues
         end
       end

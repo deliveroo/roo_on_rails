@@ -5,9 +5,7 @@ module RooOnRails
   module Checks
     module Sidekiq
       class Sidekiq < Base
-        WORKER_PROCFILE_LINE = "worker: RAILS_MAX_THREADS=($SIDEKIQ_THREADS + 1) \
-                                DB_REAPING_FREQUENCY=$SIDEKIQ_DB_REAPING_FREQUENCY \
-                                bundle exec sidekiq".freeze
+        WORKER_PROCFILE_LINE = 'worker: bundle exec roo_on_rails sidekiq'.freeze
 
         def intro
           'Checking Sidekiq Setup...'

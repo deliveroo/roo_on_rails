@@ -1,6 +1,7 @@
 require 'thor'
 require 'hashie'
 require 'roo_on_rails/checks/environment'
+require 'roo_on_rails/environment'
 
 module RooOnRails
   class Harness
