@@ -29,8 +29,19 @@ describe 'Http rack setup' do
       end
     end
 
-    it 'inserts rack enforcer into the middleware stack' do
-      expect(middleware).to include 'Rack::SslEnforcer'
+    context 'if RAILS_ENV is not set to "test"' do
+      it 'inserts rack enforcer into the middleware stack' do
+        expect(middleware).to include 'Rack::SslEnforcer'
+      end
+    end
+
+    context 'if RAILS_ENV is set to "test"' do
+      before { ENV['RAILS_ENV'] = 'test' }
+      after { ENV['RAILS_ENV'] = nil }
+
+      it 'does not insert rack enforcer into the middleware stack' do
+        expect(middleware).to_not include 'Rack::SslEnforcer'
+      end
     end
   end
 end
