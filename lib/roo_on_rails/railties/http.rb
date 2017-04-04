@@ -28,10 +28,13 @@ module RooOnRails
           app.config.middleware.use ::Rack::Deflater
         end
 
-        app.config.middleware.insert_before(
-          ActionDispatch::Cookies,
-          ::Rack::SslEnforcer
-        )
+        # Don't use SslEnforcer in test environment as it breaks Capybara
+        unless Rails.env.test?
+          app.config.middleware.insert_before(
+            ActionDispatch::Cookies,
+            ::Rack::SslEnforcer
+          )
+        end
       end
     end
   end
