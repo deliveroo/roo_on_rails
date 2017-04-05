@@ -23,3 +23,5 @@ matrix:
     - rvm: ruby-head
     - rvm: 2.4.0
       gemfile: gemfiles/rails_3.gemfile
+services:
+  - redis-server
