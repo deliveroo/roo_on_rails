@@ -17,10 +17,10 @@ namespace :db do
   end
 end
 
-%i[
+%i(
   db:migrate
   db:migrate:down
   db:rollback
-].each do |task|
-  Rake::Task[task].enhance(%i[db:migrate:extend_statement_timeout])
+).each do |task|
+  Rake::Task[task].enhance(%i(db:migrate:extend_statement_timeout))
 end
