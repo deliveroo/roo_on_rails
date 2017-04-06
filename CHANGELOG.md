@@ -3,11 +3,13 @@
 Features:
 
 - Sets database statement timeout to 200ms by default (#13).
+- Sets migration statement timeout to 10s by default (#16)
 
 Fixes:
 
 - Use correct GitHub context name for CircleCI (#12)
 - Do not depend on sort order for Codecov GitHub contexts (#12)
+- Do not add `Rack::SslEnforcer` middleware in test environment (#15)
 
 # v1.2.0 (2017-03-21)
 
