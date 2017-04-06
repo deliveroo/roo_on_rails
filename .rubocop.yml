@@ -9,7 +9,8 @@ Style/ModuleFunction:
 
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
-    '%i': ()
+    '%i': []
+    '%w': []
 
 # Disable Metric checks for specs
 Metrics/BlockLength:

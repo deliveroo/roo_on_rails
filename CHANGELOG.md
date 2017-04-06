@@ -3,7 +3,7 @@
 Features:
 
 - Sets database statement timeout to 200ms by default (#13).
-- Sets migration statement timeout to 60s by default (#16)
+- Sets migration statement timeout to 10s by default (#16)
 
 Fixes:
 

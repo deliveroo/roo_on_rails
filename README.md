@@ -98,7 +98,7 @@ We'll insert the following middlewares into the rails stack:
 
 The database statement timeout will be set to a low value by default. Use `DATABASE_STATEMENT_TIMEOUT` (milliseconds, default 200) to customise.
 
-For migrations (specifically the `db:migrate`, `db:migrate:down` and `db:rollback` tasks) a much higher statement timeout is set by default. Use `MIGRATION_STATEMENT_TIMEOUT` (milliseconds, default 60000) to customise.
+For migrations (specifically the `db:migrate`, `db:migrate:down` and `db:rollback` tasks) a much higher statement timeout is set by default. Use `MIGRATION_STATEMENT_TIMEOUT` (milliseconds, default 10000) to customise.
 
 _Note: This configuration is not supported in Rails 3 and will be skipped. Set statement timeouts directly in the database._
 

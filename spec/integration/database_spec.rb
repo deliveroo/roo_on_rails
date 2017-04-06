@@ -28,5 +28,41 @@ describe 'Database setup', rails_min_version: 4 do
         expect(statement_timeout).to include '750ms'
       end
     end
+
+    context 'when running migrations' do
+      let(:migration_dir) { app_path.join('db', 'migrate') }
+      let(:migration_path) { migration_dir.join("#{Time.now.to_i}_test_timeout.rb") }
+      let(:migration) do
+        major, minor, * = Gem::Version.new(Rails::VERSION::STRING).segments
+        version = "[#{major}.#{minor}]" if major >= 5
+        <<-EOF
+          class TestTimeout < ActiveRecord::Migration#{version}
+            def up
+              ActiveRecord::Base.connection.execute('SELECT pg_sleep(1)')
+            end
+
+            def down
+              ActiveRecord::Base.connection.execute('SELECT pg_sleep(1)')
+            end
+          end
+        EOF
+      end
+
+      let(:migrate) { app_helper.shell_run "cd #{app_path} && rake db:migrate" }
+      let(:rollback) { app_helper.shell_run "cd #{app_path} && rake db:rollback" }
+
+      before do
+        FileUtils.mkdir_p(migration_dir)
+        File.write(migration_path, migration)
+      end
+      after { File.delete(migration_path) }
+
+      it 'should allow migration statements longer than the regular timeout' do
+        expect { migrate }.to_not raise_error
+      end
+      it 'should allow rollback statements longer than the regular timeout' do
+        expect { rollback }.to_not raise_error
+      end
+    end
   end
 end

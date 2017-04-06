@@ -10,17 +10,17 @@ namespace :db do
       if ActiveRecord::VERSION::MAJOR >= 4
         config = ActiveRecord::Base.configurations[Rails.env]
         config['variables'] ||= {}
-        config['variables']['statement_timeout'] = ENV.fetch('MIGRATION_STATEMENT_TIMEOUT', 60_000)
+        config['variables']['statement_timeout'] = ENV.fetch('MIGRATION_STATEMENT_TIMEOUT', 10_000)
         ActiveRecord::Base.establish_connection
       end
     end
   end
 end
 
-%i(
+%i[
   db:migrate
   db:migrate:down
   db:rollback
-).each do |task|
-  Rake::Task[task].enhance(%i(db:migrate:extend_statement_timeout))
+].each do |task|
+  Rake::Task[task].enhance(%i[db:migrate:extend_statement_timeout])
 end
