@@ -7,11 +7,6 @@ Style/FrozenStringLiteralComment:
 Style/ModuleFunction:
   EnforcedStyle: extend_self
 
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%i': []
-    '%w': []
-
 # Disable Metric checks for specs
 Metrics/BlockLength:
   Exclude:
