@@ -18,6 +18,7 @@ namespace :db do
 end
 
 %i[
+  db:create
   db:migrate
   db:migrate:down
   db:rollback
