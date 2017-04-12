@@ -5,7 +5,7 @@ module RooOnRails
       def self.run
         RooOnRails::Environment.load
         ENV['RAILS_MAX_THREADS'] = (ENV.fetch('SIDEKIQ_THREADS').to_i + 1).to_s
-        ENV['DB_REAPING_FREQUENCY'] = ENV['SIDEKIQ_DB_REAPING_FREQUENCY']
+        ENV['DATABASE_REAPING_FREQUENCY'] = ENV['SIDEKIQ_DATABASE_REAPING_FREQUENCY']
         exec 'sidekiq'
       end
     end

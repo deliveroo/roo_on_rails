@@ -27,14 +27,6 @@ module RooOnRails
           end
         end
 
-        def check_for_sidekiq
-          _, gems = shell.run 'bundle list | grep sidekiq'
-
-          return if gems.include?('sidekiq')
-          fail! "Sidekiq is not installed, see the README: \
-                 https://github.com/deliveroo/roo_on_rails#sidekiq"
-        end
-
         def check_for_procfile
           return if File.exist?('Procfile') && File.read('Procfile').include?('worker')
           fail! "No Procfile found with a 'worker' command"
