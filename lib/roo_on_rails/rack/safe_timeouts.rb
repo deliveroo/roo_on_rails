@@ -18,7 +18,7 @@ module RooOnRails
 
       def call(env)
         @app.call(env)
-      rescue Rack::Timeout::Error, Rack::Timeout::RequestTimeoutException
+      rescue ::Rack::Timeout::Error, ::Rack::Timeout::RequestTimeoutException
         Rails.logger.warn('Clearing ActiveRecord connection cache due to timeout')
         ActiveRecord::Base.connection.clear_cache!
         raise

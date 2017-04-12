@@ -11,6 +11,7 @@ Fixes:
 - Use correct GitHub context name for CircleCI (#12)
 - Do not depend on sort order for Codecov GitHub contexts (#12)
 - Do not add `Rack::SslEnforcer` middleware in test environment (#15)
+- Fix for "undefined constant: RooOnRails::Rack::Timeout" (#18)
 
 # v1.2.0 (2017-03-21)
 
