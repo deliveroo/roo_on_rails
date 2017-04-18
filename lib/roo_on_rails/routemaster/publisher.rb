@@ -15,11 +15,10 @@ module RooOnRails
       def publish!
         return unless publish?
 
-        options = { type: event, topic: topic, url: url }
         event_data = data # cache in case it isn't memoised
-        options[:data] = recursive_stringify(event_data) if event_data.present?
+        event_data = recursive_stringify(event_data) if event_data
 
-        routemaster.send_event(**options)
+        routemaster.send(event, topic, url, data: event_data)
       end
 
       def topic
@@ -34,11 +33,11 @@ module RooOnRails
         nil
       end
 
-      def routemaster
-        raise NotImplementedError
-      end
-
       private
+
+      def routemaster
+        ::Routemaster::Client
+      end
 
       def recursive_stringify(hash)
         hash.each_with_object({}) do |(k, v), h|

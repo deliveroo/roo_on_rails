@@ -3,7 +3,7 @@ require 'new_relic/agent'
 
 module RooOnRails
   module Routemaster
-    module PublishLifecycleEvents
+    module LifecycleEvents
       extend ActiveSupport::Concern
 
       ROUTEMASTER_EVENT_TYPE_MAP = {
