@@ -1,18 +1,19 @@
 require 'active_support/concern'
 require 'new_relic/agent'
+require 'roo_on_rails/routemaster/publishers'
 
 module RooOnRails
   module Routemaster
     module LifecycleEvents
       extend ActiveSupport::Concern
 
-      ROUTEMASTER_EVENT_TYPE_MAP = {
+      ACTIVE_RECORD_TO_ROUTEMASTER_EVENT_MAP = {
         create: :created,
         update: :updated,
         destroy: :deleted,
         noop: :noop
       }.freeze
-      private_constant :ROUTEMASTER_EVENT_TYPE_MAP
+      private_constant :ACTIVE_RECORD_TO_ROUTEMASTER_EVENT_MAP
 
       def publish_lifecycle_event(event)
         publishers = Routemaster::Publishers.for(self, routemaster_event_type(event))
@@ -28,7 +29,7 @@ module RooOnRails
       private
 
       def routemaster_event_type(event)
-        ROUTEMASTER_EVENT_TYPE_MAP[event].tap do |type|
+        ACTIVE_RECORD_TO_ROUTEMASTER_EVENT_MAP[event].tap do |type|
           raise "invalid lifecycle event '#{event}'" unless type
         end
       end

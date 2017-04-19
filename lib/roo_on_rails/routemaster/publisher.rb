@@ -1,11 +1,14 @@
+require 'routemaster/client'
+
 module RooOnRails
   module Routemaster
     class Publisher
       attr_reader :model, :event
 
-      def initialize(model, event)
+      def initialize(model, event, client: ::Routemaster::Client)
         @model = model
         @event = event
+        @client = client
       end
 
       def publish?
@@ -13,12 +16,7 @@ module RooOnRails
       end
 
       def publish!
-        return unless publish?
-
-        event_data = data # cache in case it isn't memoised
-        event_data = recursive_stringify(event_data) if event_data
-
-        routemaster.send(event, topic, url, data: event_data)
+        @client.send(event, topic, url, data: stringify_keys(data)) if publish?
       end
 
       def topic
@@ -35,13 +33,11 @@ module RooOnRails
 
       private
 
-      def routemaster
-        ::Routemaster::Client
-      end
+      def stringify_keys(hash)
+        return hash if hash.nil? || hash.empty?
 
-      def recursive_stringify(hash)
         hash.each_with_object({}) do |(k, v), h|
-          h[k.to_s] = v.is_a?(Hash) ? recursive_stringify(v) : v
+          h[k.to_s] = v.is_a?(Hash) ? stringify_keys(v) : v
         end
       end
     end
