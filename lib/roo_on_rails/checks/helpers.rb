@@ -13,7 +13,10 @@ module RooOnRails
       def self.included(by)
         by.class_eval do
           extend Forwardable
-          delegate %i[ask say set_color] => :'RooOnRails::Checks::Helpers::Receiver.instance'
+          delegate %i(say ask yes? no? create_file
+                      add_file remove_file copy_file
+                      template directory inside inject_into_file
+                      append_to_file) => :'RooOnRails::Checks::Helpers::Receiver.instance'
         end
       end
 
@@ -23,5 +26,3 @@ module RooOnRails
     end
   end
 end
-
-

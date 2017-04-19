@@ -102,6 +102,20 @@ For database creation and migration (specifically the `db:create`, `db:migrate`,
 
 _Note: This configuration is not supported in Rails 3 and will be skipped. Set statement timeouts directly in the database._
 
+### Sidekiq
+
+When `SIDEKIQ_ENABLED` is set we'll:
+
+ - check for the existence of a worker line in your Procfile
+ - add SLA style queues to your worker list
+ - check for a HIREFIRE_TOKEN and if it's set enable SLA based autoscaling
+
+The following ENV are available:
+
+ - `SIDEKIQ_ENABLED`
+ - `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
+ - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the amount of time in seconds rails will wait before attempting to find and recover connections from dead threads
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/deliveroo/roo_on_rails.
