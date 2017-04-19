@@ -14,9 +14,13 @@ module SpecSupportCheck
   end
 
   module Dsl
-    def it_expects_check_to_fail
-      it { expect { perform }.to raise_error(RooOnRails::Checks::Failure) }
+    def it_expects_check_to_fail(message = nil)
       it { expect { perform rescue nil }.not_to change { context } }
+      if message
+        it { expect { perform }.to raise_error(RooOnRails::Checks::Failure, /#{message}/) }
+      else
+        it { expect { perform }.to raise_error(RooOnRails::Checks::Failure) }
+      end
     end
 
     def it_expects_check_to_pass
