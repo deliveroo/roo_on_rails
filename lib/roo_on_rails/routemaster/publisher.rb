@@ -31,6 +31,12 @@ module RooOnRails
         nil
       end
 
+      %i[created updated deleted noop].each do |event_type|
+        define_method :"#{event_type}?" do
+          event.to_sym == event_type
+        end
+      end
+
       private
 
       def stringify_keys(hash)
