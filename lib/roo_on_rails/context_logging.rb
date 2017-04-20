@@ -8,33 +8,24 @@ module RooOnRails
   # but with key/value pairs that are appended to the end of the text.
   #
   #   logger = RooOnRails::ContextLogging.new(Logger.new($stdout))
-  #   logger.context(a: 1, b: 2) { logger.info 'foo' }                     # Logs "foo -- a=1 b=2"
-  #   logger.context(a: 1) { logger.context(b: 2) { logger.info('foo') } } # Logs "foo -- a=1 b=2"
+  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' }                  # Logs "Stuff -- a=1 b=2"
+  #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } } # Logs "Stuff -- a=1 b=2"
   #
-  # You can also use `push_context` and `pop_context` in before/after blocks.
+  # The above methods persist the context in thread-local storage so it will be attached to
+  # anything done within the scope of the block, even in different methods. If you just need
+  # to log something immediately you can use the short version.
   #
-  #   class ApplicationController < ActionController::Base
-  #     before_action { logger.push_context(user_id: current_user.id) }
-  #     after_action { logger.pop_context }
-  #   end
+  #   logger.with(a: 1, b: 2).info('Stuff')                            # Logs "Stuff -- a=1 b=2"
   module ContextLogging
     module Formatter
       def call(severity, timestamp, progname, msg)
         super(severity, timestamp, progname, "#{msg}#{context_text}")
       end
 
-      def context(**context)
-        push_context(**context)
+      def with(**context)
+        current_context.push(context)
         yield self
       ensure
-        pop_context
-      end
-
-      def push_context(**context)
-        current_context.push(context)
-      end
-
-      def pop_context
         current_context.pop
       end
 
@@ -59,6 +50,19 @@ module RooOnRails
       end
     end
 
+    class LoggerProxy
+      def initialize(logger, context)
+        @logger = logger
+        @context = context
+      end
+
+      %i[debug info warn error fatal unknown].each do |severity|
+        define_method severity do |message|
+          @logger.with(**@context) { @logger.public_send(severity, message) }
+        end
+      end
+    end
+
     def self.new(logger)
       # Ensure we set a default formatter so we aren't extending nil!
       logger.formatter ||= ActiveSupport::Logger::SimpleFormatter.new
@@ -66,10 +70,14 @@ module RooOnRails
       logger.extend(self)
     end
 
-    delegate :push_context, :pop_context, :clear_context!, to: :formatter
+    delegate :clear_context!, to: :formatter
 
-    def context(**context)
-      formatter.context(**context) { yield self }
+    def with(**context)
+      if block_given?
+        formatter.with(**context) { yield self }
+      else
+        LoggerProxy.new(self, context)
+      end
     end
 
     def flush
