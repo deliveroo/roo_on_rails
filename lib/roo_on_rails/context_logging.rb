@@ -2,20 +2,22 @@ require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/object/blank'
 require 'logger'
 require 'active_support/logger'
+require 'roo_on_rails/logfmt'
 
 module RooOnRails
   # Wraps any standard logger to provide context, similar to `ActiveSupport::TaggedLogging`
   # but with key/value pairs that are appended to the end of the text.
   #
   #   logger = RooOnRails::ContextLogging.new(Logger.new($stdout))
-  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' }                  # Logs "Stuff -- a=1 b=2"
-  #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } } # Logs "Stuff -- a=1 b=2"
+  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' }                   # Logs "Stuff -- a=1 b=2"
+  #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }  # Logs "Stuff -- a=1 b=2"
   #
-  # The above methods persist the context in thread-local storage so it will be attached to
-  # anything done within the scope of the block, even in different methods. If you just need
-  # to log something immediately you can use the short version.
+  # The above methods persist the context in thread local storage so it will be attached to
+  # any logs made within the scope of the block, even in called methods. However, if your
+  # context only applies to the current log then you can chain off the `with` method.
   #
-  #   logger.with(a: 1, b: 2).info('Stuff')                            # Logs "Stuff -- a=1 b=2"
+  #   logger.with(a: 1, b: 2).info('Stuff')                   # Logs "Stuff -- a=1 b=2"
+  #   logger.with(a: 1) { logger.with(b: 2).info('Stuff')  }  # Logs "Stuff -- a=1 b=2"
   module ContextLogging
     module Formatter
       def call(severity, timestamp, progname, msg)
@@ -33,20 +35,20 @@ module RooOnRails
         current_context.clear
       end
 
+      private
+
       def current_context
         # We use our object ID here to avoid conflicting with other instances
         thread_key = @thread_key ||= "roo_on_rails:logging_context:#{object_id}".freeze
         Thread.current[thread_key] ||= []
       end
 
-      private
-
       def context_text
         context = current_context
-        return nil unless context.any?
+        return nil if context.empty?
 
         merged_context = context.each_with_object({}) { |ctx, acc| acc.merge!(ctx) }
-        ' -- ' + merged_context.map { |k, v| "#{k}=#{v}" }.join(' ')
+        ' ' + Logfmt.dump(merged_context)
       end
     end
 
