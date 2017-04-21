@@ -1,3 +1,5 @@
+require 'json'
+
 module RooOnRails
   # A generator for the logfmt log format.
   #
@@ -21,6 +23,7 @@ module RooOnRails
         str = case v
               when String then v
               when Symbol then v.to_s
+              when Array, Hash then JSON.dump(v)
               else v.respond_to?(:to_json) ? v.to_json : v.inspect
               end
         escape(str)
