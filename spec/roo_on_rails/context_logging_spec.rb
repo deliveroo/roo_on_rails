@@ -2,7 +2,8 @@ require 'roo_on_rails/context_logging'
 
 RSpec.describe RooOnRails::ContextLogging do
   let(:buffer) { StringIO.new }
-  let(:logger) { described_class.new(ActiveSupport::Logger.new(buffer)) }
+  let(:base_logger) { defined?(ActiveSupport::Logger) ? ActiveSupport::Logger : ::Logger }
+  let(:logger) { described_class.new(base_logger.new(buffer)) }
   let(:output) { buffer.string.chomp }
 
   describe '#with' do

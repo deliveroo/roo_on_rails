@@ -1,7 +1,7 @@
 require 'active_support/core_ext/module/delegation'
 require 'active_support/core_ext/object/blank'
+require 'active_support/version'
 require 'logger'
-require 'active_support/logger'
 require 'roo_on_rails/logfmt'
 
 module RooOnRails
@@ -67,7 +67,14 @@ module RooOnRails
 
     def self.new(logger)
       # Ensure we set a default formatter so we aren't extending nil!
-      logger.formatter ||= ActiveSupport::Logger::SimpleFormatter.new
+      logger.formatter ||=
+        if ActiveSupport::VERSION::MAJOR >= 4
+          require 'active_support/logger'
+          ActiveSupport::Logger::SimpleFormatter.new
+        else
+          require 'active_support/core_ext/logger'
+          ::Logger::SimpleFormatter.new
+        end
       logger.formatter.extend(Formatter)
       logger.extend(self)
     end
