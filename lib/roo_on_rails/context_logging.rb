@@ -25,10 +25,16 @@ module RooOnRails
       end
 
       def with(**context)
-        current_context.push(context)
-        yield self
-      ensure
-        current_context.pop
+        Thread.handle_interrupt(Exception => :never) do
+          current_context.push(context)
+          begin
+            Thread.handle_interrupt(Exception => :immediate) do
+              yield self
+            end
+          ensure
+            current_context.pop
+          end
+        end
       end
 
       def clear_context!
