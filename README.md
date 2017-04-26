@@ -116,6 +116,26 @@ The following ENV are available:
  - `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
  - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the amount of time in seconds rails will wait before attempting to find and recover connections from dead threads
 
+### Logging
+
+For clearer and machine-parseable log output, there in an extension to be able to add context to your logs which is output as [logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
+
+```ruby
+# in application.rb
+
+Rails.logger = RooOnRails::ContextLogging.new(ActiveSupport::Logger.new($stdout))
+```
+
+You can then add context using the `with` method:
+
+```ruby
+logger.with(a: 1, b: 2) { logger.info 'Stuff' }
+logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
+logger.with(a: 1, b: 2).info('Stuff')
+```
+
+See the [class documentation](/deliveroo/roo_on_rails/tree/master/lib/roo_on_rails/context_logging.rb) for further details.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/deliveroo/roo_on_rails.

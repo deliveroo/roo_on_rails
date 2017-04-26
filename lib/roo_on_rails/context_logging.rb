@@ -8,16 +8,19 @@ module RooOnRails
   # Wraps any standard logger to provide context, similar to `ActiveSupport::TaggedLogging`
   # but with key/value pairs that are appended to the end of the text.
   #
-  #   logger = RooOnRails::ContextLogging.new(Logger.new($stdout))
-  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' }                   # Logs "Stuff -- a=1 b=2"
-  #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }  # Logs "Stuff -- a=1 b=2"
+  #   logger = RooOnRails::ContextLogging.new(ActiveSupport::Logger.new($stdout))
+  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' }                   # Logs "Stuff a=1 b=2"
+  #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }  # Logs "Stuff a=1 b=2"
   #
   # The above methods persist the context in thread local storage so it will be attached to
   # any logs made within the scope of the block, even in called methods. However, if your
   # context only applies to the current log then you can chain off the `with` method.
   #
-  #   logger.with(a: 1, b: 2).info('Stuff')                   # Logs "Stuff -- a=1 b=2"
-  #   logger.with(a: 1) { logger.with(b: 2).info('Stuff')  }  # Logs "Stuff -- a=1 b=2"
+  #   logger.with(a: 1, b: 2).info('Stuff')                   # Logs "Stuff a=1 b=2"
+  #   logger.with(a: 1) { logger.with(b: 2).info('Stuff')  }  # Logs "Stuff a=1 b=2"
+  #
+  # Hashes, arrays and any complex object that supports `#to_json` will be output in escaped
+  # JSON format so that it can be parsed out of the attribute values.
   module ContextLogging
     module Formatter
       def call(severity, timestamp, progname, msg)
