@@ -5,6 +5,7 @@ Features:
 - Sets database statement timeout to 200ms by default (#13).
 - Sets migration statement timeout to 10s by default (#16, #17)
 - Adds Sidekiq and Hirefire (workers) integration (#11)
+- Adds the ability to tag logs with key/value pairs (#20)
 
 Fixes:
 

@@ -7,5 +7,6 @@ gem "guard-rspec"
 gem "appraisal"
 gem "rails", "~> 3.2"
 gem "sqlite3"
+gem "sidekiq", "< 5"
 
-gemspec :path => "../"
+gemspec path: "../"
