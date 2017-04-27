@@ -48,7 +48,7 @@ module RooOnRails
 
       def current_context
         # We use our object ID here to avoid conflicting with other instances
-        thread_key = @thread_key ||= "roo_on_rails:logging_context:#{object_id}".freeze
+        thread_key = @logging_context_key ||= "roo_on_rails:logging_context:#{object_id}".freeze
         Thread.current[thread_key] ||= []
       end
 
