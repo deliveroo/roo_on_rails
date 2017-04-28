@@ -60,6 +60,8 @@ We enforce configuration of New Relic.
    through [environment
    variables](https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration)
    is permitted.
+3. The `NEW_RELIC_APP_NAME` environment variable must be defined
+   such that the app will be properly registered in New Relic.
 
 No further configuration is required for production apps as the gem configures our standard settings.
 
@@ -71,6 +73,10 @@ More documentation is available [directly from heroku](https://devcenter.heroku.
 "env": {
   "NEW_RELIC_LICENSE_KEY": {
     "description": "The New Relic licence key",
+    "required": true
+  },
+  "NEW_RELIC_APP_NAME": {
+    "description": "The application name to be registered in New Relic",
     "required": true
   },
   "SECRET_KEY_BASE": {
