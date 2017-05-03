@@ -10,7 +10,7 @@ PATH
       platform-api (~> 0.8)
       rack-ssl-enforcer
       rack-timeout
-      rails (>= 3.2.22, < 5.1)
+      rails (>= 3.2.22, < 5.2)
       sidekiq
 
 GEM
@@ -68,10 +68,10 @@ GEM
     connection_pool (2.2.1)
     diff-lcs (1.3)
     docile (1.1.5)
-    dotenv (2.2.0)
-    dotenv-rails (2.2.0)
-      dotenv (= 2.2.0)
-      railties (>= 3.2, < 5.1)
+    dotenv (2.2.1)
+    dotenv-rails (2.2.1)
+      dotenv (= 2.2.1)
+      railties (>= 3.2, < 5.2)
     erubis (2.7.0)
     excon (0.55.0)
     faraday (0.12.1)
