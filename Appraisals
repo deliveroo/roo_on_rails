@@ -15,3 +15,9 @@ appraise 'rails-5' do
   gem 'sqlite3'
   gem 'pg'
 end
+
+appraise 'rails-5-1' do
+  gem 'rails', '~> 5.1'
+  gem 'sqlite3'
+  gem 'pg'
+end
