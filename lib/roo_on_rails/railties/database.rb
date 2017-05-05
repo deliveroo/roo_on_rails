@@ -1,7 +1,7 @@
 module RooOnRails
   module Railties
     class Database < Rails::Railtie
-      if ActiveRecord::VERSION::MAJOR >= 4
+      if defined?(ActiveRecord) && ActiveRecord::VERSION::MAJOR >= 4
         initializer 'roo_on_rails.database', after: 'active_record.initialize_database' do
           $stderr.puts 'initializer roo_on_rails.database'
 
