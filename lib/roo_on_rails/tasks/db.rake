@@ -23,5 +23,6 @@ end
   db:migrate:down
   db:rollback
 ].each do |task|
+  break unless defined?(ActiveRecord)
   Rake::Task[task].enhance(%i[db:migrate:extend_statement_timeout])
 end
