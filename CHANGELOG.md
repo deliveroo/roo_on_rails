@@ -1,3 +1,13 @@
+# v1.3.1 (2017-05-05)
+
+Features:
+
+- Added Rails 5.1 support (#25)
+
+Fixes:
+
+- Documentation (#23, #24)
+
 # v1.3.0 (2017-04-28)
 
 Features:
