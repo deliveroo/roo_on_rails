@@ -7,7 +7,7 @@ module RooOnRails
   module Checks
     module Heroku
       # Check if a corresponding app exists on Heroku (for a given environment)
-      # 
+      #
       # Input context
       # - git_repo: the name of the repository
       # - heroku.api_client: a connected PlatformAPI client
@@ -41,13 +41,17 @@ module RooOnRails
         private
 
         def name_stem
-          context.app_name_stem || context.git_repo.delete('.')
+          app_name = context.app_name_stem || context.git_repo.delete('.')
+          split_app_name = app_name.split('-')
+          split_app_name.combination(split_app_name.length - 1).map do |permutation|
+            permutation.join('-')
+          end
         end
 
         def candidates
           [
             ['deliveroo', 'roo', nil],
-            [name_stem],
+            name_stem,
             [env],
           ].tap { |a|
             a.replace a.first.product(*a[1..-1])
