@@ -37,7 +37,8 @@ module RooOnRails
         def ensure_status_checks!
           status_checks = protection[:required_status_checks] || {}
           enforce_admins = protection[:enforce_admins]
-          fail! 'status checks do not include admins' unless enforce_admins && enforce_admins[:enabled]
+          fail! 'status checks do not include admins' unless enforce_admins &&
+                                                             enforce_admins[:enabled]
 
           contexts = status_checks[:contexts] || []
           ensure_ci_status_check!(contexts)
