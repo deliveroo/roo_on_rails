@@ -27,7 +27,7 @@ module RooOnRails
               required_status_checks: fixed_required_status_checks,
               required_pull_request_reviews: fixed_pull_request_reviews,
               restrictions: fixed_restrictions,
-              enforce_admins: false
+              enforce_admins: true
             )
           )
         end
@@ -36,7 +36,8 @@ module RooOnRails
 
         def ensure_status_checks!
           status_checks = protection[:required_status_checks] || {}
-          fail! 'status checks do not include admins' unless status_checks[:include_admins]
+          enforce_admins = protection[:enforce_admins]
+          fail! 'status checks do not include admins' unless enforce_admins && enforce_admins[:enabled]
 
           contexts = status_checks[:contexts] || []
           ensure_ci_status_check!(contexts)
@@ -59,7 +60,8 @@ module RooOnRails
 
         def ensure_code_reviews!
           reviews = protection[:required_pull_request_reviews] || {}
-          fail! 'code reviews do not include admins' unless reviews[:include_admins]
+          fail! 'code reviews dismiss state reviews' unless reviews[:dismiss_stale_reviews]
+          fail! 'code reviews do not include admins' if reviews[:dismissal_restrictions]
         end
 
         def ensure_no_push!
