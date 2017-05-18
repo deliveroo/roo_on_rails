@@ -26,7 +26,8 @@ module RooOnRails
             options.merge(
               required_status_checks: fixed_required_status_checks,
               required_pull_request_reviews: fixed_pull_request_reviews,
-              restrictions: fixed_restrictions
+              restrictions: fixed_restrictions,
+              enforce_admins: false
             )
           )
         end
