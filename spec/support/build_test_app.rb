@@ -39,8 +39,13 @@ module ROR
           }
         end
 
+        if Rails::VERSION::MAJOR < 5
+          append_to_file scaffold_dir.join('Gemfile'), %{
+            gem 'puma', '~> 3.0'
+          }
+        end
+
         append_to_file scaffold_dir.join('Gemfile'), %{
-          gem 'puma', '~> 3.0'
           gem 'roo_on_rails', path: '../../..'
         }
 
