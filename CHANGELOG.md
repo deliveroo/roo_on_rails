@@ -1,10 +1,21 @@
-# HEAD
+# v1.3.1 (2017-05-05)
+
+Features:
+
+- Added Rails 5.1 support (#25)
+
+Fixes:
+
+- Documentation (#23, #24)
+
+# v1.3.0 (2017-04-28)
 
 Features:
 
 - Sets database statement timeout to 200ms by default (#13).
 - Sets migration statement timeout to 10s by default (#16, #17)
 - Adds Sidekiq and Hirefire (workers) integration (#11)
+- Adds the ability to tag logs with key/value pairs (#20)
 
 Fixes:
 

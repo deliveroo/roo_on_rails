@@ -33,8 +33,19 @@ module ROR
 
         shell_run "rails new #{scaffold_dir} #{rails_new_options}"
 
+        if Rails::VERSION::MAJOR < 4
+          append_to_file scaffold_dir.join('Gemfile'), %{
+            gem 'sidekiq', '< 5'
+          }
+        end
+
+        if Rails::VERSION::MAJOR < 5
+          append_to_file scaffold_dir.join('Gemfile'), %{
+            gem 'puma', '~> 3.0'
+          }
+        end
+
         append_to_file scaffold_dir.join('Gemfile'), %{
-          gem 'puma', '~> 3.0'
           gem 'roo_on_rails', path: '../../..'
         }
 

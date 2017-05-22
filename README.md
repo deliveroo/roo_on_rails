@@ -60,6 +60,8 @@ We enforce configuration of New Relic.
    through [environment
    variables](https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration)
    is permitted.
+3. The `NEW_RELIC_APP_NAME` environment variable must be defined
+   such that the app will be properly registered in New Relic.
 
 No further configuration is required for production apps as the gem configures our standard settings.
 
@@ -71,6 +73,10 @@ More documentation is available [directly from heroku](https://devcenter.heroku.
 "env": {
   "NEW_RELIC_LICENSE_KEY": {
     "description": "The New Relic licence key",
+    "required": true
+  },
+  "NEW_RELIC_APP_NAME": {
+    "description": "The application name to be registered in New Relic",
     "required": true
   },
   "SECRET_KEY_BASE": {
@@ -108,13 +114,47 @@ When `SIDEKIQ_ENABLED` is set we'll:
 
  - check for the existence of a worker line in your Procfile
  - add SLA style queues to your worker list
- - check for a HIREFIRE_TOKEN and if it's set enable SLA based autoscaling
+ - check for a `HIREFIRE_TOKEN` and if it's set enable SLA based autoscaling
 
 The following ENV are available:
 
  - `SIDEKIQ_ENABLED`
  - `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
  - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the amount of time in seconds rails will wait before attempting to find and recover connections from dead threads
+
+### HireFire Workers
+
+When `HIREFIRE_TOKEN` is set an endpoint will be mounted at /hirefire that reports the required worker count as a function of queue latency. By default we add queue names in the style 'within1day', so if we notice an average latency in that queue of more than an set threshold we'll request one more worker. If we notice less than a threshold we'll request one less worker. These settings can be customised via the following ENV variables
+
+ - `WORKER_INCREASE_THRESHOLD` (default 0.5)
+ - `WORKER_DECREASE_THRESHOLD` (default 0.1)
+
+When setting the manager up in the HireFire web ui, the following settings must be used:
+
+- name: 'worker'
+- type: 'Worker.HireFire.JobQueue'
+- ratio: 1
+- decrementable: 'true'
+
+### Logging
+
+For clearer and machine-parseable log output, there in an extension to be able to add context to your logs which is output as [logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
+
+```ruby
+# in application.rb
+
+Rails.logger = RooOnRails::ContextLogging.new(ActiveSupport::Logger.new($stdout))
+```
+
+You can then add context using the `with` method:
+
+```ruby
+logger.with(a: 1, b: 2) { logger.info 'Stuff' }
+logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
+logger.with(a: 1, b: 2).info('Stuff')
+```
+
+See the [class documentation](/deliveroo/roo_on_rails/tree/master/lib/roo_on_rails/context_logging.rb) for further details.
 
 ## Contributing
 
