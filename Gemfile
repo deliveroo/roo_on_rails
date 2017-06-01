@@ -6,3 +6,6 @@ gemspec
 gem 'guard'
 gem 'guard-rspec'
 gem 'appraisal'
+
+gem 'pg'
+gem 'sqlite3'
