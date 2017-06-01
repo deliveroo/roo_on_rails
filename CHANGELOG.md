@@ -1,3 +1,14 @@
+# HEAD
+
+Features:
+
+- Added `newrelic:notice_deployment` rake task (#32)
+
+Fixes:
+
+- `roo_on_rails` command only loads the checks harness if necessary (#30)
+- Upgraded outdated `platform-api` gem (#31)
+
 # v1.3.1 (2017-05-05)
 
 Features:
@@ -15,7 +26,7 @@ Features:
 - Sets database statement timeout to 200ms by default (#13).
 - Sets migration statement timeout to 10s by default (#16, #17)
 - Adds Sidekiq and Hirefire (workers) integration (#11)
-- Adds the ability to tag logs with key/value pairs (#20)
+- Adds the ability to tag logs with key/value pairs (#20, #21)
 
 Fixes:
 
@@ -23,6 +34,7 @@ Fixes:
 - Do not depend on sort order for Codecov GitHub contexts (#12)
 - Do not add `Rack::SslEnforcer` middleware in test environment (#15)
 - Fix for "undefined constant: RooOnRails::Rack::Timeout" (#18)
+- Use correct class name in Sidekiq auto-scaling metric (#22)
 
 # v1.2.0 (2017-03-21)
 
@@ -45,7 +57,7 @@ Features:
 
 # v1.0.1 (2017-01-20)
 
-Bug fixes:
+Fixes:
 
 - Do not load New Relic in test environments (#2, #3)
 
