@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
+
 require 'rubygems'
 require 'roo_on_rails/config'
-require 'roo_on_rails/harness'
-require 'roo_on_rails/sidekiq/loader'
 
 if ARGV.include? 'sidekiq'
+  require 'roo_on_rails/sidekiq/loader'
   RooOnRails::Sidekiq::Loader.run
 else
+  require 'roo_on_rails/harness'
   module RooOnRails
     Harness.new(try_fix: true, context: Config.load).run
   end
