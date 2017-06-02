@@ -19,18 +19,19 @@ module RooOnRails
       class MetricsBridgeConfigured < EnvSpecific
         requires Heroku::AppExists
         
-        BRIDGE_APP = 'roo-dd-bridge-production'
+        BRIDGE_APP = 'roo-dd-bridge-production'.freeze
 
         def intro
           "Checking whether metrics bridge is configured for #{bold app_name}"
         end
 
         def call
-          config = client.config_var.info_for_app(BRIDGE_APP)
+          config = current_config
+          names = config[app_list_var].split(',')
 
-          fail! 'Bridge does not allow this app' unless config[app_list_var].split(',').include? app_name
+          fail! 'Bridge does not allow this app'        unless names.include? app_name
           fail! 'Bridge lacks credentials for this app' unless config[token_var]
-          fail! 'Bridge lacks tags for this app' unless config[tags_var]
+          fail! 'Bridge lacks tags for this app'        unless config[tags_var]
 
           pass 'Bridge is configured'
           context.heroku.metric_bridge_token![env] = config[token_var]
@@ -39,13 +40,18 @@ module RooOnRails
         private
 
         def fix
-          app_list = Set.new client.config_var.info_for_app(BRIDGE_APP).fetch(app_list_var, '').split(',')
+          app_list = Set.new current_config.fetch(app_list_var, '').split(',')
           app_list << app_name
           client.config_var.update(
             BRIDGE_APP,
             tags_var     => "app:#{app_name}",
             token_var    => SecureRandom.hex(16),
-            app_list_var => app_list.to_a.join(','))
+            app_list_var => app_list.to_a.join(',')
+          )
+        end
+
+        def current_config
+          client.config_var.info_for_app(BRIDGE_APP)
         end
 
         def app_list_var
@@ -53,11 +59,11 @@ module RooOnRails
         end
 
         def tags_var
-          "%s_TAGS" % app_name.upcase
+          '%s_TAGS' % app_name.upcase
         end
 
         def token_var
-          "%s_PASSWORD" % app_name.upcase
+          '%s_PASSWORD' % app_name.upcase
         end
 
         def app_name

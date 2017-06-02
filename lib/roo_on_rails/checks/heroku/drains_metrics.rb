@@ -23,8 +23,8 @@ module RooOnRails
 
         def call
           url = client.log_drain.list(app_name).
-            map { |h| h['url'] }.
-            find { |u| u.include? MetricsBridgeConfigured::BRIDGE_APP }
+                map { |h| h['url'] }.
+                find { |u| u.include? MetricsBridgeConfigured::BRIDGE_APP }
 
           fail! 'No matching drain found' if url.nil?
           final_fail! 'Misconfigured drain found' if url != drain_uri

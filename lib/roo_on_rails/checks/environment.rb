@@ -10,9 +10,9 @@ module RooOnRails
   module Checks
     class Environment < EnvSpecific
       requires GitHub::BranchProtection
+      requires Heroku::DrainsMetrics
       requires Heroku::PrebootEnabled
       requires Sidekiq::Settings
-      requires Heroku::DrainsMetrics
 
       def call
         # nothing to do
