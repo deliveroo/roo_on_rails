@@ -3,6 +3,7 @@
 Features:
 
 - Added `newrelic:notice_deployment` rake task (#32)
+- Supports Rails apps without ActiveRecord (#26)
 
 Fixes:
 
