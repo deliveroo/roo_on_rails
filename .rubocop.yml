@@ -28,6 +28,16 @@ Metrics/LineLength:
   Max: 100
   Exclude:
     - Gemfile
-
+  
 Style/Documentation:
   Enabled: false
+
+
+Style/FormatString:
+  Enabled: false
+Style/DotPosition:
+  Enabled: false
+Style/TrailingWhitespace:
+  Enabled: false
+Metrics/AbcSize:
+  Max: 30

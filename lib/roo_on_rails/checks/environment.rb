@@ -4,11 +4,13 @@ require 'roo_on_rails/checks/heroku/app_exists'
 require 'roo_on_rails/checks/heroku/preboot_enabled'
 require 'roo_on_rails/checks/heroku/app_exists'
 require 'roo_on_rails/checks/sidekiq/settings'
+require 'roo_on_rails/checks/heroku/drains_metrics'
 
 module RooOnRails
   module Checks
     class Environment < EnvSpecific
       requires GitHub::BranchProtection
+      requires Heroku::DrainsMetrics
       requires Heroku::PrebootEnabled
       requires Sidekiq::Settings
 

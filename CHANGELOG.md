@@ -2,19 +2,20 @@
 
 Features:
 
-- Added `newrelic:notice_deployment` rake task (#32)
+- Adds `newrelic:notice_deployment` rake task (#32)
+- Adds Heroku/Datadog integration checks (#33)
 - Supports Rails apps without ActiveRecord (#26)
 
 Fixes:
 
 - `roo_on_rails` command only loads the checks harness if necessary (#30)
-- Upgraded outdated `platform-api` gem (#31)
+- Upgrades outdated `platform-api` gem (#31)
 
 # v1.3.1 (2017-05-05)
 
 Features:
 
-- Added Rails 5.1 support (#25)
+- Adds Rails 5.1 support (#25)
 
 Fixes:
 
