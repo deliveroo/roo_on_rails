@@ -16,7 +16,7 @@ module RooOnRails
       # - heroku.metric_bridge_token.{env}: the password for the metrics bridge
       class DrainsMetrics < EnvSpecific
         requires Heroku::AppExists, MetricsBridgeConfigured
-        
+
         def intro
           "Checking for metrics drain on #{bold app_name}"
         end
@@ -36,7 +36,7 @@ module RooOnRails
         def fix
           client.log_drain.create(app_name, url: drain_uri)
         end
-        
+
         def drain_uri
           'https://%s:%s@%s.herokuapp.com' % [
             app_name,
