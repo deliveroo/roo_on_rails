@@ -15,7 +15,6 @@ module RooOnRails
         dependencies.any? ? @requires.merge(dependencies) : @requires
       end
 
-
       def initialize(options = {})
         @options = options.dup
         @fix     = @options.delete(:fix) { false }
