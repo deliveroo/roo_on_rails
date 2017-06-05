@@ -30,17 +30,15 @@ module RooOnRails
       end
 
       def config_sidekiq_metrics
-        begin
-          require 'sidekiq/middleware/server/statsd'
-        rescue LoadError
-          return # metrics are only available in sidekiq pro
-        end
+        require 'sidekiq/middleware/server/statsd'
 
         ::Sidekiq.configure_server do |x|
           x.server_middleware do |chain|
             chain.add ::Sidekiq::Middleware::Server::Statsd, client: RooOnRails.statsd
           end
         end
+      rescue LoadError
+        $stderr.puts 'Sidekiq metrics unavailable without Sidekiq Pro'
       end
 
       def add_middleware(app)
