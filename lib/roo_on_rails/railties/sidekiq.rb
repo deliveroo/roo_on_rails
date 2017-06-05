@@ -1,4 +1,5 @@
 require 'sidekiq'
+require 'roo_on_rails/statsd'
 require 'roo_on_rails/sidekiq/settings'
 require 'roo_on_rails/sidekiq/sla_metric'
 
