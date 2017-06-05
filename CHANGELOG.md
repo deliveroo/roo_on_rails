@@ -4,6 +4,7 @@ Features:
 
 - Adds `newrelic:notice_deployment` rake task (#32)
 - Adds Heroku/Datadog integration checks (#33)
+- Supports Rails apps without ActiveRecord (#26)
 
 Fixes:
 
