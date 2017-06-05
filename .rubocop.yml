@@ -37,7 +37,5 @@ Style/FormatString:
   Enabled: false
 Style/DotPosition:
   Enabled: false
-Style/TrailingWhitespace:
-  Enabled: false
 Metrics/AbcSize:
   Max: 30

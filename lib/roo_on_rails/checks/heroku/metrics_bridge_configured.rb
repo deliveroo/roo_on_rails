@@ -18,7 +18,7 @@ module RooOnRails
       # - heroku.metric_bridge_token.{env}: the password for the metrics bridge
       class MetricsBridgeConfigured < EnvSpecific
         requires Heroku::AppExists
-        
+
         BRIDGE_APP = 'roo-dd-bridge-production'.freeze
 
         def intro

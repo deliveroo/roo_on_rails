@@ -11,7 +11,7 @@ module RooOnRails
         super(options)
         @env = @options[:env]
       end
-      
+
       def signature
         super + [@env]
       end

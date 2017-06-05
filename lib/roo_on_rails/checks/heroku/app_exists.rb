@@ -7,7 +7,7 @@ module RooOnRails
   module Checks
     module Heroku
       # Check if a corresponding app exists on Heroku (for a given environment)
-      # 
+      #
       # Input context
       # - git_repo: the name of the repository
       # - heroku.api_client: a connected PlatformAPI client
@@ -31,7 +31,8 @@ module RooOnRails
           end
 
           if matches.many?
-            final_fail! "multiple matching apps detected: #{candidates.map { |c| bold c}.join(', ')}"
+            list = candidates.map { |c| bold c }.join(', ')
+            final_fail! "multiple matching apps detected: #{list}"
           end
 
           context.heroku.app![env] = matches.first
