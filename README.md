@@ -141,9 +141,22 @@ When setting the manager up in the HireFire web ui, the following settings must 
 For clearer and machine-parseable log output, there in an extension to be able to add context to your logs which is output as [logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
 
 ```ruby
-# in application.rb
+# application.rb
 
-Rails.logger = RooOnRails::ContextLogging.new(ActiveSupport::Logger.new($stdout))
+require 'roo_on_rails/context_logging'
+
+class Application < Rails::Application
+
+  # add this block somewhere within the application class
+  logger = config.logger
+  if logger.nil?
+    logger = ActiveSupport::Logger.new($stdout)
+    logger.formatter = config.log_formatter
+  end
+  logger = ActiveSupport::TaggedLogging.new(logger) unless logger.respond_to?(:tagged)
+  config.logger = RooOnRails::ContextLogging.new(logger)
+
+end
 ```
 
 You can then add context using the `with` method:
@@ -154,7 +167,7 @@ logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
 logger.with(a: 1, b: 2).info('Stuff')
 ```
 
-See the [class documentation](/deliveroo/roo_on_rails/tree/master/lib/roo_on_rails/context_logging.rb) for further details.
+See the [class documentation](lib/roo_on_rails/context_logging.rb) for further details.
 
 ## Contributing
 
