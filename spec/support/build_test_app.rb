@@ -89,7 +89,16 @@ module ROR
       end
 
       def rails_new_options
-        "#{RAILS_NEW_BASE_OPTIONS} --database=#{@database}"
+        options = [RAILS_NEW_BASE_OPTIONS]
+
+        options << case @database
+        when nil
+          '--skip-active-record'
+        else
+          "--database=#{@database}"
+        end
+        
+        options.join(' ')
       end
 
       def scaffold_dir
