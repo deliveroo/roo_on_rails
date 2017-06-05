@@ -10,6 +10,7 @@ module RooOnRails
         $stderr.puts 'initializer roo_on_rails.sidekiq'
         break unless ENV.fetch('SIDEKIQ_ENABLED', 'true').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
         config_sidekiq
+        config_sidekiq_metrics
         config_hirefire(app)
       end
 
@@ -25,6 +26,20 @@ module RooOnRails
         ::Sidekiq.configure_server do |x|
           x.options[:concurrency] = RooOnRails::Sidekiq::Settings.concurrency.to_i
           x.options[:queues] = RooOnRails::Sidekiq::Settings.queues
+        end
+      end
+
+      def config_sidekiq_metrics
+        begin
+          require 'sidekiq/middleware/server/statsd'
+        rescue LoadError
+          return # metrics are only available in sidekiq pro
+        end
+
+        ::Sidekiq.configure_server do |x|
+          x.server_middleware do |chain|
+            chain.add ::Sidekiq::Middleware::Server::Statsd, client: RooOnRails.statsd
+          end
         end
       end
 
