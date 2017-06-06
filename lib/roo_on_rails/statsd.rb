@@ -1,4 +1,5 @@
 require 'datadog/statsd'
+require 'singleton'
 
 module RooOnRails
   class Statsd
@@ -7,7 +8,7 @@ module RooOnRails
     attr_reader :client
 
     def initialize
-      @client = defined?(::STATSD) ? ::STATSD : Datadog::Statsd.new(host, port, tags: tags)
+      @client = defined?(::STATSD) ? ::STATSD : ::Datadog::Statsd.new(host, port, tags: tags)
     end
 
     private
