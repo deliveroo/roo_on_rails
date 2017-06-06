@@ -1,3 +1,11 @@
+# HEAD
+
+Features:
+
+- Adds Datadog integration (#35)
+- Adds `Sidekiq::MetricsWorker` to publish queue/process metrics (#35)
+- Inserts Sidekiq STATSD middleware if Sidekiq Pro is available (#35)
+
 # v1.4.0 (2017-06-05)
 
 Features:
