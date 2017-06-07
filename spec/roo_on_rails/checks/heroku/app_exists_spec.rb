@@ -19,7 +19,7 @@ describe RooOnRails::Checks::Heroku::AppExists, type: :check do
     let(:existing_apps) { [] }
     it_expects_check_to_fail
   end
-  
+
   context 'when multiple matching apps exist' do
     let(:existing_apps) { %w[ fubar-app-production roo-fubar-app-production ] }
     it_expects_check_to_fail
@@ -30,5 +30,12 @@ describe RooOnRails::Checks::Heroku::AppExists, type: :check do
     it_expects_check_to_pass
 
     it { expect { perform }.to change { context.heroku.app_.production }.to 'fubar-app-production' }
+  end
+
+  context 'when app name does not include all parts of the repo name' do
+    let(:existing_apps) { %w[ fubar-production ] }
+    it_expects_check_to_pass
+
+    it { expect { perform }.to change { context.heroku.app_.production }.to 'fubar-production' }
   end
 end
