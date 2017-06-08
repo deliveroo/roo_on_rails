@@ -7,6 +7,6 @@ gem "guard-rspec"
 gem "appraisal"
 gem "pg"
 gem "sqlite3"
-gem "rails", "~> 5.0"
+gem "rails", "~> 5.0.0"
 
 gemspec path: "../"
