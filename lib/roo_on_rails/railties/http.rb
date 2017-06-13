@@ -31,7 +31,7 @@ module RooOnRails
         # Don't use SslEnforcer in test environment as it breaks Capybara
         unless Rails.env.test?
           app.config.middleware.insert_before(
-            ActionDispatch::Cookies,
+            Rack::Head,
             ::Rack::SslEnforcer
           )
         end
