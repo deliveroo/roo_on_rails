@@ -20,7 +20,7 @@ module RooOnRails
         # This needs to be inserted low in the stack, before Rails returns the
         # thread-current connection to the pool.
         app.config.middleware.insert_before(
-          ActionDispatch::Cookies,
+          Rack::Head,
           RooOnRails::Rack::SafeTimeouts
         )
 
