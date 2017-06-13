@@ -20,7 +20,7 @@ module RooOnRails
         # This needs to be inserted low in the stack, before Rails returns the
         # thread-current connection to the pool.
         app.config.middleware.insert_before(
-          Rack::Head,
+          ::Rack::Head,
           RooOnRails::Rack::SafeTimeouts
         )
 
@@ -31,7 +31,7 @@ module RooOnRails
         # Don't use SslEnforcer in test environment as it breaks Capybara
         unless Rails.env.test?
           app.config.middleware.insert_before(
-            Rack::Head,
+            ::Rack::Head,
             ::Rack::SslEnforcer
           )
         end
