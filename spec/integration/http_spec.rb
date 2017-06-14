@@ -8,8 +8,7 @@ describe 'Http rack setup' do
   context 'When booting' do
     let(:middleware) { app_helper.shell_run "cd #{app_path} && rake middleware" }
 
-    it 'inserts rack timeout into the middleware stack' do
-      binding.pry
+    it 'inserts rack timeout into the middleware stack' do      
       expect(middleware).to include 'Rack::Timeout'
     end
 
