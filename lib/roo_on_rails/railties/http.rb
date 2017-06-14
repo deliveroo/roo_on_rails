@@ -17,7 +17,10 @@ module RooOnRails
           ::Rack::Timeout
         )
 
-        middleware_to_insert_before = defined?(::Rack::Head) ? ::Rack::Head : ::ActionDispatch::Cookies
+        middlewares = app.config.middleware.to_a.map { |c| c.klass.to_s }
+        middlewares.each { |p| puts p.klass.to_s }
+        
+        middleware_to_insert_before = middlewares.include?('Rack::Head') ? ::Rack::Head : ::ActionDispatch::Cookies
 
         # This needs to be inserted low in the stack, before Rails returns the
         # thread-current connection to the pool.

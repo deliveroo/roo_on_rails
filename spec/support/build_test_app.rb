@@ -63,7 +63,7 @@ module ROR
         scaffold_dir.rmtree unless @keep_scaffold
         self
       rescue => e
-        binding.pry
+        # binding.pry
       end
 
       def unpack_scaffold_at(path)
