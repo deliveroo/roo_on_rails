@@ -97,7 +97,7 @@ module ROR
         else
           "--database=#{@database}"
         end
-        
+
         options.join(' ')
       end
 
