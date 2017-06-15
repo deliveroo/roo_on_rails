@@ -9,10 +9,11 @@ module RooOnRails
       initializer 'roo_on_rails.sidekiq' do |app|
         require 'hirefire-resource'
         $stderr.puts 'initializer roo_on_rails.sidekiq'
-        break unless ENV.fetch('SIDEKIQ_ENABLED', 'true').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
-        config_sidekiq
-        config_sidekiq_metrics
-        config_hirefire(app)
+        if ENV.fetch('SIDEKIQ_ENABLED', 'true').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
+          config_sidekiq
+          config_sidekiq_metrics
+          config_hirefire(app)
+        end
       end
 
       def config_hirefire(app)
