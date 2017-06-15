@@ -62,8 +62,6 @@ module ROR
         shell_run "tar -C #{scaffold_dir} -cf #{scaffold_path} ."
         scaffold_dir.rmtree unless @keep_scaffold
         self
-      rescue => e
-        # binding.pry
       end
 
       def unpack_scaffold_at(path)
