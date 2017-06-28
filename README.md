@@ -110,6 +110,8 @@ _Note: This configuration is not supported in Rails 3 and will be skipped. Set s
 
 ### Sidekiq
 
+Deliveroo services implement Sidekiq with an _urgency_ pattern. By only having time-based [SLA](https://en.wikipedia.org/wiki/Service-level_agreement) queue names (eg. `within5minutes`) we can automatically create incident alerting for queues which take longer than the time the application needs them to be processed.
+
 When `SIDEKIQ_ENABLED` is set we'll:
 
  - check for the existence of a worker line in your Procfile
