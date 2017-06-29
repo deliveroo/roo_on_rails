@@ -124,6 +124,8 @@ The following ENV are available:
  - `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
  - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the amount of time in seconds rails will wait before attempting to find and recover connections from dead threads
 
+NB. If you are migrating to SLA-based queue names, do not set `SIDEKIQ_ENABLED` to `true` before your old queues have finished processing (this will prevent Sidekiq from seeing the old queues at all).
+
 ### HireFire Workers
 
 When `HIREFIRE_TOKEN` is set an endpoint will be mounted at /hirefire that reports the required worker count as a function of queue latency. By default we add queue names in the style 'within1day', so if we notice an average latency in that queue of more than an set threshold we'll request one more worker. If we notice less than a threshold we'll request one less worker. These settings can be customised via the following ENV variables
