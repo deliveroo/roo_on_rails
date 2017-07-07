@@ -9,5 +9,6 @@ gem "pg"
 gem "sqlite3"
 gem "rails", "~> 3.2"
 gem "sidekiq", "< 5"
+gem "encrypted-cookies" # Only for Rails 3; built-in to Rails 4+
 
 gemspec path: "../"
