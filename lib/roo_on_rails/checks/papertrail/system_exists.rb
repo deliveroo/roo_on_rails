@@ -17,7 +17,7 @@ module RooOnRails
       # - papertrail.dest.host, .port
       #
       # Output context:
-      # - FIXME
+      # - papertrail.system_id.{env}
       class SystemExists < EnvSpecific
         requires Heroku::AppExists
         requires Heroku::Token
@@ -40,10 +40,23 @@ module RooOnRails
             final_fail! "system found, but is listening to #{data.syslog.hostname}:#{data.syslog.port} instead of #{context.papertrail.dest.host}:#{context.papertrail.dest.port}"
           end
 
-          pass "found system for token #{system_token}"
+          context.papertrail.system_id![env] = data.id
+          pass "found system #{data.id} for token #{system_token}"
         end
 
         def fix
+          # cause the app to log something
+          dyno = heroku.dyno.create(app_name, command: 'date')
+
+          # wait a bit
+          10.times do
+            begin
+              heroku.dyno.info(app_name, dyno['id'])
+              sleep 0.5
+            rescue Excon::Error::NotFound
+              break
+            end
+          end
         end
 
         private
@@ -54,6 +67,10 @@ module RooOnRails
 
         def app_name
           context.heroku.app[env]
+        end
+
+        def heroku
+          context.heroku.api_client
         end
       end
     end

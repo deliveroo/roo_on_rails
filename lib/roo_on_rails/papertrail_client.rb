@@ -16,6 +16,14 @@ module RooOnRails
       _conn.get('systems.json').body
     end
 
+    def get_system(id)
+      _conn.get('systems/%s.json' % id).body
+    end
+
+    def update_system(id, data)
+      _conn.put('systems/%s.json' % id, system: data).body
+    end
+
     # private
 
     def _conn
