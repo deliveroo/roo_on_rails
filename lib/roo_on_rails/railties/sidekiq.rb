@@ -9,11 +9,14 @@ module RooOnRails
     class Sidekiq < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
         require 'hirefire-resource'
-        $stderr.puts 'initializer roo_on_rails.sidekiq'
+        
         if RooOnRails::Config.sidekiq_enabled?
+          $stderr.puts 'initializer roo_on_rails.sidekiq'
           config_sidekiq
           config_sidekiq_metrics
           config_hirefire(app)
+        else
+          $stderr.puts 'skipping initializer roo_on_rails.sidekiq'
         end
       end
 
