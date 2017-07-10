@@ -1,4 +1,5 @@
 require 'sidekiq'
+require 'roo_on_rails/config'
 require 'roo_on_rails/statsd'
 require 'roo_on_rails/sidekiq/settings'
 require 'roo_on_rails/sidekiq/sla_metric'
@@ -9,7 +10,7 @@ module RooOnRails
       initializer 'roo_on_rails.sidekiq' do |app|
         require 'hirefire-resource'
         $stderr.puts 'initializer roo_on_rails.sidekiq'
-        if ENV.fetch('SIDEKIQ_ENABLED', 'true').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
+        if RooOnRails::Config.sidekiq_enabled?
           config_sidekiq
           config_sidekiq_metrics
           config_hirefire(app)
