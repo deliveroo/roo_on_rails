@@ -13,6 +13,10 @@ module RooOnRails
         enabled? 'SIDEKIQ_ENABLED'
       end
 
+      def google_auth_enabled?
+        enabled? 'GOOGLE_AUTH_ENABLED', default: false
+      end
+
 
       private
 

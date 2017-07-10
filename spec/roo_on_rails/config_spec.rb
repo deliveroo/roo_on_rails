@@ -32,6 +32,8 @@ RSpec.describe RooOnRails::Config do
     specify "with a truthy setting it returns true" do
       set_env "true"
       expect(subject).to be true
+      set_env "1"
+      expect(subject).to be true
     end
 
     specify "with a non truthy setting it returns false" do
@@ -40,6 +42,35 @@ RSpec.describe RooOnRails::Config do
       set_env "bangerang"
       expect(subject).to be false
     end
+  end
 
+  describe "google_auth_enabled?" do
+    subject { described_class.google_auth_enabled? }
+
+    before { @original = ENV['GOOGLE_AUTH_ENABLED'] }
+    after  { ENV['GOOGLE_AUTH_ENABLED'] = @original }
+
+    def set_env(value)
+      ENV['GOOGLE_AUTH_ENABLED'] = value
+    end
+
+    specify "without any configured value it defaults to false" do
+      set_env nil
+      expect(subject).to be false
+    end
+
+    specify "with a truthy setting it returns true" do
+      set_env "true"
+      expect(subject).to be true
+      set_env "1"
+      expect(subject).to be true
+    end
+
+    specify "with a non truthy setting it returns false" do
+      set_env "false"
+      expect(subject).to be false
+      set_env "bangerang"
+      expect(subject).to be false
+    end
   end
 end
