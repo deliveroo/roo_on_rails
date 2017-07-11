@@ -12,7 +12,6 @@ module RooOnRails
       # - heroku.app.{env}
       # - papertrail.system_id.{env}: a Papertrail system ID
       # - papertrail.client
-      # - papertrail.dest.host, .port
       #
       # Output context:
       # - None
