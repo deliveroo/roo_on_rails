@@ -1,3 +1,9 @@
+# Pre-release
+
+Features:
+
+- Adds check for a `PLAYBOOK.md` file, which should detail how to deal with issues which might occur with the service.
+
 # v1.5.0 (2017-06-19)
 
 Features:
