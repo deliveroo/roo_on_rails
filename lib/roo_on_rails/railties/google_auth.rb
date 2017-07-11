@@ -17,7 +17,8 @@ module RooOnRails
               google_oauth2_client_id,
               google_oauth2_client_secret,
               path_prefix: '/auth',
-              prompt: 'consent'
+              prompt: 'consent',
+              hd: %w(com ae be co.uk com.au com.sg de es fr hk ie it nl).map { |tld| "deliveroo.#{tld}" }
           end
         else
           $stderr.puts 'skipping initializer roo_on_rails.google_auth'
