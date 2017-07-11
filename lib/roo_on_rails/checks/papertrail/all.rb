@@ -13,7 +13,7 @@ module RooOnRails
         end
 
         def call
-          pass "all Papertrail checks passed"
+          pass 'all Papertrail checks passed'
         end
       end
     end

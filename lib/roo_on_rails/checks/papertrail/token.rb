@@ -42,4 +42,3 @@ module RooOnRails
     end
   end
 end
-

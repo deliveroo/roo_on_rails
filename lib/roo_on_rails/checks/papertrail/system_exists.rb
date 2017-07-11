@@ -36,7 +36,7 @@ module RooOnRails
           fail! "no system with token '#{system_token}' found" if data.nil?
 
           if data.syslog.hostname != context.papertrail.dest.host ||
-              data.syslog.port != context.papertrail.dest.port
+             data.syslog.port != context.papertrail.dest.port
             final_fail! "system found, but is listening to #{data.syslog.hostname}:#{data.syslog.port} instead of #{context.papertrail.dest.host}:#{context.papertrail.dest.port}"
           end
 

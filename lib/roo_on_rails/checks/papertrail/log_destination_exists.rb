@@ -15,7 +15,7 @@ module RooOnRails
         requires Token
 
         # The shared log destination
-        NAME = 'default'
+        NAME = 'default'.freeze
 
         def intro
           "Checking for log destination #{bold NAME}..."
@@ -26,7 +26,7 @@ module RooOnRails
             h['syslog']['description'] == NAME
           }
 
-          fail! "Log destination not found" if data.nil?
+          fail! "Log destination #{bold NAME} not found" if data.nil?
 
           context.papertrail!.dest!.host = data['syslog']['hostname']
           context.papertrail!.dest!.port = data['syslog']['port']
@@ -37,5 +37,3 @@ module RooOnRails
     end
   end
 end
-
-

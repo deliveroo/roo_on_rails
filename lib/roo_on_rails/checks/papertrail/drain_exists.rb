@@ -28,7 +28,7 @@ module RooOnRails
         def call
           # find the PT drain
           data = client.log_drain.list(app_name).
-            select { |h| h['url'] =~ /papertrailapp/ }
+                 select { |h| h['url'] =~ /papertrailapp/ }
           fail! 'no Papertrail drain found' if data.empty?
           fail! 'multiple Papertrail drains found' if data.length > 1
 
@@ -54,9 +54,9 @@ module RooOnRails
         end
 
         def papertrail_url
-          format 'syslog+tls://%s:%s', 
-            context.papertrail.dest.host,
-            context.papertrail.dest.port
+          format 'syslog+tls://%s:%s',
+                 context.papertrail.dest.host,
+                 context.papertrail.dest.port
         end
       end
     end
