@@ -30,3 +30,18 @@ Rails.application.config.middleware.use RooOnRails::Rack::GoogleOauth do |env|
   # For example:
   # MyAuthController.action(:login).call(env)
 end
+
+# What to do in case of failure.
+# Must be a 302 redirect.
+# It can invoke a Rails controller#action
+#
+OmniAuth.config.on_failure = proc do |env|
+  # These are available:
+  #
+  # error = env['omniauth.error']
+  # details = error.message
+  # error_type = env['omniauth.error.type']
+  
+  [302, {'Location' => '/'}, ['']]
+end
+
