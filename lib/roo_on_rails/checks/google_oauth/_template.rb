@@ -14,7 +14,7 @@ Rails.application.config.middleware.use RooOnRails::Rack::GoogleOauth do |env|
   naive_token = Digest::MD5.hexdigest(auth_data.info.email.downcase)
   expires_in = Time.current + 60 * 60 * 24
   headers = {'Location' => '/'}
-  Rack::Utils.set_cookie_header!(headers, 'naive_session_id', {
+  Rack::Utils.set_cookie_header!(headers, 'naive_auth_cookie', {
     value: naive_token, expires: expires_in, path: '/'
   })
   [302, headers, ['You are being redirecred to /']]
