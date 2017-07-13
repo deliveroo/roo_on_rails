@@ -42,4 +42,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'memfs'
   spec.add_development_dependency 'simplecov'
   spec.add_development_dependency 'codecov'
+  spec.add_development_dependency 'rack-test'
 end

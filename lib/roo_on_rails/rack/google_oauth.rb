@@ -27,7 +27,7 @@ module RooOnRails
 
       def is_oauth_callback?(env)
         request = ::Rack::Request.new(env)
-        request.fullpath.starts_with?(OAUTH_CALLBACK)
+        request.fullpath.start_with?(OAUTH_CALLBACK)
       end
     end
   end
