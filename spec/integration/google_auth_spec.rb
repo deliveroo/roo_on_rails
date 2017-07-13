@@ -18,15 +18,5 @@ RSpec.describe 'Google Auth setup' do
         expect(middleware).to include 'OmniAuth::Builder'
       end
     end
-
-    context "if Google Auth has NOT been enabled" do
-      before do
-        allow(RooOnRails::Config).to receive(:google_auth_enabled?) { false }
-      end
-
-      it 'does NOT insert OmniAuth into the middleware stack' do     
-        expect(middleware).to_not include 'OmniAuth::Builder'
-      end
-    end
   end
 end
