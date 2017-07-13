@@ -38,9 +38,9 @@ end
 OmniAuth.config.on_failure = proc do |env|
   # These are available:
   #
-  # error = env['omniauth.error']
-  # details = error.message
-  # error_type = env['omniauth.error.type']
+  # error = env['omniauth.error']           # e.g. #<OmniAuth::Strategies::OAuth2::CallbackError: OmniAuth::Strategies::OAuth2::CallbackError>
+  # details = error.message                 # e.g. "invalid_hd | Invalid Hosted Domain"
+  # error_type = env['omniauth.error.type'] # e.g. :invalid_credentials
   
   [302, {'Location' => '/'}, ['']]
 end
