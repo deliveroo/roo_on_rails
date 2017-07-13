@@ -7,7 +7,7 @@ Rails.application.config.middleware.use RooOnRails::Rack::GoogleOauth do |env|
   # Here you're supposed to do something with the OAuth payload and
   # return a valid Rack response.
 
-  # A simple but insecure example:
+  # A simple and insecure example:
   #
   require 'digest/md5'
   auth_data = env['omniauth.auth']
@@ -19,7 +19,7 @@ Rails.application.config.middleware.use RooOnRails::Rack::GoogleOauth do |env|
   })
   [302, headers, ['You are being redirecred to /']]
 
-  # You can also hand it over to a Rails controller#action, where the
+  # You can also hand it over to a Rails controller action, where the
   # OAuth payload will be available in `request.env['omniauth.auth']`.
   # If you do this, the controller will take care of returning a valid
   # response for Rack.
@@ -33,15 +33,18 @@ end
 
 # What to do in case of failure.
 # Must be a 302 redirect.
-# It can invoke a Rails controller#action
+# It can invoke a Rails controller action
 #
 OmniAuth.config.on_failure = proc do |env|
-  # These are available:
-  #
-  # error = env['omniauth.error']           # e.g. #<OmniAuth::Strategies::OAuth2::CallbackError: OmniAuth::Strategies::OAuth2::CallbackError>
-  # details = error.message                 # e.g. "invalid_hd | Invalid Hosted Domain"
-  # error_type = env['omniauth.error.type'] # e.g. :invalid_credentials
-  
+  error = env['omniauth.error']           # e.g. #<OmniAuth::Strategies::OAuth2::CallbackError: OmniAuth::Strategies::OAuth2::CallbackError>
+  details = error.message                 # e.g. "invalid_hd | Invalid Hosted Domain"
+  error_type = env['omniauth.error.type'] # e.g. :invalid_credentials
+
+  Rails.logger.info("[RooOnRails] Login failed (#{error_type}): #{details}")
+
+  # To use a rails controller;
+  # MyAuthController.action(:login_failed).call(env)
+
   [302, {'Location' => '/'}, ['']]
 end
 
