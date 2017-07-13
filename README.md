@@ -180,7 +180,7 @@ When `GOOGLE_AUTH_ENABLED` is set to true we'll:
 
 To use this functionality, you must:
 
-* Obtain the Oauth2 credentials from Google, and configuring them in `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET`.
+* Obtain the Oauth2 credentials from Google and configure them in `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET`.
 * Provide in `GOOGLE_AUTH_ALLOWED_DOMAINS` a comma-separated list of domains, to whitelist the allowed email addresses.
 * Customize the code in the generated Rails initializer to hook into your application's authentication logic.
 * Update your Rails controllers to require authentication, when necessary.
