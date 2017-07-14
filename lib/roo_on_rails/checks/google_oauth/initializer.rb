@@ -6,14 +6,13 @@ module RooOnRails
   module Checks
     module GoogleOauth
       class Initializer < Base
-
-        LOCATION = "config/initializers/google_oauth.rb".freeze
+        LOCATION = 'config/initializers/google_oauth.rb'.freeze
 
         def call
           if RooOnRails::Config.google_auth_enabled?
             check_initializer
           else
-            pass "Google Oauth is not enabled. Doing nothing"
+            pass 'Google Oauth is not enabled. Doing nothing'
           end
         end
 
@@ -24,15 +23,15 @@ module RooOnRails
         private
 
         def check_initializer
-          if File.exists? LOCATION
-            pass "Google Oauth initializer is present. Doing nothing."
+          if File.exist? LOCATION
+            pass 'Google Oauth initializer is present. Doing nothing.'
           else
-            fail! "Google Oauth is enabled but the initializer is missing."
+            fail! 'Google Oauth is enabled but the initializer is missing.'
           end
         end
 
         def template
-          File.join(__dir__, "_template.rb")
+          File.join(__dir__, '_template.rb')
         end
       end
     end

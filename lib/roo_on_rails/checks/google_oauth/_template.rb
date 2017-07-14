@@ -13,7 +13,7 @@ Rails.application.config.middleware.use RooOnRails::Rack::GoogleOauth do |env|
   auth_data = env['omniauth.auth']
   naive_token = Digest::MD5.hexdigest(auth_data.info.email.downcase)
   expires_in = Time.current + 60 * 60 * 24
-  headers = {'Location' => '/'}
+  headers = { 'Location' => '/' }
   Rack::Utils.set_cookie_header!(headers, 'naive_auth_cookie', {
     value: naive_token, expires: expires_in, path: '/'
   })
@@ -45,6 +45,5 @@ OmniAuth.config.on_failure = proc do |env|
   # To use a rails controller;
   # MyAuthController.action(:login_failed).call(env)
 
-  [302, {'Location' => '/'}, ['']]
+  [302, { 'Location' => '/' }, ['']]
 end
-

@@ -17,7 +17,6 @@ module RooOnRails
         enabled? 'GOOGLE_AUTH_ENABLED', default: false
       end
 
-
       private
 
       ENABLED_PATTERN = /\A(YES|TRUE|ON|1)\Z/i
