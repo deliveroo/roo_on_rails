@@ -20,7 +20,7 @@ module RooOnRails
       end
 
       def topic
-        @model.class.name.underscore.pluralize
+        @model.class.name.tableize
       end
 
       def url
