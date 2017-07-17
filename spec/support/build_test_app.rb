@@ -62,8 +62,6 @@ module ROR
         shell_run "tar -C #{scaffold_dir} -cf #{scaffold_path} ."
         scaffold_dir.rmtree unless @keep_scaffold
         self
-      rescue => e
-        binding.pry
       end
 
       def unpack_scaffold_at(path)
@@ -89,7 +87,16 @@ module ROR
       end
 
       def rails_new_options
-        "#{RAILS_NEW_BASE_OPTIONS} --database=#{@database}"
+        options = [RAILS_NEW_BASE_OPTIONS]
+
+        options << case @database
+        when nil
+          '--skip-active-record'
+        else
+          "--database=#{@database}"
+        end
+
+        options.join(' ')
       end
 
       def scaffold_dir

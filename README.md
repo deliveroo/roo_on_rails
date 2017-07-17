@@ -99,6 +99,7 @@ We'll insert the following middlewares into the rails stack:
 1. `Rack::Timeout`: sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT` (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
 2. `Rack::SslEnforcer`: enforces HTTPS.
 3. `Rack::Deflater`: compresses responses from the application, can be disabled with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
+4. Optional middlewares for Google Oauth2 (more below).
 
 ### Database configuration
 
@@ -141,9 +142,22 @@ When setting the manager up in the HireFire web ui, the following settings must 
 For clearer and machine-parseable log output, there in an extension to be able to add context to your logs which is output as [logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
 
 ```ruby
-# in application.rb
+# application.rb
 
-Rails.logger = RooOnRails::ContextLogging.new(ActiveSupport::Logger.new($stdout))
+require 'roo_on_rails/context_logging'
+
+class Application < Rails::Application
+
+  # add this block somewhere within the application class
+  logger = config.logger
+  if logger.nil?
+    logger = ActiveSupport::Logger.new($stdout)
+    logger.formatter = config.log_formatter
+  end
+  logger = ActiveSupport::TaggedLogging.new(logger) unless logger.respond_to?(:tagged)
+  config.logger = RooOnRails::ContextLogging.new(logger)
+
+end
 ```
 
 You can then add context using the `with` method:
@@ -154,7 +168,23 @@ logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
 logger.with(a: 1, b: 2).info('Stuff')
 ```
 
-See the [class documentation](/deliveroo/roo_on_rails/tree/master/lib/roo_on_rails/context_logging.rb) for further details.
+See the [class documentation](lib/roo_on_rails/context_logging.rb) for further details.
+
+### Google Oauth
+
+When `GOOGLE_AUTH_ENABLED` is set to true we'll:
+
+* Inject a `Omniauth` Rack middleware with a pre-configured strategy for Google Oauth2.
+* Onject custom Rack middleare to handle Oauth callback requests.
+* Generate the `config/initializers/google_oauth.rb` file that contains some examples of how to wire in your authentication logic.
+
+To use this functionality, you must:
+
+* Obtain the Oauth2 credentials from Google and configure them in `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET`.
+* Provide in `GOOGLE_AUTH_ALLOWED_DOMAINS` a comma-separated list of domains, to whitelist the allowed email addresses.
+* Customize the code in the generated Rails initializer to hook into your application's authentication logic.
+* Update your Rails controllers to require authentication, when necessary.
+
 
 ## Contributing
 

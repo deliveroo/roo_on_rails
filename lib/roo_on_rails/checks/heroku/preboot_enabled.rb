@@ -10,7 +10,7 @@ module RooOnRails
       # - heroku.app.{env}: an existing app name.
       class PrebootEnabled < EnvSpecific
         requires Git::Origin, Heroku::AppExists
-        
+
         def intro
           "Checking preboot status on #{bold app_name}"
         end

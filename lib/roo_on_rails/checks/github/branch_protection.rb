@@ -26,7 +26,8 @@ module RooOnRails
             options.merge(
               required_status_checks: fixed_required_status_checks,
               required_pull_request_reviews: fixed_pull_request_reviews,
-              restrictions: fixed_restrictions
+              restrictions: fixed_restrictions,
+              enforce_admins: true
             )
           )
         end
@@ -35,7 +36,9 @@ module RooOnRails
 
         def ensure_status_checks!
           status_checks = protection[:required_status_checks] || {}
-          fail! 'status checks do not include admins' unless status_checks[:include_admins]
+          enforce_admins = protection[:enforce_admins]
+          fail! 'status checks are not enforced for admins' unless enforce_admins &&
+                                                                   enforce_admins[:enabled]
 
           contexts = status_checks[:contexts] || []
           ensure_ci_status_check!(contexts)
@@ -44,7 +47,7 @@ module RooOnRails
         end
 
         def ensure_ci_status_check!(contexts)
-          fail! 'no CI status check' unless contexts.include?(ci_context)
+          fail! 'no continuous integration status check' unless contexts.include?(ci_context)
         end
 
         def ensure_analysis_status_check!(contexts)
@@ -58,20 +61,24 @@ module RooOnRails
 
         def ensure_code_reviews!
           reviews = protection[:required_pull_request_reviews] || {}
-          fail! 'code reviews do not include admins' unless reviews[:include_admins]
+          fail! 'code approvals should be dismissed on push' unless reviews[:dismiss_stale_reviews]
+
+          users = reviews.dig(:dismissal_restrictions, :users)
+          teams = reviews.dig(:dismissal_restrictions, :teams)
+          fail! 'review dismissal restrictions should be enabled' if users.nil? || teams.nil?
+          fail! 'nobody should be allowed to dismiss reviews' if users.any? || teams.any?
         end
 
         def ensure_no_push!
           users = protection.dig(:restrictions, :users)
           teams = protection.dig(:restrictions, :teams)
           fail! 'push restrictions should be enabled' if users.nil? || teams.nil?
-          fail! 'no users or teams should be allowed to push to master' if users.any? || teams.any?
+          fail! 'nobody should be allowed to push to master' if users.any? || teams.any?
         end
 
         def fixed_required_status_checks
           status_checks = protection[:required_status_checks] || {}
           status_checks.merge(
-            include_admins: true,
             contexts: (status_checks[:contexts] || []) | [
               ci_context,
               analysis_context,
@@ -82,7 +89,10 @@ module RooOnRails
 
         def fixed_pull_request_reviews
           reviews = protection[:required_pull_request_reviews] || {}
-          reviews.merge(include_admins: true)
+          reviews.merge(
+            dismiss_stale_reviews: true,
+            dismissal_restrictions: { users: [], teams: [] }
+          )
         end
 
         def fixed_restrictions

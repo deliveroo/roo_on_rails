@@ -1,8 +1,39 @@
+# v1.6.0 (2017-07-11)
+
+Features:
+
+- Adds check for a `PLAYBOOK.md` file, which should detail how to deal with issues which might occur with the service.
+
+Bug fixes:
+
+- Allow usage of recent versions of `newrelic_rpm` (#38)
+
+# v1.5.0 (2017-06-19)
+
+Features:
+
+- Adds Datadog integration (#35)
+- Adds `Sidekiq::MetricsWorker` to publish queue/process metrics (#35)
+- Inserts Sidekiq STATSD middleware if Sidekiq Pro is available (#35)
+
+# v1.4.0 (2017-06-05)
+
+Features:
+
+- Adds `newrelic:notice_deployment` rake task (#32)
+- Adds Heroku/Datadog integration checks (#33)
+- Supports Rails apps without ActiveRecord (#26)
+
+Fixes:
+
+- `roo_on_rails` command only loads the checks harness if necessary (#30)
+- Upgrades outdated `platform-api` gem (#31)
+
 # v1.3.1 (2017-05-05)
 
 Features:
 
-- Added Rails 5.1 support (#25)
+- Adds Rails 5.1 support (#25)
 
 Fixes:
 
@@ -15,7 +46,7 @@ Features:
 - Sets database statement timeout to 200ms by default (#13).
 - Sets migration statement timeout to 10s by default (#16, #17)
 - Adds Sidekiq and Hirefire (workers) integration (#11)
-- Adds the ability to tag logs with key/value pairs (#20)
+- Adds the ability to tag logs with key/value pairs (#20, #21)
 
 Fixes:
 
@@ -23,6 +54,7 @@ Fixes:
 - Do not depend on sort order for Codecov GitHub contexts (#12)
 - Do not add `Rack::SslEnforcer` middleware in test environment (#15)
 - Fix for "undefined constant: RooOnRails::Rack::Timeout" (#18)
+- Use correct class name in Sidekiq auto-scaling metric (#22)
 
 # v1.2.0 (2017-03-21)
 
@@ -45,7 +77,7 @@ Features:
 
 # v1.0.1 (2017-01-20)
 
-Bug fixes:
+Fixes:
 
 - Do not load New Relic in test environments (#2, #3)
 

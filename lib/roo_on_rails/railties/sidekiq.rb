@@ -1,4 +1,6 @@
 require 'sidekiq'
+require 'roo_on_rails/config'
+require 'roo_on_rails/statsd'
 require 'roo_on_rails/sidekiq/settings'
 require 'roo_on_rails/sidekiq/sla_metric'
 
@@ -7,10 +9,15 @@ module RooOnRails
     class Sidekiq < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
         require 'hirefire-resource'
-        $stderr.puts 'initializer roo_on_rails.sidekiq'
-        break unless ENV.fetch('SIDEKIQ_ENABLED', 'true').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
-        config_sidekiq
-        config_hirefire(app)
+        
+        if RooOnRails::Config.sidekiq_enabled?
+          $stderr.puts 'initializer roo_on_rails.sidekiq'
+          config_sidekiq
+          config_sidekiq_metrics
+          config_hirefire(app)
+        else
+          $stderr.puts 'skipping initializer roo_on_rails.sidekiq'
+        end
       end
 
       def config_hirefire(app)
@@ -26,6 +33,18 @@ module RooOnRails
           x.options[:concurrency] = RooOnRails::Sidekiq::Settings.concurrency.to_i
           x.options[:queues] = RooOnRails::Sidekiq::Settings.queues
         end
+      end
+
+      def config_sidekiq_metrics
+        require 'sidekiq/middleware/server/statsd'
+
+        ::Sidekiq.configure_server do |x|
+          x.server_middleware do |chain|
+            chain.add ::Sidekiq::Middleware::Server::Statsd, client: RooOnRails.statsd
+          end
+        end
+      rescue LoadError
+        $stderr.puts 'Sidekiq metrics unavailable without Sidekiq Pro'
       end
 
       def add_middleware(app)

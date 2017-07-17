@@ -26,13 +26,6 @@ module SpecSupportCheck
     def it_expects_check_to_pass
       it { expect { perform }.not_to raise_error }
     end
-
-    # def resolved(sig)
-    #   before do
-    #     context.deps ||= {}
-    #     context.deps[sig.to_s] = true
-    #   end
-    # end
   end
 end
 
