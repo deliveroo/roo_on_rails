@@ -36,7 +36,7 @@ module RooOnRails
 
       module ClassMethods
         def publish_lifecycle_events(*events)
-          events ||= %i[create update destroy]
+          events ||= %i(create update destroy)
           events.each do |event|
             after_commit(
               -> { publish_lifecycle_event(event) },
