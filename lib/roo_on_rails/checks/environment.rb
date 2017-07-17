@@ -6,6 +6,7 @@ require 'roo_on_rails/checks/heroku/app_exists'
 require 'roo_on_rails/checks/sidekiq/settings'
 require 'roo_on_rails/checks/heroku/drains_metrics'
 require 'roo_on_rails/checks/documentation/playbook'
+require 'roo_on_rails/checks/google_oauth/initializer'
 require 'roo_on_rails/checks/papertrail/all'
 
 module RooOnRails
@@ -16,6 +17,7 @@ module RooOnRails
       requires Heroku::PrebootEnabled
       requires Sidekiq::Settings
       requires Documentation::Playbook
+      requires GoogleOauth::Initializer
       requires Papertrail::All
 
       def call
