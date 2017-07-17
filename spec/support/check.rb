@@ -24,6 +24,7 @@ module SpecSupportCheck
     end
 
     def it_expects_check_to_pass
+      it { expect(subject.intro).to be_a_kind_of(String) }
       it { expect { perform }.not_to raise_error }
     end
   end
