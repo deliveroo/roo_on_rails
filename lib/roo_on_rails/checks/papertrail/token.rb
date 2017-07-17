@@ -12,15 +12,21 @@ module RooOnRails
       class Token < Base
         requires Git::Origin
 
+        def initialize(papertrail_client: nil, **options)
+          @papertrail_client = papertrail_client || PapertrailClient
+          super(**options)
+        end
+
         def intro
           'Obtaining Papertrail auth token...'
         end
 
         def call
-          token = `git config papertrail.token`.strip
-          fail! 'no Papertrail API token configured' if token.empty?
+          status, token = shell.run 'git config papertrail.token'
+          fail! 'no Papertrail API token configured' if token.strip.empty? || !status
+          token.strip!
 
-          client = PapertrailClient.new(token: token)
+          client = @papertrail_client.new(token: token)
           begin
             client.list_destinations
           rescue Faraday::ClientError => e

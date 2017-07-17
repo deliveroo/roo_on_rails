@@ -19,4 +19,7 @@ RSpec.configure do |config|
   config.around(:each, memfs: true) do |example|
     MemFs.activate { example.run }
   end
+
+  config.before(:each, webmock: true) { require 'webmock/rspec' ; WebMock.enable! }
+  config.after(:each,  webmock: true) { WebMock.disable! }
 end
