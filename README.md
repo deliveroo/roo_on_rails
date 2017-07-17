@@ -204,6 +204,11 @@ Run the following from your app's top-level directory:
 bundle exec roo_on_rails
 ```
 
+You will (currently) need to have admin privileges on the
+`roo-dd-bridge-production` application for this to work. This will be addressed
+eventually.
+
+
 ### Description
 
 Running the `roo_on_rails` command currently checks for:
@@ -221,7 +226,7 @@ The command is designed to fix issues in many cases.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at
+Pull requests are welcome on GitHub at
 `https://github.com/deliveroo/roo_on_rails`.
 
 
