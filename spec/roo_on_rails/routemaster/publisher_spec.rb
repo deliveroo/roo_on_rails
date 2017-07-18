@@ -2,25 +2,21 @@ require 'active_support/core_ext/string'
 require 'roo_on_rails/routemaster/publisher'
 
 RSpec.describe RooOnRails::Routemaster::Publisher do
-  class TestPublisherA < RooOnRails::Routemaster::Publisher
-    def url
-      "https://deliveroo.test/url"
-    end
-
-    def data
-      { test_key_1: "Test value 1", test_key_2: "Test value 2" }
-    end
-  end
-
-  class TestPublisherB < RooOnRails::Routemaster::Publisher
-  end
-
+  TestPublisherA = Class.new(RooOnRails::Routemaster::Publisher)
+  TestPublisherB = Class.new(RooOnRails::Routemaster::Publisher)
   TestModel = Class.new
   let(:model) { TestModel.new }
   let(:event) { :noop }
 
   describe 'when configured correctly' do
     let(:publisher) { TestPublisherA.new(model, event) }
+
+    before do
+      allow(publisher).to receive_messages(
+        url: "https://deliveroo.test/url",
+        data: { test_key_1: "Test value 1", test_key_2: "Test value 2" }
+      )
+    end
 
     it 'should publish an event to Routemaster fine' do
       expect(::Routemaster::Client).to receive(:send).with(
