@@ -6,6 +6,7 @@ gemspec
 gem 'guard'
 gem 'guard-rspec'
 gem 'appraisal'
+gem 'webmock'
 
 gem 'pg'
 gem 'sqlite3'
