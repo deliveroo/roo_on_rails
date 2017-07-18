@@ -1,8 +1,15 @@
+# HEAD
+
+Features:
+
+- Adds check for Papertrail integration (#43)
+
 # v1.6.0 (2017-07-11)
 
 Features:
 
-- Adds check for a `PLAYBOOK.md` file, which should detail how to deal with issues which might occur with the service.
+- Adds check for a `PLAYBOOK.md` file, which should detail how to deal with
+  issues which might occur with the service (#41)
 
 Bug fixes:
 

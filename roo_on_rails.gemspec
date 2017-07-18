@@ -33,6 +33,8 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'sidekiq'
   spec.add_runtime_dependency 'dogstatsd-ruby'
   spec.add_runtime_dependency 'omniauth-google-oauth2'
+  spec.add_runtime_dependency 'faraday'
+  spec.add_runtime_dependency 'faraday_middleware'
 
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'
