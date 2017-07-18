@@ -1,6 +1,35 @@
 ## `roo_on_rails` [![Gem Version](https://badge.fury.io/rb/roo_on_rails.svg)](https://badge.fury.io/rb/roo_on_rails) [![Build Status](https://travis-ci.org/deliveroo/roo_on_rails.svg?branch=master)](https://travis-ci.org/deliveroo/roo_on_rails) [![Code Climate](https://codeclimate.com/repos/58809e664ab8420081007382/badges/3489b7689ab2e0cf5d61/gpa.svg)](https://codeclimate.com/repos/58809e664ab8420081007382/feed)
 
-A gem that makes following our [guidelines](http://deliveroo.engineering/guidelines/services/) easy.
+
+`roo_on_rails` is:
+
+1. A library that extends Rails (as a set of Railties) and auto-configures common
+   dependencies.
+2. A command that checks whether an application's Github repository and Heroku
+   instanciations are compliant.
+
+... packaged into a gem, to make following our
+[guidelines](http://deliveroo.engineering/guidelines/services/) easy.
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Library features](#library-features)
+    - [New Relic configuration](#new-relic-configuration)
+    - [Rack middleware](#rack-middleware)
+    - [Database configuration](#database-configuration)
+    - [Sidekiq](#sidekiq)
+    - [HireFire Workers](#hirefire-workers)
+    - [Logging](#logging)
+    - [Google Oauth](#google-oauth)
+- [Command features](#command-features)
+- [Contributing](#contributing)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Installation
 
@@ -30,25 +59,7 @@ Then re-run your test suite to make sure everything is shipshape.
 
 ## Usage
 
-Run the following from your app's top-level directory:
-
-```
-bundle exec roo_on_rails
-```
-
-This will run a series of checks of your application's setup, as descirbed
-below.
-
-
-## Features
-
-### App validation
-
-Running the `roo_on_rails` script currently checks for:
-
-- compliant Heroku app naming;
-- presence of the Heroku preboot flag;
-- correct Github master branch protection.
+## Configuration and usage
 
 ### New Relic configuration
 
@@ -63,74 +74,63 @@ We enforce configuration of New Relic.
 3. The `NEW_RELIC_APP_NAME` environment variable must be defined
    such that the app will be properly registered in New Relic.
 
-No further configuration is required for production apps as the gem configures our standard settings.
-
-However if you have Heroku's [review apps](https://devcenter.heroku.com/articles/github-integration-review-apps) enabled then you will need to update `app.json` so that it lists `NEW_RELIC_LICENSE_KEY` in the `env` section, so that this key is copied from the parent app (only keys listed here will be created on the review app; either generated, if that is specified, or otherwise copied).
-
-More documentation is available [directly from heroku](https://devcenter.heroku.com/articles/github-integration-review-apps#inheriting-config-vars) but the block below has been helpful in other apps:
-
-```json
-"env": {
-  "NEW_RELIC_LICENSE_KEY": {
-    "description": "The New Relic licence key",
-    "required": true
-  },
-  "NEW_RELIC_APP_NAME": {
-    "description": "The application name to be registered in New Relic",
-    "required": true
-  },
-  "SECRET_KEY_BASE": {
-    "description": "A secret basis for the key which verifies the integrity of signed cookies.",
-    "generator": "secret"
-  },
-  "RACK_ENV": {
-    "description": "The name of the environment for Rack."
-  },
-  "RAILS_ENV": {
-    "description": "The name of the environment for Rails."
-  }
-},
-```
+No further configuration is required for production apps as the gem configures
+our standard settings.
 
 ### Rack middleware
 
 We'll insert the following middlewares into the rails stack:
 
-1. `Rack::Timeout`: sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT` (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
+1. `Rack::Timeout`: sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT`
+   (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
 2. `Rack::SslEnforcer`: enforces HTTPS.
-3. `Rack::Deflater`: compresses responses from the application, can be disabled with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
+3. `Rack::Deflater`: compresses responses from the application, can be disabled
+   with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 4. Optional middlewares for Google Oauth2 (more below).
 
 ### Database configuration
 
-The database statement timeout will be set to a low value by default. Use `DATABASE_STATEMENT_TIMEOUT` (milliseconds, default 200) to customise.
+The database statement timeout will be set to a low value by default. Use
+`DATABASE_STATEMENT_TIMEOUT` (milliseconds, default 200) to customise.
 
-For database creation and migration (specifically the `db:create`, `db:migrate`, `db:migrate:down` and `db:rollback` tasks) a much higher statement timeout is set by default. Use `MIGRATION_STATEMENT_TIMEOUT` (milliseconds, default 10000) to customise.
+For database creation and migration (specifically the `db:create`, `db:migrate`,
+`db:migrate:down` and `db:rollback` tasks) a much higher statement timeout is
+set by default. Use `MIGRATION_STATEMENT_TIMEOUT` (milliseconds, default 10000)
+to customise.
 
-_Note: This configuration is not supported in Rails 3 and will be skipped. Set statement timeouts directly in the database._
+_Note: This configuration is not supported in Rails 3 and will be skipped. Set
+statement timeouts directly in the database._
 
 ### Sidekiq
 
 When `SIDEKIQ_ENABLED` is set we'll:
 
- - check for the existence of a worker line in your Procfile
- - add SLA style queues to your worker list
- - check for a `HIREFIRE_TOKEN` and if it's set enable SLA based autoscaling
+- check for the existence of a worker line in your Procfile;
+- add SLA style queues to your worker list;
+- check for a `HIREFIRE_TOKEN` and if it's set enable SLA based autoscaling;
 
 The following ENV are available:
 
- - `SIDEKIQ_ENABLED`
- - `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
- - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the amount of time in seconds rails will wait before attempting to find and recover connections from dead threads
+- `SIDEKIQ_ENABLED`
+- `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
+- `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the
+  amount of time in seconds rails will wait before attempting to find and
+  recover connections from dead threads
 
-### HireFire Workers
+### HireFire (for Sidekiq workers)
 
-When `HIREFIRE_TOKEN` is set an endpoint will be mounted at /hirefire that reports the required worker count as a function of queue latency. By default we add queue names in the style 'within1day', so if we notice an average latency in that queue of more than an set threshold we'll request one more worker. If we notice less than a threshold we'll request one less worker. These settings can be customised via the following ENV variables
+When `HIREFIRE_TOKEN` is set an endpoint will be mounted at `/hirefire` that
+reports the required worker count as a function of queue latency. By default we
+add queue names in the style 'within1day', so if we notice an average latency in
+that queue of more than an set threshold we'll request one more worker. If we
+notice less than a threshold we'll request one less worker. These settings can
+be customised via the following ENV variables
 
- - `WORKER_INCREASE_THRESHOLD` (default 0.5)
- - `WORKER_DECREASE_THRESHOLD` (default 0.1)
+- `WORKER_INCREASE_THRESHOLD` (default 0.5)
+- `WORKER_DECREASE_THRESHOLD` (default 0.1)
 
-When setting the manager up in the HireFire web ui, the following settings must be used:
+When setting the manager up in the HireFire web ui, the following settings must
+be used:
 
 - name: 'worker'
 - type: 'Worker.HireFire.JobQueue'
@@ -139,7 +139,9 @@ When setting the manager up in the HireFire web ui, the following settings must 
 
 ### Logging
 
-For clearer and machine-parseable log output, there in an extension to be able to add context to your logs which is output as [logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
+For clearer and machine-parseable log output, there in an extension to be able
+to add context to your logs which is output as
+[logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
 
 ```ruby
 # application.rb
@@ -168,29 +170,68 @@ logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
 logger.with(a: 1, b: 2).info('Stuff')
 ```
 
-See the [class documentation](lib/roo_on_rails/context_logging.rb) for further details.
+See the [class documentation](lib/roo_on_rails/context_logging.rb) for further
+details.
 
 ### Google Oauth
 
 When `GOOGLE_AUTH_ENABLED` is set to true we'll:
 
-* Inject a `Omniauth` Rack middleware with a pre-configured strategy for Google Oauth2.
+* Inject a `Omniauth` Rack middleware with a pre-configured strategy for Google
+  Oauth2.
 * Onject custom Rack middleare to handle Oauth callback requests.
-* Generate the `config/initializers/google_oauth.rb` file that contains some examples of how to wire in your authentication logic.
+* Generate the `config/initializers/google_oauth.rb` file that contains some
+  examples of how to wire in your authentication logic.
 
 To use this functionality, you must:
 
-* Obtain the Oauth2 credentials from Google and configure them in `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET`.
-* Provide in `GOOGLE_AUTH_ALLOWED_DOMAINS` a comma-separated list of domains, to whitelist the allowed email addresses.
-* Customize the code in the generated Rails initializer to hook into your application's authentication logic.
+* Obtain the Oauth2 credentials from Google and configure them in
+  `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET`.
+* Provide in `GOOGLE_AUTH_ALLOWED_DOMAINS` a comma-separated list of domains, to
+  whitelist the allowed email addresses.
+* Customize the code in the generated Rails initializer to hook into your
+  application's authentication logic.
 * Update your Rails controllers to require authentication, when necessary.
+
+
+## Command features
+
+### Usage
+
+Run the following from your app's top-level directory:
+
+```
+bundle exec roo_on_rails
+```
+
+You will (currently) need to have admin privileges on the
+`roo-dd-bridge-production` application for this to work. This will be addressed
+eventually.
+
+
+### Description
+
+Running the `roo_on_rails` command currently checks for:
+
+- the presence of `PLAYBOOK.md`
+- compliant Heroku app naming;
+- presence of the Heroku preboot flag;
+- correct Github master branch protection;
+- integration with the Heroku-Datadog metrics bridge (for CPU, memory, request
+  throughput data);
+- integration with Papertrail;
+- correct Sidekiq configuration.
+
+The command is designed to fix issues in many cases.
 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/deliveroo/roo_on_rails.
+Pull requests are welcome on GitHub at
+`https://github.com/deliveroo/roo_on_rails`.
 
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the [MIT
+License](http://opensource.org/licenses/MIT).

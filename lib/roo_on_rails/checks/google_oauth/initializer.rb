@@ -8,6 +8,10 @@ module RooOnRails
       class Initializer < Base
         LOCATION = 'config/initializers/google_oauth.rb'.freeze
 
+        def intro
+          'Google Oauth protection'
+        end
+
         def call
           if RooOnRails::Config.google_auth_enabled?
             check_initializer
