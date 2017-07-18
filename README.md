@@ -219,6 +219,7 @@ Running the `roo_on_rails` command currently checks for:
 - correct Github master branch protection;
 - integration with the Heroku-Datadog metrics bridge (for CPU, memory, request
   throughput data);
+- integration with Papertrail;
 - correct Sidekiq configuration.
 
 The command is designed to fix issues in many cases.
