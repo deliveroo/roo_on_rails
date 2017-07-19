@@ -17,7 +17,17 @@ module RooOnRails
         metric.round(3)
       end
 
+      private
+
       def permitted_latency
+        entries = ENV.fetch('SIDEKIQ_PERMITTED_LATENCY_VALUES', '').split(',')
+        entry = entries.find { |e| e.start_with?(queue.name) }
+        return default_queue_permitted_latency unless entry
+        _, duration, unit = entry.split(':')
+        duration.to_i.public_send(unit).to_i
+      end
+
+      def default_queue_permitted_latency
         prefix, number, unit = queue.name.partition(/[0-9]+/)
         case prefix
         when 'monitoring', 'realtime' then 10.seconds.to_i

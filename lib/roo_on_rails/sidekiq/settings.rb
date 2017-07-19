@@ -1,16 +1,19 @@
 module RooOnRails
   module Sidekiq
     class Settings
+      DEFAULT_QUEUES = %w[
+        monitoring
+        realtime
+        within1minute
+        within5minutes
+        within30minutes
+        within1hour
+        within1day
+      ].freeze
+
       def self.queues
-        %w(
-          monitoring
-          realtime
-          within1minute
-          within5minutes
-          within30minutes
-          within1hour
-          within1day
-        ).freeze
+        env_key = 'SIDEKIQ_QUEUES'
+        ENV.key?(env_key) ? ENV[env_key].split(',') : DEFAULT_QUEUES
       end
 
       def self.concurrency

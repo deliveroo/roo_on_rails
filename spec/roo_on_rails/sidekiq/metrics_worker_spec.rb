@@ -103,6 +103,42 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
       end
     end
 
+
+    context 'with an additional/custom queue' do
+      before do
+        allow(ENV).to receive(:[]).with(any_args).and_call_original
+        allow(ENV).to receive(:fetch).with(any_args).and_call_original
+
+        env_var_key, env_var_value = 'SIDEKIQ_PERMITTED_LATENCY_VALUES', 'a:1:hour,new-que:1:minute,b:3:days'
+        allow(ENV).to receive(:[]).with(env_var_key).and_return(env_var_value)
+        allow(ENV).to receive(:fetch).with(env_var_key, any_args).and_return(env_var_value)
+
+        allow(Sidekiq::Queue).to receive(:all) do
+          [instance_double(Sidekiq::Queue, name: 'new-que', size: 100, latency: 300)]
+        end
+
+        allow(statsd).to receive(:gauge).with(any_args)
+        perform
+      end
+
+      it 'should send size, latency and normalised latency based on the queue name' do
+        expect(statsd)
+          .to have_received(:gauge)
+          .with('jobs.queue.size', 100, tags: ['queue:new-que'])
+          .once
+
+        expect(statsd)
+          .to have_received(:gauge)
+          .with('jobs.queue.latency', 300, tags: ['queue:new-que'])
+          .once
+
+        expect(statsd)
+          .to have_received(:gauge)
+          .with('jobs.queue.normalised_latency', 5.0, tags: ['queue:new-que'])
+          .once
+      end
+    end
+
     context 'with a queue whose permitted latency cannot be determined' do
       before do
         allow(Sidekiq::Queue).to receive(:all) do
