@@ -13,11 +13,9 @@ module RooOnRails
       ).freeze
 
       def self.queues
-        env_key = 'SIDEKIQ_QUEUES'
-        return DEFAULT_QUEUES unless ENV.key?(env_key)
-        ENV[env_key].split(',').map do |queue_entry|
+        ENV.fetch('SIDEKIQ_QUEUES', '').split(',').map do |queue_entry|
           queue_entry.split(':').first.strip
-        end
+        end.presence || DEFAULT_QUEUES
       end
 
       def self.concurrency
