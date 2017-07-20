@@ -18,10 +18,10 @@ module RooOnRails
               number.strip.to_i.public_send(unit.strip).to_i
             else
               ENV.fetch('SIDEKIQ_QUEUES', '').split(',').reduce(nil) do |result, entry|
-              entry = entry.strip
-              next result unless entry.start_with?(queue_name)
-              _, number, unit = entry.split(':').last.partition(/\d+/)
-              number.strip.to_i.public_send(unit.strip).to_i
+                entry = entry.strip
+                next result unless entry.start_with?(queue_name)
+                _, number, unit = entry.split(':').last.partition(/\d+/)
+                number.strip.to_i.public_send(unit.strip).to_i
               end
             end
           end
