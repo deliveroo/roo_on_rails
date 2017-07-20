@@ -7,7 +7,8 @@ module RooOnRails
 
       def self.permitted_latency_values
         @permitted_latency_values ||= Hash.new do |hash, queue_name|
-          hash[queue_name] = case queue_name
+          hash[queue_name] = begin
+            case queue_name
             when 'monitoring', 'realtime'
               10.seconds.to_i
             when 'default'
@@ -23,6 +24,7 @@ module RooOnRails
               number.strip.to_i.public_send(unit.strip).to_i
               end
             end
+          end
         end
       end
 
@@ -34,7 +36,7 @@ module RooOnRails
       end
 
       def normalised_latency
-				queue.latency.fdiv(permitted_latency).round(3)
+        queue.latency.fdiv(permitted_latency).round(3)
       end
 
       private
