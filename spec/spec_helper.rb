@@ -11,8 +11,8 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift File.expand_path('../..', __FILE__)
 
 RSpec.configure do |config|
-  require_relative './support/global_helpers.rb'
-  config.include GlobalHelpers
+  require_relative './support/env_helpers'
+  config.include(EnvHelpers)
 
   config.filter_run_excluding rails_min_version: (lambda { |_, meta|
     require 'rails'

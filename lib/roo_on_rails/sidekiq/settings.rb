@@ -9,11 +9,13 @@ module RooOnRails
         within30minutes
         within1hour
         within1day
+        default
       ).freeze
 
       def self.queues
-        env_key = 'SIDEKIQ_QUEUES'
-        ENV.key?(env_key) ? ENV[env_key].split(',') : DEFAULT_QUEUES
+				ENV.fetch('SIDEKIQ_QUEUES', '').split(',').map { |queue_entry|
+					queue_entry.split(':').first.strip
+				}.presence || DEFAULT_QUEUES
       end
 
       def self.concurrency

@@ -106,10 +106,7 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
 
     context 'with an additional/custom queue' do
       before do
-        stub_config_var(
-          'SIDEKIQ_PERMITTED_LATENCY_VALUES',
-          'a:1:hour,new-que:1:minute,b:3:days'
-        )
+        stub_config_var('SIDEKIQ_QUEUES', 'a:1hour,new-que:1minute,b:3days')
 
         allow(Sidekiq::Queue).to receive(:all) do
           [instance_double(Sidekiq::Queue, name: 'new-que', size: 100, latency: 300)]

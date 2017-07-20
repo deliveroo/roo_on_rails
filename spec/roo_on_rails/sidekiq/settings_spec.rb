@@ -5,8 +5,8 @@ RSpec.describe RooOnRails::Sidekiq::Settings do
     subject { described_class.queues }
 
     context 'default value' do
-      it do
-        should match_array(%w[
+      it 'have default queues in the right sequence' do
+        should eql %w[
           monitoring
           realtime
           within1minute
@@ -14,7 +14,8 @@ RSpec.describe RooOnRails::Sidekiq::Settings do
           within30minutes
           within1hour
           within1day
-        ])
+          default
+        ]
       end
     end
 

@@ -5,6 +5,29 @@ module RooOnRails
     class QueueLatency
       extend Forwardable
 
+      def self.permitted_latency_values
+        @permitted_latency_values ||= Hash.new do |hash, queue_name|
+					hash[queue_name] = begin
+						case queue_name
+						when 'monitoring', 'realtime'
+							10.seconds.to_i
+						when 'default'
+							1.day.to_i
+						when /\Awithin\d+.+\z/
+							_, number, unit = queue_name.partition(/\d+/)
+							number.strip.to_i.public_send(unit.strip).to_i
+						else
+							ENV.fetch('SIDEKIQ_QUEUES', '').split(',').reduce(nil) do |result, entry|
+								entry = entry.strip
+								next result unless entry.start_with?(queue_name)
+								_, number, unit = entry.split(':').last.partition(/\d+/)
+								number.strip.to_i.public_send(unit.strip).to_i
+							end
+						end
+					end
+        end
+      end
+
       def_delegators :@queue, :size, :latency, :name
       attr_reader :queue
 
@@ -13,28 +36,14 @@ module RooOnRails
       end
 
       def normalised_latency
-        metric = queue.latency.to_f / permitted_latency
-        metric.round(3)
+				queue.latency.fdiv(permitted_latency).round(3)
       end
 
       private
 
       def permitted_latency
-        entries = ENV.fetch('SIDEKIQ_PERMITTED_LATENCY_VALUES', '').split(',')
-        entry = entries.find { |e| e.start_with?(queue.name) }
-        return default_queue_permitted_latency unless entry
-        _, duration, unit = entry.split(':')
-        duration.to_i.public_send(unit).to_i
-      end
-
-      def default_queue_permitted_latency
-        prefix, number, unit = queue.name.partition(/[0-9]+/)
-        case prefix
-        when 'monitoring', 'realtime' then 10.seconds.to_i
-        when 'default' then 1.day.to_i
-        when 'within' then number.to_i.public_send(unit.to_sym).to_i
-        else raise "Cannot determine permitted latency for queue #{queue.name}"
-        end
+        self.class.permitted_latency_values[queue.name] ||
+          raise("Cannot determine permitted latency for queue #{queue.name}")
       end
     end
   end
