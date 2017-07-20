@@ -14,7 +14,7 @@ module RooOnRails
 
       def self.queues
         env_key = 'SIDEKIQ_QUEUES'
-        return DEFAULT_QUEUES unless ENV.has_key?(env_key)
+        return DEFAULT_QUEUES unless ENV.key?(env_key)
         ENV[env_key].split(',').map do |queue_entry|
           queue_entry.split(':').first.strip
         end
