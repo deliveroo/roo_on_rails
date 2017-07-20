@@ -7,24 +7,22 @@ module RooOnRails
 
       def self.permitted_latency_values
         @permitted_latency_values ||= Hash.new do |hash, queue_name|
-					hash[queue_name] = begin
-						case queue_name
-						when 'monitoring', 'realtime'
-							10.seconds.to_i
-						when 'default'
-							1.day.to_i
-						when /\Awithin\d+.+\z/
-							_, number, unit = queue_name.partition(/\d+/)
-							number.strip.to_i.public_send(unit.strip).to_i
-						else
-							ENV.fetch('SIDEKIQ_QUEUES', '').split(',').reduce(nil) do |result, entry|
-								entry = entry.strip
-								next result unless entry.start_with?(queue_name)
-								_, number, unit = entry.split(':').last.partition(/\d+/)
-								number.strip.to_i.public_send(unit.strip).to_i
-							end
-						end
-					end
+          hash[queue_name] = case queue_name
+            when 'monitoring', 'realtime'
+              10.seconds.to_i
+            when 'default'
+              1.day.to_i
+            when /\Awithin\d+.+\z/
+              _, number, unit = queue_name.partition(/\d+/)
+              number.strip.to_i.public_send(unit.strip).to_i
+            else
+              ENV.fetch('SIDEKIQ_QUEUES', '').split(',').reduce(nil) do |result, entry|
+              entry = entry.strip
+              next result unless entry.start_with?(queue_name)
+              _, number, unit = entry.split(':').last.partition(/\d+/)
+              number.strip.to_i.public_send(unit.strip).to_i
+              end
+            end
         end
       end
 
