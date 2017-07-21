@@ -5,27 +5,37 @@ module RooOnRails
     class QueueLatency
       extend Forwardable
 
+      DEFAULT_LATENCY_VALUES = {
+        'monitoring' => 10.seconds.to_i,
+        'realtime' => 10.seconds.to_i,
+        'within1minute' => 1.minute.to_i,
+        'within5minutes' => 5.minutes.to_i,
+        'within30minutes' => 30.minutes.to_i,
+        'within1hour' => 1.hour.to_i,
+        'within1day' => 1.day.to_i,
+        'default' => 1.day.to_i
+      }.freeze
+
       def self.permitted_latency_values
-        @permitted_latency_values ||= Hash.new do |hash, queue_name|
-          hash[queue_name] = begin
-            case queue_name
-            when 'monitoring', 'realtime'
-              10.seconds.to_i
-            when 'default'
-              1.day.to_i
-            when /\Awithin\d+.+\z/
-              _, number, unit = queue_name.partition(/\d+/)
-              number.strip.to_i.public_send(unit.strip).to_i
-            else
-              ENV.fetch('SIDEKIQ_QUEUES', '').split(',').reduce(nil) do |result, entry|
-                entry = entry.strip
-                next result unless entry.start_with?(queue_name)
-                _, number, unit = entry.split(':').last.partition(/\d+/)
-                number.strip.to_i.public_send(unit.strip).to_i
+        @permitted_latency_values ||=
+          unless ENV.key?('SIDEKIQ_QUEUES')
+            DEFAULT_LATENCY_VALUES
+          else
+            ENV['SIDEKIQ_QUEUES'].split(',').each_with_object({}) do |entry, hash|
+              queue_entry = entry.strip
+              if DEFAULT_LATENCY_VALUES.key?(queue_entry)
+                queue_name = queue_entry
+                hash[queue_name] = DEFAULT_LATENCY_VALUES[queue_entry]
+              elsif queue_entry.match(/\Awithin\d+.+\z/)
+                _, number, unit = queue_entry.partition(/\d+/)
+                hash[queue_entry] = number.to_i.public_send(unit.strip).to_i
+              elsif queue_entry.include?(':')
+                queue_name, latency_info = queue_entry.split(':')
+                _, number, unit = latency_info.partition(/\d+/)
+                hash[queue_name] = number.to_i.public_send(unit.strip).to_i
               end
-            end
+            end.freeze
           end
-        end
       end
 
       def_delegators :@queue, :size, :latency, :name
@@ -36,14 +46,12 @@ module RooOnRails
       end
 
       def normalised_latency
-        queue.latency.fdiv(permitted_latency).round(3)
-      end
-
-      private
-
-      def permitted_latency
-        self.class.permitted_latency_values[queue.name] ||
+        permitted_latency = self.class.permitted_latency_values[queue.name]
+        if permitted_latency
+          queue.latency.fdiv(permitted_latency).round(3)
+        else
           raise("Cannot determine permitted latency for queue #{queue.name}")
+        end
       end
     end
   end

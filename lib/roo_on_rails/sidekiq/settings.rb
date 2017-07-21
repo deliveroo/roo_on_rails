@@ -1,21 +1,10 @@
+require_relative './queue_latency'
+
 module RooOnRails
   module Sidekiq
     class Settings
-      DEFAULT_QUEUES = %w(
-        monitoring
-        realtime
-        within1minute
-        within5minutes
-        within30minutes
-        within1hour
-        within1day
-        default
-      ).freeze
-
       def self.queues
-        ENV.fetch('SIDEKIQ_QUEUES', '').split(',').map do |queue_entry|
-          queue_entry.split(':').first.strip
-        end.presence || DEFAULT_QUEUES
+        @queues ||= QueueLatency.permitted_latency_values.sort_by(&:last).map(&:first).freeze
       end
 
       def self.concurrency

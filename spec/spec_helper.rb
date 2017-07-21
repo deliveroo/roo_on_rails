@@ -14,6 +14,9 @@ RSpec.configure do |config|
   require_relative './support/env_helpers'
   config.include(EnvHelpers)
 
+  require_relative './support/sidekiq_queue_helpers'
+  config.include(SidekiqQueueHelpers)
+
   config.filter_run_excluding rails_min_version: (lambda { |_, meta|
     require 'rails'
     Gem::Version.new(meta[:rails_min_version]) >= Gem::Version.new(Rails::VERSION::STRING)

@@ -20,8 +20,12 @@ RSpec.describe RooOnRails::Sidekiq::Settings do
     end
 
     context 'custom value' do
-      before { stub_config_var('SIDEKIQ_QUEUES', 'queue-a,queue-b') }
-      it { should match_array(%w[queue-a queue-b]) }
+      before { stub_queues('realtime,queue-a:1day,queue-b:5seconds') }
+      after  { reset_queues }
+
+      it 'have custom queues in the right sequence' do
+        should eql %w[queue-b realtime queue-a]
+      end
     end
   end
 
@@ -33,7 +37,7 @@ RSpec.describe RooOnRails::Sidekiq::Settings do
     end
 
     context 'custom value' do
-      before { stub_config_var 'SIDEKIQ_THREADS', 2 }
+      before { stub_config_var('SIDEKIQ_THREADS', 2) }
       it { should eql 2 }
     end
   end
