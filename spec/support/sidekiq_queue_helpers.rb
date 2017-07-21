@@ -11,10 +11,8 @@ module SidekiqQueueHelpers
   def reset_queues
     require 'roo_on_rails/sidekiq/settings'
     RooOnRails::Sidekiq::Settings.queues
+    RooOnRails::Sidekiq::Settings.permitted_latency_values
     RooOnRails::Sidekiq::Settings.remove_instance_variable(:@queues)
-
-    require 'roo_on_rails/sidekiq/queue_latency'
-    RooOnRails::Sidekiq::QueueLatency.permitted_latency_values
-    RooOnRails::Sidekiq::QueueLatency.remove_instance_variable(:@permitted_latency_values)
+    RooOnRails::Sidekiq::Settings.remove_instance_variable(:@permitted_latency_values)
   end
 end
