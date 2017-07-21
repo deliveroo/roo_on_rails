@@ -16,12 +16,16 @@ module RooOnRails
         'default' => 1.day.to_i
       }.freeze
 
-      def self.permitted_latency_values
-        @permitted_latency_values ||=
-          unless ENV.key?('SIDEKIQ_QUEUES')
-            DEFAULT_LATENCY_VALUES
-          else
-            ENV['SIDEKIQ_QUEUES'].split(',').each_with_object({}) do |entry, hash|
+      class << self
+        def permitted_latency_values
+          @permitted_latency_values ||= ENV.key?('SIDEKIQ_QUEUES') ? extract_queues_from_env.freeze : DEFAULT_LATENCY_VALUES
+        end
+
+        private
+
+        def extract_queues_from_env
+          {}.tap do |hash|
+            ENV['SIDEKIQ_QUEUES'].split(',').each do |entry|
               queue_entry = entry.strip
               if DEFAULT_LATENCY_VALUES.key?(queue_entry)
                 queue_name = queue_entry
@@ -34,8 +38,9 @@ module RooOnRails
                 _, number, unit = latency_info.partition(/\d+/)
                 hash[queue_name] = number.to_i.public_send(unit.strip).to_i
               end
-            end.freeze
+            end
           end
+        end
       end
 
       def_delegators :@queue, :size, :latency, :name
