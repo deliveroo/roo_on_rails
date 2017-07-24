@@ -1,11 +1,8 @@
-# v1.8.1 (2017-07-24)
-
-- reports Sidekiq metrics only for queues defined in process
-
-# v1.8.0 (2017-07-24)
+# HEAD (2017-07-24)
 
 Features:
 
+- reports Sidekiq metrics only for queues defined in process
 - adds 'default' to list of default Sidekiq queues
 - accepts custom Sidekiq queue names
 - accepts custom Sidekiq queue permitted latency values
