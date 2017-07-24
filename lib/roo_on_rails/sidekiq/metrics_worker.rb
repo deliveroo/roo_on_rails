@@ -4,6 +4,8 @@ require 'roo_on_rails/sidekiq/process_scaling'
 require 'roo_on_rails/sidekiq/settings'
 require 'roo_on_rails/statsd'
 
+# Reports Sidekiq queue metrics for queues configured within the current Sidekiq process i.e. queues returned by `RooOnRails::Sidekiq::Settings.queues`
+
 module RooOnRails
   module Sidekiq
     class MetricsWorker
