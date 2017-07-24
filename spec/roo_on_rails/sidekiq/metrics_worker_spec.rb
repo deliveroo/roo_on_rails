@@ -7,7 +7,6 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
     let(:perform) { described_class.new.perform }
 
     before do
-      # allow(statsd).to receive(:batch).and_call_original
       allow(statsd).to receive(:gauge).with(any_args)
       allow(Sidekiq::Queue).to receive(:all).and_return(sidekiq_queues) if defined?(sidekiq_queues)
     end
