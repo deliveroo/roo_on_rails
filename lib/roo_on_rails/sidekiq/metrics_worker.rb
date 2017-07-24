@@ -1,6 +1,7 @@
 require 'sidekiq/api'
 require 'roo_on_rails/sidekiq/queue_latency'
 require 'roo_on_rails/sidekiq/process_scaling'
+require 'roo_on_rails/sidekiq/settings'
 require 'roo_on_rails/statsd'
 
 module RooOnRails
@@ -12,13 +13,21 @@ module RooOnRails
 
       def perform
         RooOnRails.statsd.batch do |stats|
-          queues = ::Sidekiq::Queue.all.map { |q| QueueLatency.new(q) }
+          queues = fetch_queues
           queue_stats(stats, queues)
           process_stats(stats, queues)
         end
       end
 
       private
+
+      def fetch_queues
+        [].tap do |array|
+          ::Sidekiq::Queue.all.each do |q|
+            array << QueueLatency.new(q) if Settings.queues.include?(q.name.to_s)
+          end
+        end
+      end
 
       def queue_stats(stats, queues)
         queues.each do |queue|

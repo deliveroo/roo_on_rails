@@ -5,62 +5,47 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
 
   describe '#perform' do
     let(:perform) { described_class.new.perform }
+
     before do
-      allow(statsd).to receive(:batch).and_call_original
-      allow(statsd).to receive(:gauge)
+      # allow(statsd).to receive(:batch).and_call_original
+      allow(statsd).to receive(:gauge).with(any_args)
+      allow(Sidekiq::Queue).to receive(:all).and_return(sidekiq_queues) if defined?(sidekiq_queues)
     end
 
     after { reset_queues }
 
     it 'should send all metrics in a batch' do
+      expect(statsd).to receive(:batch).with(no_args).once
       perform
-      expect(statsd).to have_received(:batch).once.with(no_args)
     end
 
     context 'with the default queue' do
-      before do
-        allow(Sidekiq::Queue).to receive(:all) do
-          [instance_double(Sidekiq::Queue, name: 'default', size: 37, latency: 293)]
-        end
-        perform
-      end
+      let(:sidekiq_queues) { [instance_double(Sidekiq::Queue, name: 'default', size: 37, latency: 293)] }
 
       it 'should send size, latency and normalised latency based on 1 day' do
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.size', 37, tags: ['queue:default']
-        ).ordered
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.latency', 293, tags: ['queue:default']
-        ).ordered
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.normalised_latency', 0.003, tags: ['queue:default']
-        ).ordered
+        tags = ['queue:default']
+        expect(statsd).to receive(:gauge).with('jobs.queue.size', 37, tags: tags)
+        expect(statsd).to receive(:gauge).with('jobs.queue.latency', 293, tags: tags)
+        expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.003, tags: tags)
+        perform
       end
     end
 
     context 'with the realtime queue' do
       let(:latency) { 6.2 }
-      before do
-        allow(Sidekiq::Queue).to receive(:all) do
-          [instance_double(Sidekiq::Queue, name: 'realtime', size: 476, latency: latency)]
-        end
-      end
+      let(:sidekiq_queues) { [instance_double(Sidekiq::Queue, name: 'realtime', size: 476, latency: latency)] }
 
       it 'should send size, latency and normalised latency based on 10 seconds' do
+        tags = ['queue:realtime']
+        expect(statsd).to receive(:gauge).with('jobs.queue.size', 476, tags: tags)
+        expect(statsd).to receive(:gauge).with('jobs.queue.latency', 6.2, tags: tags)
+        expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.62, tags: tags)
         perform
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.size', 476, tags: ['queue:realtime']
-        ).ordered
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.latency', 6.2, tags: ['queue:realtime']
-        ).ordered
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.normalised_latency', 0.62, tags: ['queue:realtime']
-        ).ordered
       end
 
       context 'when there is one process active' do
         let(:process_count) { 1 }
+
         before do
           allow(Sidekiq::ProcessSet).to receive(:new) do
             double(count: process_count)
@@ -68,8 +53,8 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
         end
 
         it 'should request 2 workers' do
+          expect(statsd).to receive(:gauge).with('jobs.processes.requested', 2)
           perform
-          expect(statsd).to have_received(:gauge).with('jobs.processes.requested', 2).ordered
         end
 
         context 'when there is no load but two workers' do
@@ -77,76 +62,108 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
           let(:latency) { 0 }
 
           it 'should request 1 workers' do
+            expect(statsd).to receive(:gauge).with('jobs.processes.requested', 1)
             perform
-            expect(statsd).to have_received(:gauge).with('jobs.processes.requested', 1).ordered
           end
         end
       end
     end
 
     context 'with a within* queue' do
-      before do
-        stub_queues('within60minutes')
+      let(:sidekiq_queues) { [instance_double(Sidekiq::Queue, name: 'within60minutes', size: 3948, latency: 134)] }
 
-        allow(Sidekiq::Queue).to receive(:all) do
-          [instance_double(Sidekiq::Queue, name: 'within60minutes', size: 3948, latency: 134)]
-        end
-
-        perform
-      end
+      before { stub_queues('within60minutes') }
 
       it 'should send size, latency and normalised latency based on the queue name' do
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.size', 3948, tags: ['queue:within60minutes']
-        ).ordered
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.latency', 134, tags: ['queue:within60minutes']
-        ).ordered
-        expect(statsd).to have_received(:gauge).with(
-          'jobs.queue.normalised_latency', 0.037, tags: ['queue:within60minutes']
-        ).ordered
+        tags = ['queue:within60minutes']
+        expect(statsd).to receive(:gauge).with('jobs.queue.size', 3948, tags: tags)
+        expect(statsd).to receive(:gauge).with('jobs.queue.latency', 134, tags: tags)
+        expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.037, tags: tags)
+        perform
       end
     end
 
-
-    context 'with an additional/custom queue' do
+    context 'with custom queues' do
       before do
-        stub_queues('a:1hour,new-que:1minute,b:3days')
-
-        allow(Sidekiq::Queue).to receive(:all) do
-          [instance_double(Sidekiq::Queue, name: 'new-que', size: 100, latency: 300)]
-        end
-
+        stub_queues('new-queue-a:1minute,new-queue-b:1hour,new-queue-c:3days')
         allow(statsd).to receive(:gauge).with(any_args)
-        perform
       end
 
-      it 'should send size, latency and normalised latency based on the queue name' do
-        expect(statsd)
-          .to have_received(:gauge)
-          .with('jobs.queue.size', 100, tags: ['queue:new-que'])
-          .once
+      context 'all Sidekiq queues are included in custom queue list' do
+        let(:sidekiq_queues) do
+          [
+            instance_double(Sidekiq::Queue, name: 'new-queue-a', size: 100, latency: 300),
+            instance_double(Sidekiq::Queue, name: 'new-queue-b', size: 50, latency: 2700),
+            instance_double(Sidekiq::Queue, name: 'new-queue-c', size: 150, latency: 32400)
+          ]
+        end
 
-        expect(statsd)
-          .to have_received(:gauge)
-          .with('jobs.queue.latency', 300, tags: ['queue:new-que'])
-          .once
+        it 'reports metrics for all queues' do
+          tags = ['queue:new-queue-a']
+          expect(statsd).to receive(:gauge).with('jobs.queue.size', 100, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.latency', 300, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 5.00, tags: tags)
 
-        expect(statsd)
-          .to have_received(:gauge)
-          .with('jobs.queue.normalised_latency', 5.0, tags: ['queue:new-que'])
-          .once
+          tags = ['queue:new-queue-b']
+          expect(statsd).to receive(:gauge).with('jobs.queue.size', 50, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.latency', 2700, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.75, tags: tags)
+
+          tags = ['queue:new-queue-c']
+          expect(statsd).to receive(:gauge).with('jobs.queue.size', 150, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.latency', 32400, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.125, tags: tags)
+
+          perform
+        end
+      end
+
+      context 'some Sidekiq queues are included in custom queue list' do
+        let(:sidekiq_queues) do
+          [
+            instance_double(Sidekiq::Queue, name: 'new-queue-a', size: 100, latency: 300),
+            instance_double(Sidekiq::Queue, name: 'new-queue-x', size: 50, latency: 2700),
+            instance_double(Sidekiq::Queue, name: 'new-queue-c', size: 150, latency: 32400)
+          ]
+        end
+
+        it 'reports metrics for queues included in custom queue list' do
+          tags = ['queue:new-queue-a']
+          expect(statsd).to receive(:gauge).with('jobs.queue.size', 100, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.latency', 300, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 5.00, tags: tags)
+
+          tags = ['queue:new-queue-c']
+          expect(statsd).to receive(:gauge).with('jobs.queue.size', 150, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.latency', 32400, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.125, tags: tags)
+
+          perform
+        end
+      end
+
+      context 'no Sidekiq queue is included in custom queue list' do
+        let(:sidekiq_queues) do
+          [
+            instance_double(Sidekiq::Queue, name: 'new-queue-a', size: 100, latency: 300),
+            instance_double(Sidekiq::Queue, name: 'new-queue-x', size: 50, latency: 2700),
+            instance_double(Sidekiq::Queue, name: 'new-queue-c', size: 150, latency: 32400)
+          ]
+        end
+
+        it 'does not report stats for any queues' do
+          expect(statsd).to_not receive(:gauge).with('jobs.queue.size')
+          expect(statsd).to_not receive(:gauge).with('jobs.queue.latency')
+          expect(statsd).to_not receive(:gauge).with('jobs.queue.normalised_latency')
+          perform
+        end
       end
     end
 
     context 'with a queue whose permitted latency cannot be determined' do
-      before do
-        allow(Sidekiq::Queue).to receive(:all) do
-          [instance_double(Sidekiq::Queue, name: 'test', size: 3948, latency: 134)]
-        end
-      end
-
-      it { expect { perform }.to raise_error RuntimeError }
+      let(:sidekiq_queues) { [instance_double(Sidekiq::Queue, name: 'test', size: 3948, latency: 134)] }
+      before { stub_queues('test') }
+      specify { expect { perform }.to raise_error RuntimeError }
     end
   end
 end
