@@ -17,7 +17,6 @@ module RooOnRails
       requires Heroku::PrebootEnabled
       requires Sidekiq::Settings
       requires Documentation::Playbook
-      requires GoogleOauth::Initializer
       requires Papertrail::All
 
       def call

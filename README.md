@@ -173,25 +173,21 @@ logger.with(a: 1, b: 2).info('Stuff')
 See the [class documentation](lib/roo_on_rails/context_logging.rb) for further
 details.
 
-### Google Oauth
+### Google OAuth authentication
 
-When `GOOGLE_AUTH_ENABLED` is set to true we'll:
+When `GOOGLE_AUTH_ENABLED` is set to true we inject a `Omniauth` Rack middleware
+with a pre-configured strategy for Google Oauth2.
 
-* Inject a `Omniauth` Rack middleware with a pre-configured strategy for Google
-  Oauth2.
-* Onject custom Rack middleare to handle Oauth callback requests.
-* Generate the `config/initializers/google_oauth.rb` file that contains some
-  examples of how to wire in your authentication logic.
+Parameters:
 
-To use this functionality, you must:
+- `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET` (mandatory)
+- `GOOGLE_AUTH_PATH_PREFIX` (optional, defaults to `/auth`)
+- `GOOGLE_AUTH_CONTROLLER` (optional, defaults to `sessions`)
 
-* Obtain the Oauth2 credentials from Google and configure them in
-  `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET`.
-* Provide in `GOOGLE_AUTH_ALLOWED_DOMAINS` a comma-separated list of domains, to
-  whitelist the allowed email addresses.
-* Customize the code in the generated Rails initializer to hook into your
-  application's authentication logic.
-* Update your Rails controllers to require authentication, when necessary.
+This feature is bring-your-own-controller — it won't magically protect your
+application.
+
+A simple but secure example is detailed in `README.google_oauth2.md`.
 
 
 ## Command features
