@@ -1,5 +1,5 @@
 require 'active_support/core_ext/numeric'
-require_relative './settings'
+require 'roo_on_rails/sidekiq/settings'
 
 module RooOnRails
   module Sidekiq

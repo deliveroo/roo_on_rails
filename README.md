@@ -213,9 +213,14 @@ That command will sequentially run a number of checks. For it to run successfull
 - checks are run sequentially for staging and then for production. The process halts at any non-fixable failing check. To process only specific environments, you can set a config variable while running the command, like so:
 
 ```
-ROO_ON_RAILS_ENVIRONMENTS=staging,production bundle exec roo_on_rails $(: this is the default behaviour)
-ROO_ON_RAILS_ENVIRONMENTS=staging bundle exec roo_on_rails $(: run checks only on staging)
-ROO_ON_RAILS_ENVIRONMENTS=production bundle exec roo_on_rails $(: run checks only on production)
+# the default behaviour:
+ROO_ON_RAILS_ENVIRONMENTS=staging,production bundle exec roo_on_rails
+
+# run checks only on staging:
+ROO_ON_RAILS_ENVIRONMENTS=staging bundle exec roo_on_rails
+
+# run checks only on production:
+ROO_ON_RAILS_ENVIRONMENTS=production bundle exec roo_on_rails
 ```
 
 
