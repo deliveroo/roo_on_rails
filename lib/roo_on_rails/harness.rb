@@ -13,10 +13,8 @@ module RooOnRails
     end
 
     def run
-      envs = ENV.fetch('ROO_ON_RAILS_ENVIRONMENTS', 'staging,production').split(',')
-      envs.each do |env|
-        check = Checks::Environment.new(env: env.strip, fix: @try_fix, context: @context)
-        check.run
+      ENV.fetch('ROO_ON_RAILS_ENVIRONMENTS', 'staging,production').split(',').each do |env|
+        Checks::Environment.new(env: env.strip, fix: @try_fix, context: @context).run
       end
 
       self
