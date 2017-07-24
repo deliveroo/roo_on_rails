@@ -7,17 +7,18 @@ module RooOnRails
   class Harness
     include Thor::Shell
 
-    def initialize(try_fix: false, context: nil)
+    def initialize(try_fix: false, context: nil, dry_run: false)
       @try_fix = try_fix
       @context = context || Hashie::Mash.new
+      @dry_run = dry_run
     end
 
     def run
+      checks = []
       ENV.fetch('ROO_ON_RAILS_ENVIRONMENTS', 'staging,production').split(',').each do |env|
-        Checks::Environment.new(env: env.strip, fix: @try_fix, context: @context).run
+        checks << Checks::Environment.new(env: env.strip, fix: @try_fix, context: @context, dry_run: @dry_run)
       end
-
-      self
+      checks.each(&:run)
     rescue Shell::CommandFailed
       say 'A command failed to run, aborting', %i[bold red]
       exit 2
