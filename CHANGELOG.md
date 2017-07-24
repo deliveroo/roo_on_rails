@@ -1,7 +1,10 @@
+<<<<<<< HEAD
 # v1.8.1 (2017-07-24)
 
 - reports Sidekiq metrics only for queues defined in process
 
+=======
+>>>>>>> master
 # v1.8.0 (2017-07-24)
 
 Features:
