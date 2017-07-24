@@ -13,10 +13,10 @@ module RooOnRails
     end
 
     def run
-      [
-        Checks::Environment.new(env: 'staging',    fix: @try_fix, context: @context),
-        Checks::Environment.new(env: 'production', fix: @try_fix, context: @context),
-      ].each(&:run)
+      ENV.fetch('ROO_ON_RAILS_ENVIRONMENTS', 'staging,production').split(',').each do |env|
+        Checks::Environment.new(env: env, fix: @try_fix, context: @context)
+      end
+
       self
     rescue Shell::CommandFailed
       say 'A command failed to run, aborting', %i[bold red]
