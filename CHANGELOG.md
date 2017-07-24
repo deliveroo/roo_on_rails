@@ -1,3 +1,12 @@
+# v1.8.0 (2017-07-24)
+
+Features:
+
+- adds 'default' to list of default Sidekiq queues
+- accepts custom Sidekiq queue names
+- accepts custom Sidekiq queue permitted latency values
+- allows environment-specific application checks
+
 # v1.7.0 (2017-07-18)
 
 Features:
