@@ -18,21 +18,13 @@ module RooOnRails
 
       def perform
         RooOnRails.statsd.batch do |stats|
-          queues = fetch_queues
+          queues = QueueLatency.queues
           queue_stats(stats, queues)
           process_stats(stats, queues)
         end
       end
 
       private
-
-      def fetch_queues
-        [].tap do |array|
-          ::Sidekiq::Queue.all.each do |q|
-            array << QueueLatency.new(q) if Settings.queues.include?(q.name.to_s)
-          end
-        end
-      end
 
       def queue_stats(stats, queues)
         queues.each do |queue|

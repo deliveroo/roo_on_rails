@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'roo_on_rails/sidekiq/metrics_worker'
 
 RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
@@ -31,39 +32,47 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
     end
 
     context 'with the realtime queue' do
-      let(:latency) { 6.2 }
       let(:sidekiq_queues) { [instance_double(Sidekiq::Queue, name: 'realtime', size: 476, latency: latency)] }
 
-      it 'should send size, latency and normalised latency based on 10 seconds' do
-        tags = ['queue:realtime']
-        expect(statsd).to receive(:gauge).with('jobs.queue.size', 476, tags: tags)
-        expect(statsd).to receive(:gauge).with('jobs.queue.latency', 6.2, tags: tags)
-        expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.62, tags: tags)
-        perform
+      before do
+        allow(Sidekiq::ProcessSet).to receive(:new) do
+          double(count: process_count)
+        end
       end
 
-      context 'when there is one process active' do
+      context 'when there is 1 process and latency is above threshold' do
         let(:process_count) { 1 }
-
-        before do
-          allow(Sidekiq::ProcessSet).to receive(:new) do
-            double(count: process_count)
-          end
-        end
+        let(:latency) { 6.2 }
 
         it 'should request 2 workers' do
           expect(statsd).to receive(:gauge).with('jobs.processes.requested', 2)
           perform
         end
 
-        context 'when there is no load but two workers' do
-          let(:process_count) { 2 }
-          let(:latency) { 0 }
+        it 'should send size, latency and normalised latency based on 10 seconds' do
+          tags = ['queue:realtime']
+          expect(statsd).to receive(:gauge).with('jobs.queue.size', 476, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.latency', 6.2, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.62, tags: tags)
+          perform
+        end
+      end
 
-          it 'should request 1 workers' do
-            expect(statsd).to receive(:gauge).with('jobs.processes.requested', 1)
-            perform
-          end
+      context 'when there is 1 process and latency is below threshold' do
+        let(:process_count) { 2 }
+        let(:latency) { 0.9 }
+
+        it 'should request 1 workers' do
+          expect(statsd).to receive(:gauge).with('jobs.processes.requested', 1)
+          perform
+        end
+
+        it 'should send size, latency and normalised latency based on 10 seconds' do
+          tags = ['queue:realtime']
+          expect(statsd).to receive(:gauge).with('jobs.queue.size', 476, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.latency', 0.9, tags: tags)
+          expect(statsd).to receive(:gauge).with('jobs.queue.normalised_latency', 0.09, tags: tags)
+          perform
         end
       end
     end
