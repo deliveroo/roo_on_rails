@@ -10,6 +10,8 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
       allow(statsd).to receive(:gauge)
     end
 
+    after { reset_queues }
+
     it 'should send all metrics in a batch' do
       perform
       expect(statsd).to have_received(:batch).once.with(no_args)
@@ -84,9 +86,12 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
 
     context 'with a within* queue' do
       before do
+        stub_queues('within60minutes')
+
         allow(Sidekiq::Queue).to receive(:all) do
           [instance_double(Sidekiq::Queue, name: 'within60minutes', size: 3948, latency: 134)]
         end
+
         perform
       end
 
@@ -100,6 +105,37 @@ RSpec.describe RooOnRails::Sidekiq::MetricsWorker do
         expect(statsd).to have_received(:gauge).with(
           'jobs.queue.normalised_latency', 0.037, tags: ['queue:within60minutes']
         ).ordered
+      end
+    end
+
+
+    context 'with an additional/custom queue' do
+      before do
+        stub_queues('a:1hour,new-que:1minute,b:3days')
+
+        allow(Sidekiq::Queue).to receive(:all) do
+          [instance_double(Sidekiq::Queue, name: 'new-que', size: 100, latency: 300)]
+        end
+
+        allow(statsd).to receive(:gauge).with(any_args)
+        perform
+      end
+
+      it 'should send size, latency and normalised latency based on the queue name' do
+        expect(statsd)
+          .to have_received(:gauge)
+          .with('jobs.queue.size', 100, tags: ['queue:new-que'])
+          .once
+
+        expect(statsd)
+          .to have_received(:gauge)
+          .with('jobs.queue.latency', 300, tags: ['queue:new-que'])
+          .once
+
+        expect(statsd)
+          .to have_received(:gauge)
+          .with('jobs.queue.normalised_latency', 5.0, tags: ['queue:new-que'])
+          .once
       end
     end
 
