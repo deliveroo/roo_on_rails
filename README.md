@@ -117,6 +117,7 @@ When `SIDEKIQ_ENABLED` is set we'll:
 The following ENV are available:
 
 - `SIDEKIQ_ENABLED`
+- `SIDEKIQ_QUEUES` - comma-separated custom queue names; if not specified, default queues are processed which are defined [here](./lib/roo_on_rails/sidekiq/settings.rb). For accurate health reporting and scaling for your custom queue names, you can specify their permitted latency within this variable e.g. `within5seconds,queue-one:10seconds,queue-two:20minutes,queue-three:3hours,queue-four:1day,default`. For non-default queue names that don't follow the `withinXunit` pattern, you will **need** to specify the permitted latency otherwise the initialization will error.
 - `SIDEKIQ_THREADS` (default: 25) - Sets sidekiq concurrency value
 - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the
   amount of time in seconds rails will wait before attempting to find and
@@ -213,9 +214,23 @@ Run the following from your app's top-level directory:
 bundle exec roo_on_rails
 ```
 
-You will (currently) need to have admin privileges on the
-`roo-dd-bridge-production` application for this to work. This will be addressed
-eventually.
+That command will sequentially run a number of checks. For it to run successfully, you will need:
+
+- a GitHub API token that can read your GitHub repository's settings placed in `~/.roo_on_rails/github-token`
+- the Heroku toolbelt installed and logged in
+- admin privileges on the `roo-dd-bridge-production` (this will be addressed eventually)
+- checks are run sequentially for staging and then for production. The process halts at any non-fixable failing check. To process only specific environments, you can set a config variable while running the command, like so:
+
+```
+# the default behaviour:
+ROO_ON_RAILS_ENVIRONMENTS=staging,production bundle exec roo_on_rails
+
+# run checks only on staging:
+ROO_ON_RAILS_ENVIRONMENTS=staging bundle exec roo_on_rails
+
+# run checks only on production:
+ROO_ON_RAILS_ENVIRONMENTS=production bundle exec roo_on_rails
+```
 
 
 ### Description
