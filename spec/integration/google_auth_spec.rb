@@ -9,12 +9,16 @@ RSpec.describe 'Google Auth setup' do
   context 'when booting' do
     let(:middleware) { app_helper.shell_run "cd #{app_path} && rake middleware" }
 
-    context "if Google Auth has been enabled" do
-      before do
-        allow(RooOnRails::Config).to receive(:google_auth_enabled?) { true }
+    context "if Google Auth has not been enabled" do
+      it 'does not insert OmniAuth into the middleware stack' do
+        expect(middleware).to_not include 'OmniAuth::Builder'
       end
+    end
 
-      it 'inserts OmniAuth into the middleware stack' do     
+    context "if Google Auth has been enabled" do
+      let(:app_env_vars) { ["GOOGLE_AUTH_ENABLED=TRUE", super()].join("\n") }
+
+      it 'inserts OmniAuth into the middleware stack' do
         expect(middleware).to include 'OmniAuth::Builder'
       end
     end
