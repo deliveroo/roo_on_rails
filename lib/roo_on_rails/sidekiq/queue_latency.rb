@@ -1,4 +1,5 @@
 require 'active_support/core_ext/numeric'
+require 'roo_on_rails/sidekiq/settings'
 
 module RooOnRails
   module Sidekiq
@@ -13,18 +14,9 @@ module RooOnRails
       end
 
       def normalised_latency
-        metric = queue.latency.to_f / permitted_latency
-        metric.round(3)
-      end
-
-      def permitted_latency
-        prefix, number, unit = queue.name.partition(/[0-9]+/)
-        case prefix
-        when 'monitoring', 'realtime' then 10.seconds.to_i
-        when 'default' then 1.day.to_i
-        when 'within' then number.to_i.public_send(unit.to_sym).to_i
-        else raise "Cannot determine permitted latency for queue #{queue.name}"
-        end
+        permitted_latency = Settings.permitted_latency_values[queue.name]
+        return queue.latency.fdiv(permitted_latency).round(3) if permitted_latency
+        raise("Cannot determine permitted latency for queue #{queue.name}")
       end
     end
   end
