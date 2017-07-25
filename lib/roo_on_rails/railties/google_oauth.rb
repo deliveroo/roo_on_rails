@@ -2,25 +2,38 @@ module RooOnRails
   module Railties
     class GoogleOAuth < Rails::Railtie
       initializer 'roo_on_rails.google_auth.middleware' do |app|
-        _add_middleware(app)
+        _if_enabled do
+          _add_middleware(app)
+        end
       end
 
       initializer 'roo_on_rails.google_auth.routes', after: :set_routes_reloader_hook do |app|
-        _add_routes(app)
-        app.reloader.to_prepare { _add_routes(app) }
+        _if_enabled do
+          _add_routes(app)
+          # support development mode on route changes (only works in Rails 5)
+          app.reloader.to_prepare { _add_routes(app) }
+        end
       end
 
       private
 
-      def _add_middleware(app)
+      def _if_enabled
         return unless Config.google_auth_enabled?
-        $stderr.puts 'initializer roo_on_rails.google_auth'
+        if Rails::VERSION::MAJOR < 5
+          Rails.logger.warn 'The Google OAuth feature is not supported with Rails < 5'
+          return
+        end
+
+        yield
+      end
+
+      def _add_middleware(app)
+        $stderr.puts 'initializer roo_on_rails.google_auth.middleware'
 
         require 'roo_on_rails/config'
         require 'omniauth'
         require 'omniauth-google-oauth2'
         require 'active_support/core_ext/object/blank'
-
 
         options = {
           path_prefix: Config.google_auth_path_prefix,
@@ -42,7 +55,6 @@ module RooOnRails
       end
 
       def _add_routes(app)
-        return unless Config.google_auth_enabled?
         $stderr.puts 'initializer roo_on_rails.google_auth.routes'
 
         prefix = Config.google_auth_path_prefix

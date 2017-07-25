@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'spec/support/run_test_app'
 
-RSpec.describe 'Google OAuth' do
+RSpec.describe 'Google OAuth', rails_min_version:  5 do
   run_test_app
   before { app.wait_start }
 
