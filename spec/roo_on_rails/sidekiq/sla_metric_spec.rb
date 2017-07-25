@@ -9,9 +9,7 @@ RSpec.describe RooOnRails::Sidekiq::SlaMetric do
 
   before do
     allow(Sidekiq::Queue).to receive(:all) { sidekiq_queues }
-    allow(Sidekiq::ProcessSet).to receive(:new) do
-      double(count: process_count)
-    end
+    allow_any_instance_of(RooOnRails::Sidekiq::ProcessScaling).to receive(:current_processes){ process_count }
   end
 
   let(:perform){ described_class.queue }
