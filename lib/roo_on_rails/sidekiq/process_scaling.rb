@@ -8,7 +8,7 @@ module RooOnRails
       end
 
       def current_processes
-        ::Sidekiq::ProcessSet.new.select { |p| p['quiet'] == 'false' }
+        ::Sidekiq::ProcessSet.new.count { |p| p['quiet'] == 'false' }
       end
 
       def max_normalised_latency
