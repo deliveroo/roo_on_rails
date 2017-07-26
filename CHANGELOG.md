@@ -1,4 +1,4 @@
-# HEAD
+# v1.8.0 (2017-07-26)
 
 Bug fixes:
 
@@ -6,12 +6,17 @@ Bug fixes:
 
 Features:
 
+- Provides a `PLAYBOOK.md` template when detected missing (#42)
 - Adds pre-baked Google OAuth support (#44, #49)
-- reports Sidekiq metrics only for queues defined in process (#50)
-- adds 'default' to list of default Sidekiq queues
-- accepts custom Sidekiq queue names
-- accepts custom Sidekiq queue permitted latency values
-- allows environment-specific application checks
+- Reports Sidekiq metrics only for queues defined in process (#50)
+- Finer-grained Sidekiq configuration (#46)
+    - adds 'default' to list of default Sidekiq queues
+    - accepts custom Sidekiq queue names and permitted latency values
+    - allows environment-specific application checks
+
+Other:
+
+- Fixes the test harness (#48)
 
 # v1.7.0 (2017-07-18)
 
