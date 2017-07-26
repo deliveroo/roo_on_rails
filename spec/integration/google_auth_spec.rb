@@ -1,21 +1,48 @@
 require 'spec_helper'
 require 'spec/support/run_test_app'
-require 'roo_on_rails/config'
 
-RSpec.describe 'Google Auth setup' do
+RSpec.describe 'Google OAuth', rails_min_version:  5 do
   run_test_app
   before { app.wait_start }
 
-  context 'when booting' do
-    let(:middleware) { app_helper.shell_run "cd #{app_path} && rake middleware" }
+  after  { ENV['GOOGLE_AUTH_ENABLED'] = 'NO' }
+
+  describe 'middleware' do
+    let(:output) { app_helper.shell_run "cd #{app_path} && rake middleware" }
 
     context "if Google Auth has been enabled" do
-      before do
-        allow(RooOnRails::Config).to receive(:google_auth_enabled?) { true }
+      before { ENV['GOOGLE_AUTH_ENABLED'] = 'YES' }
+
+      it 'inserts OmniAuth into the middleware stack' do
+        expect(output).to include 'OmniAuth::Builder'
+      end
+    end
+
+    context 'by default' do
+      it 'does not insert OmniAuth into the middleware stack' do
+        expect(output).not_to include 'OmniAuth::Builder'
+      end
+    end
+  end
+
+  describe 'routes' do
+    let(:output) { app_helper.shell_run "cd #{app_path} && rake routes" }
+
+    context "if Google Auth has been enabled" do
+      before { ENV['GOOGLE_AUTH_ENABLED'] = 'YES' }
+
+      it 'adds the callback route' do
+        expect(output).to include '/auth/google_oauth2/callback'
       end
 
-      it 'inserts OmniAuth into the middleware stack' do     
-        expect(middleware).to include 'OmniAuth::Builder'
+      it 'adds the failure route' do
+        expect(output).to include '/auth/failure'
+      end
+    end
+
+    context 'by default' do
+      it 'does not add the callback route' do
+        expect(output).not_to include '/auth/google_oauth2/callback'
       end
     end
   end

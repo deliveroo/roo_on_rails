@@ -10,10 +10,10 @@ describe 'Sidekiq Setup' do
     it 'does not insert hirefire into the middleware stack' do
       expect(middleware).not_to include 'HireFire::Middleware'
     end
+
     context "if HIREFIRE_TOKEN is set" do
-      before do
-        app_helper.append_to_file app_path.join('.env'), "\nHIREFIRE_TOKEN=hello"
-      end
+      let(:app_env_vars) { ["HIREFIRE_TOKEN=hello", super()].join("\n") }
+
       it 'inserts hirefire into the middleware stack' do
         expect(middleware).to include 'HireFire::Middleware'
       end

@@ -5,8 +5,8 @@ require 'thor'
 module ROR
   module BuildTestApp
     ROOT = Pathname.new('../../..').expand_path(__FILE__)
-    BUNDLE_CACHE = ROOT.join('vendor/bundle')
     TEST_DIR = ROOT.join('tmp/scaffold')
+    BUNDLE_CACHE = TEST_DIR.join('bundle')
     RAILS_NEW_BASE_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'.freeze
 
     class Helper < Thor::Group
@@ -33,6 +33,7 @@ module ROR
 
         shell_run "rails new #{scaffold_dir} #{rails_new_options}"
 
+        require 'rails'
         if Rails::VERSION::MAJOR < 4
           append_to_file scaffold_dir.join('Gemfile'), %{
             gem 'sidekiq', '< 5'
@@ -49,19 +50,18 @@ module ROR
           gem 'roo_on_rails', path: '../../..'
         }
 
-        create_file scaffold_dir.join('.env'),
-          'NEW_RELIC_LICENSE_KEY=dead-0000-beef'
-
-        # comment_lines scaffold_dir.join('config/database.yml').to_s,
-        #   /^\s+username:/
 
         Bundler.with_clean_env do
-          shell_run "cd #{scaffold_dir} && bundle install --path=#{BUNDLE_CACHE}"
+          shell_run "cd #{scaffold_dir} && bundle install -j4 --path=#{BUNDLE_CACHE}"
         end
 
         shell_run "tar -C #{scaffold_dir} -cf #{scaffold_path} ."
         scaffold_dir.rmtree unless @keep_scaffold
         self
+      end
+
+      def write_dotenv_file(path, app_env_vars)
+        create_file path.join('.env'), app_env_vars
       end
 
       def unpack_scaffold_at(path)
@@ -108,16 +108,17 @@ module ROR
       end
     end
 
-
     def build_test_app
       let(:app_id) { '%s.%s' % [Time.now.strftime('%F.%H%M%S'), SecureRandom.hex(4)] }
       let(:app_path) { TEST_DIR.join(app_id) }
       let(:app_helper) { Helper.new(app_options) }
       let(:app_options) { {} }
-
+      let(:app_env_vars) { "NEW_RELIC_LICENSE_KEY=dead-0000-beef\n" }
 
       before do
-        app_helper.ensure_scaffold.unpack_scaffold_at(app_path)
+        app_helper.ensure_scaffold
+          .unpack_scaffold_at(app_path)
+          .write_dotenv_file(app_path, app_env_vars)
       end
 
       after do
