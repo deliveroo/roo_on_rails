@@ -103,6 +103,11 @@ statement timeouts directly in the database._
 
 ### Sidekiq
 
+Deliveroo services implement Sidekiq with an _urgency_ pattern. By only having
+time-based [SLA](https://en.wikipedia.org/wiki/Service-level_agreement) queue
+names (eg. `within5minutes`) we can automatically create incident alerting for
+queues which take longer than the time the application needs them to be processed.
+
 When `SIDEKIQ_ENABLED` is set we'll:
 
 - check for the existence of a worker line in your Procfile;
@@ -116,6 +121,10 @@ The following ENV are available:
 - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the
   amount of time in seconds rails will wait before attempting to find and
   recover connections from dead threads
+
+NB. If you are migrating to SLA-based queue names, do not set `SIDEKIQ_ENABLED`
+to `true` before your old queues have finished processing (this will prevent
+Sidekiq from seeing the old queues at all).
 
 ### HireFire (for Sidekiq workers)
 
@@ -173,25 +182,21 @@ logger.with(a: 1, b: 2).info('Stuff')
 See the [class documentation](lib/roo_on_rails/context_logging.rb) for further
 details.
 
-### Google Oauth
+### Google OAuth authentication
 
-When `GOOGLE_AUTH_ENABLED` is set to true we'll:
+When `GOOGLE_AUTH_ENABLED` is set to true we inject a `Omniauth` Rack middleware
+with a pre-configured strategy for Google Oauth2.
 
-* Inject a `Omniauth` Rack middleware with a pre-configured strategy for Google
-  Oauth2.
-* Onject custom Rack middleare to handle Oauth callback requests.
-* Generate the `config/initializers/google_oauth.rb` file that contains some
-  examples of how to wire in your authentication logic.
+Parameters:
 
-To use this functionality, you must:
+- `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET` (mandatory)
+- `GOOGLE_AUTH_PATH_PREFIX` (optional, defaults to `/auth`)
+- `GOOGLE_AUTH_CONTROLLER` (optional, defaults to `sessions`)
 
-* Obtain the Oauth2 credentials from Google and configure them in
-  `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET`.
-* Provide in `GOOGLE_AUTH_ALLOWED_DOMAINS` a comma-separated list of domains, to
-  whitelist the allowed email addresses.
-* Customize the code in the generated Rails initializer to hook into your
-  application's authentication logic.
-* Update your Rails controllers to require authentication, when necessary.
+This feature is bring-your-own-controller — it won't magically protect your
+application.
+
+A simple but secure example is detailed in `README.google_oauth2.md`.
 
 ### Routemaster client
 
