@@ -24,7 +24,6 @@ module RooOnRails
       end
 
       def run
-        # $stderr.puts "#{signature.join '/'}#run (dry_run = #{@dry_run})"
         resolve dependencies
         return true if @dry_run
         say intro
