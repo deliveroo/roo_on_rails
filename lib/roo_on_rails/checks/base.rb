@@ -20,10 +20,12 @@ module RooOnRails
         @fix     = @options.delete(:fix) { false }
         @context = @options.delete(:context) { Hashie::Mash.new }
         @shell   = @options.delete(:shell) { Shell.new }
+        @dry_run = options.fetch(:dry_run, false)
       end
 
       def run
         resolve dependencies
+        return true if @dry_run
         say intro
         call
         true
