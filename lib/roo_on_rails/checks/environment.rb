@@ -13,7 +13,6 @@ module RooOnRails
       requires GitHub::BranchProtection
       requires Heroku::DrainsMetrics
       requires Heroku::PrebootEnabled
-      requires GoogleOauth::Initializer
       requires Papertrail::All
 
       def call
