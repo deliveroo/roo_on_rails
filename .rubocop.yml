@@ -28,7 +28,7 @@ Metrics/LineLength:
   Max: 100
   Exclude:
     - Gemfile
-  
+
 Style/Documentation:
   Enabled: false
 
@@ -39,3 +39,8 @@ Style/DotPosition:
   Enabled: false
 Metrics/AbcSize:
   Max: 30
+
+Rubocop/Metrics/MethodLength:
+  Max: 20
+Rubocop/Style/TrailingCommaInLiteral:
+  Enabled: false
