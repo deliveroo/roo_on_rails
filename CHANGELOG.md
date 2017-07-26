@@ -4,10 +4,10 @@ Bug fixes:
 
 - Do not consider 'quiet' workers in the SLA sidekiq metric (#51)
 
-# v1.8.0 (2017-07-24)
-
 Features:
 
+- Adds pre-baked Google OAuth support (#44, #49)
+- reports Sidekiq metrics only for queues defined in process (#50)
 - adds 'default' to list of default Sidekiq queues
 - accepts custom Sidekiq queue names
 - accepts custom Sidekiq queue permitted latency values

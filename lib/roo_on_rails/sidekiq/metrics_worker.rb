@@ -1,7 +1,13 @@
 require 'sidekiq/api'
 require 'roo_on_rails/sidekiq/queue_latency'
 require 'roo_on_rails/sidekiq/process_scaling'
+require 'roo_on_rails/sidekiq/settings'
 require 'roo_on_rails/statsd'
+
+# Reports Sidekiq queue metrics for queues configured within the current Sidekiq process
+# i.e. queues returned by `RooOnRails::Sidekiq::Settings.queues`
+# To enable reporting for custom queues, ensure your process is running the monitoring
+# queue e.g. `SIDEKIQ_QUEUES="new-queue:5seconds,monitoring" bundle exec sidekiq`
 
 module RooOnRails
   module Sidekiq
@@ -12,7 +18,7 @@ module RooOnRails
 
       def perform
         RooOnRails.statsd.batch do |stats|
-          queues = ::Sidekiq::Queue.all.map { |q| QueueLatency.new(q) }
+          queues = QueueLatency.queues
           queue_stats(stats, queues)
           process_stats(stats, queues)
         end
