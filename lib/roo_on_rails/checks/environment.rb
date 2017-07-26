@@ -14,15 +14,6 @@ module RooOnRails
       requires Heroku::PrebootEnabled
       requires Papertrail::All
 
-      def initialize(options = {})
-        super
-        @dry_run = options.fetch(:dry_run, false)
-      end
-
-      def run
-        super unless @dry_run
-      end
-
       def call
         # nothing to do
       end

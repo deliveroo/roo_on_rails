@@ -17,7 +17,7 @@ module RooOnRails
 
     def run
       checks = [
-        Checks::Sidekiq::Settings.new(fix: @try_fix, context: @context),
+        Checks::Sidekiq::Settings.new(fix: @try_fix, context: @context, dry_run: @dry_run),
         Checks::Documentation::Playbook.new(fix: @try_fix, context: @context, dry_run: @dry_run),
       ]
       environments.each do |env|

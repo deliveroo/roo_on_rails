@@ -5,45 +5,47 @@ require 'roo_on_rails/checks/environment'
 RSpec.describe RooOnRails::Harness do
   describe '#run' do
     let(:try_fix) { false }
-    let(:context_value) { nil }
+    let(:context_value) { Hashie::Mash.new }
     let(:dry_run) { true }
     let(:checks_class) { RooOnRails::Checks::Environment }
-    let(:instance) {described_class.new(try_fix: try_fix, context: context_value, dry_run: dry_run) }
+    let(:instance) { described_class.new(try_fix: try_fix, context: context_value, dry_run: dry_run) }
 
     subject(:run) { instance.run }
 
-    context 'ROO_ON_RAILS_ENVIRONMENTS not specified' do
-      it 'returns instances of Checks::Environment' do
-        expect(run).to all(be_a(checks_class))
-        expect(run.map(&:env)).to eql %w[staging production]
+    shared_examples 'runs checks' do |options|
+      options.fetch(:for, []).each do |env_name|
+        it "runs checks for #{env_name}" do
+          run
+          expect(context_value.deps.keys).to include(a_string_matching(/#{env_name}/))
+        end
       end
+
+      options.fetch(:not_for, []).each do |env_name|
+        it "skips checks for #{env_name}" do
+          run
+          expect(context_value.deps.keys).not_to include(a_string_matching(/#{env_name}/))
+        end
+      end
+    end
+
+    context 'ROO_ON_RAILS_ENVIRONMENTS not specified' do
+      include_examples 'runs checks', for: %i[production staging]
     end
 
     context 'ROO_ON_RAILS_ENVIRONMENTS=staging,production' do
       before { stub_config_var 'ROO_ON_RAILS_ENVIRONMENTS', 'staging,production' }
 
-      it 'returns instances of Checks::Environment' do
-        expect(run).to all(be_a(checks_class))
-        expect(run.map(&:env)).to eql %w[staging production]
-      end
+      include_examples 'runs checks', for: %i[production staging]
     end
 
     context 'ROO_ON_RAILS_ENVIRONMENTS=staging' do
       before { stub_config_var 'ROO_ON_RAILS_ENVIRONMENTS', 'staging' }
-
-      it 'returns instances of Checks::Environment' do
-        expect(run).to all(be_a(checks_class))
-        expect(run.map(&:env)).to eql %w[staging]
-      end
+      include_examples 'runs checks', for: %i[staging], not_for: %i[production]
     end
 
     context 'ROO_ON_RAILS_ENVIRONMENTS=production' do
       before { stub_config_var 'ROO_ON_RAILS_ENVIRONMENTS', 'production' }
-
-      it 'returns instances of Checks::Environment' do
-        expect(run).to all(be_a(checks_class))
-        expect(run.map(&:env)).to eql %w[production]
-      end
+      include_examples 'runs checks', for: %i[production], not_for: %i[staging]
     end
   end
 end
