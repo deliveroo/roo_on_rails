@@ -103,6 +103,11 @@ statement timeouts directly in the database._
 
 ### Sidekiq
 
+Deliveroo services implement Sidekiq with an _urgency_ pattern. By only having
+time-based [SLA](https://en.wikipedia.org/wiki/Service-level_agreement) queue
+names (eg. `within5minutes`) we can automatically create incident alerting for
+queues which take longer than the time the application needs them to be processed.
+
 When `SIDEKIQ_ENABLED` is set we'll:
 
 - check for the existence of a worker line in your Procfile;
@@ -117,6 +122,10 @@ The following ENV are available:
 - `SIDEKIQ_DATABASE_REAPING_FREQUENCY` (default: 10) - For sidekiq processes the
   amount of time in seconds rails will wait before attempting to find and
   recover connections from dead threads
+
+NB. If you are migrating to SLA-based queue names, do not set `SIDEKIQ_ENABLED`
+to `true` before your old queues have finished processing (this will prevent
+Sidekiq from seeing the old queues at all).
 
 ### HireFire (for Sidekiq workers)
 

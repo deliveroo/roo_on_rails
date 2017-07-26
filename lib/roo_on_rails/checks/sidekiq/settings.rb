@@ -12,7 +12,14 @@ module RooOnRails
         end
 
         def call
-          fail! 'Custom Sidekiq settings found.' if File.exist?('config/sidekiq.yml')
+          if File.exist?('config/sidekiq.yml')
+            message = [
+              'Custom Sidekiq settings found.',
+              '  Please see the Roo On Rails readme for more information.'
+            ].join("\n")
+
+            fail! message
+          end
         end
       end
     end
