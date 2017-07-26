@@ -1,4 +1,8 @@
-# HEAD (2017-07-24)
+# HEAD
+
+Bug fixes:
+
+- Do not consider 'quiet' workers in the SLA sidekiq metric (#51)
 
 Features:
 

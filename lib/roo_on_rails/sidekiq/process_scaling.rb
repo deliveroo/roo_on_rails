@@ -15,6 +15,7 @@ module RooOnRails
 
       def current_processes
         ::Sidekiq::ProcessSet.new.count do |process|
+          process['quiet'] == 'false' &&
           @queue_names.any? do |queue_name|
             process['queues'].include?(queue_name)
           end
@@ -22,7 +23,7 @@ module RooOnRails
       end
 
       def max_normalised_latency
-        @queue_latencies.map(&:normalised_latency).max.to_f
+          @queue_latencies.any? ? @queue_latencies.map(&:normalised_latency).max.to_f : 0.0
       end
 
       def requested_processes

@@ -15,16 +15,22 @@ RSpec.describe RooOnRails::Sidekiq::SlaMetric do
     subject(:queue) { described_class.queue }
 
     context '1 process and queue latency is greater than threshold to increase' do
-      let(:process_set) { [Hashie::Mash.new(queues: %w[within1minute])] }
+      let(:process_set) { [Hashie::Mash.new(quiet: 'false', queues: %w[within1minute])] }
       let(:latency) { 31.seconds.to_i }
       it { should eql 2 }
+    end
+
+    context '1 quiet process and queue latency is greater than threshold to increase' do
+      let(:process_set) { [Hashie::Mash.new(quiet: 'true', queues: %w[within1minute])] }
+      let(:latency) { 31.seconds.to_i }
+      it { should eql 1 }
     end
 
     context '2 processes and queue latency is less than threshold to decrease' do
       let(:process_set) do
         [
-          Hashie::Mash.new(queues: %w[within1minute]),
-          Hashie::Mash.new(queues: %w[within1minute])
+          Hashie::Mash.new(quiet: 'false', queues: %w[within1minute]),
+          Hashie::Mash.new(quiet: 'false', queues: %w[within1minute])
         ]
       end
       let(:latency) { 5.seconds.to_i }
@@ -37,8 +43,8 @@ RSpec.describe RooOnRails::Sidekiq::SlaMetric do
 
       let(:process_set) do
         [
-          Hashie::Mash.new(queues: %w[within1minute]),
-          Hashie::Mash.new(queues: %w[new-queue])
+          Hashie::Mash.new(quiet: 'false', queues: %w[within1minute]),
+          Hashie::Mash.new(quiet: 'false', queues: %w[new-queue])
         ]
       end
 
