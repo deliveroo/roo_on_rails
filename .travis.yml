@@ -13,9 +13,10 @@ gemfile:
 install:
   - bundle install --jobs=3 --retry=3 --path=vendor/bundle
 cache:
-  bundler: false
+  bundler: true
   directories:
     - vendor/bundle
+    - vendor/bundle-scaffold
 before_script:
   - unset RACK_ENV
   - unset RAILS_ENV
