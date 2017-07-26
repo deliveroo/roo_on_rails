@@ -1,3 +1,9 @@
+# HEAD  (2017-07-26)
+
+Features:
+
+- Publish lifecycle events to Routemaster (#19)
+
 # v1.8.0 (2017-07-26)
 
 Bug fixes:
