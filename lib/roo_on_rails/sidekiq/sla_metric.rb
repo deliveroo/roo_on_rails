@@ -6,10 +6,10 @@ module RooOnRails
   module Sidekiq
     # Returns stats on the current SLA performance of queues in a Sidekiq instance.
     #
-    # Assumes workers are not bound to queues.
+    # Only returns stats for queues being processed by current Sidekiq process
     class SlaMetric
       def self.queue
-        queues = ::Sidekiq::Queue.all.map { |q| QueueLatency.new(q) }
+        queues = QueueLatency.queues
         global_stats = ProcessScaling.new(queues)
         global_stats.requested_processes
       end
