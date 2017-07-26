@@ -27,5 +27,7 @@ matrix:
   exclude:
     - rvm: 2.4.1
       gemfile: gemfiles/rails_3.gemfile
+    - rvm: ruby-head
+      gemfile: gemfiles/rails_3.gemfile
 services:
   - redis-server
