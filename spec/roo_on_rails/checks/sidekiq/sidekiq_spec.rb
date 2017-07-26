@@ -22,7 +22,11 @@ describe RooOnRails::Checks::Sidekiq::Sidekiq, type: :check do
 
         describe 'Procfile' do
           context "if there's not a Procfile" do
+            before { File.delete('Procfile') rescue nil }
+            after { File.delete('Procfile') rescue nil }
+
             it_expects_check_to_fail
+
             context 'when fixing' do
               let(:perform) { silence_stream(STDOUT) { subject.fix } }
 
@@ -33,9 +37,9 @@ describe RooOnRails::Checks::Sidekiq::Sidekiq, type: :check do
               it_expects_check_to_pass
 
               it 'adds a Procfile' do
+                perform
                 expect(procfile_contents).not_to include 'web: rails s'
                 expect(procfile_contents).to include described_class::WORKER_PROCFILE_LINE
-                File.delete('Procfile')
               end
             end
           end

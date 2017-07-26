@@ -43,6 +43,8 @@ module RooOnRails
                 queue_name, latency_info = queue_entry.split(':')
                 _, number, unit = latency_info.partition(/\d+/)
                 hash[queue_name] = number.to_i.public_send(unit.strip).to_i
+              else
+                hash[queue_entry] = nil
               end
             end
           end

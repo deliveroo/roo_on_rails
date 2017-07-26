@@ -1,3 +1,4 @@
+require 'active_support'
 require 'active_support/core_ext/numeric'
 require 'roo_on_rails/sidekiq/settings'
 
@@ -8,6 +9,12 @@ module RooOnRails
 
       def_delegators :@queue, :size, :latency, :name
       attr_reader :queue
+
+      def self.queues
+        ::Sidekiq::Queue.all.each_with_object([]) do |q, array|
+          array << new(q) if Settings.queues.include?(q.name.to_s)
+        end
+      end
 
       def initialize(queue)
         @queue = queue
