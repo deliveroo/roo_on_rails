@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    roo_on_rails (1.8.0)
+    roo_on_rails (1.8.1)
       dogstatsd-ruby
       dotenv-rails (~> 2.1)
       faraday
@@ -122,7 +122,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     nenv (0.3.0)
-    newrelic_rpm (4.2.0.334)
+    newrelic_rpm (4.3.0.335)
     notiffany (0.1.1)
       nenv (~> 0.1)
       shellany (~> 0.0)
