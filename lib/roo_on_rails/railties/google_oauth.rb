@@ -1,4 +1,4 @@
-  require 'roo_on_rails/config'
+require 'roo_on_rails/config'
 
 module RooOnRails
   module Railties
