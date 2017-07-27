@@ -1,3 +1,13 @@
+# HEAD
+
+Features:
+
+- Google OAuth supported in Rails 3 and 4 (#54)
+
+Bug fixes:
+
+- Allow client apps to load middleware (#54)
+
 # v1.8.0 (2017-07-26)
 
 Bug fixes:

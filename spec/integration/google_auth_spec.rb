@@ -1,10 +1,8 @@
 require 'spec_helper'
 require 'spec/support/run_test_app'
 
-RSpec.describe 'Google OAuth', rails_min_version:  5 do
-  run_test_app
-  before { app.wait_start }
-
+RSpec.describe 'Google OAuth' do
+  build_test_app
   after  { ENV['GOOGLE_AUTH_ENABLED'] = 'NO' }
 
   describe 'middleware' do
@@ -46,4 +44,20 @@ RSpec.describe 'Google OAuth', rails_min_version:  5 do
       end
     end
   end
+
+  describe 'other middleware' do
+    before do
+      app_helper.create_file app_path.join('config/initializers/deflater.rb'), %{
+        require 'rack/deflater'
+        Rails.application.config.middleware.use Rack::Deflater
+      }
+    end
+
+    let(:output) { app_helper.shell_run "cd #{app_path} && rake middleware" }
+
+    it 'allows for other middleware' do
+      expect(output).to include('Rack::Deflater')
+    end
+  end
+
 end
