@@ -57,8 +57,6 @@ And then execute:
 
 Then re-run your test suite to make sure everything is shipshape.
 
-## Usage
-
 ## Configuration and usage
 
 ### New Relic configuration
@@ -199,16 +197,14 @@ application.
 
 A simple but secure example is detailed in `README.google_oauth2.md`.
 
-### Routemaster client
+### Routemaster Client
 
-[routemaster-client](https://github.com/deliveroo/routemaster-client) comes as a dependency with a base events publisher.
+When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen you need to set the following environment variables:
 
-To publish events onto the bus from your app, you must:
+* `ROOBUS_URL` – the full URL of your Routemaster application (mandatory)
+* `ROOBUS_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
 
-* Make sure you have the `ROUTEMASTER_ENABLED` env var set to `true`.
-* Add the `publish_lifecycle_events` class method to the relevant model(s).
-* Create publisher file(s) with `url` method and others if applicable.
-* Register your publisher(s) in `config/initializers/routemaster.rb`.
+You can then implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
 ## Command features
 
