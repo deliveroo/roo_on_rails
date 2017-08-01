@@ -4,11 +4,15 @@ module RooOnRails
   module Railties
     class Routemaster < Rails::Railtie
       initializer 'roo_on_rails.routemaster' do
-        return unless routemaster_and_roobus_enabled?
+        return unless Config.routemaster_enabled?
+
+        $stderr.puts 'initializer roo_on_rails.routemaster'
+
+        abort 'Aborting: ROOBUS_URL and ROOBUS_UUID are required' if roobus_credentials_blank?
 
         require 'routemaster/client'
 
-        Routemaster::Client.configure do |config|
+        ::Routemaster::Client.configure do |config|
           config.url = roobus_url
           config.uuid = roobus_uuid
         end
@@ -16,8 +20,8 @@ module RooOnRails
 
       private
 
-      def routemaster_and_roobus_enabled?
-        Config.routemaster_enabled? && roobus_url && roobus_uuid
+      def roobus_credentials_blank?
+        roobus_url.blank? && roobus_uuid.blank?
       end
 
       def roobus_url
