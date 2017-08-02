@@ -48,7 +48,7 @@ end
 
 ### Create publishers for lifecycle events
 
-We have now configured our models to publish lifecycle events to Routemaster, but it won't send anything until you have created matching publishers. Let's start with creating a `BasePublisher` that we can then inherit from:
+We have now configured our models to publish lifecycle events to Routemaster, but it won't send anything until you have enabled publishing and created matching publishers. Let's start with creating a `BasePublisher` that we can then inherit from:
 
 ```ruby
 # app/publishers/base_publisher.rb
@@ -91,7 +91,6 @@ The final step is to tell Routemaster that these publishers exist, so that it ca
 
 ```ruby
 # config/initilizers/routemaster.rb
-require 'roo_on_rails/config'
 require 'roo_on_rails/routemaster/publishers'
 
 PUBLISHERS = [
@@ -99,11 +98,9 @@ PUBLISHERS = [
   RiderPublisher
 ].freeze
 
-if RooOnRails::Config.routemaster_enabled?
-  PUBLISHERS.each do |publisher|
-    model_class = publisher.to_s.gsub("Publisher", "").constantize
-    RooOnRails::Routemaster::Publishers.register(publisher, model_class: model_class)
-  end
+PUBLISHERS.each do |publisher|
+  model_class = publisher.to_s.gsub("Publisher", "").constantize
+  RooOnRails::Routemaster::Publishers.register(publisher, model_class: model_class)
 end
 ```
 
