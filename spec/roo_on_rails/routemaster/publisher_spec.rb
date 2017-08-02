@@ -8,6 +8,10 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
   let(:model) { TestModel.new }
   let(:event) { :noop }
 
+  before do
+    allow(::RooOnRails::Config).to receive(:routemaster_publishing_enabled?) { true }
+  end
+
   describe 'when configured correctly' do
     let(:publisher) { TestPublisherA.new(model, event) }
 

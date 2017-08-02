@@ -1,3 +1,4 @@
+require 'roo_on_rails/config'
 require 'routemaster/client'
 
 module RooOnRails
@@ -15,8 +16,13 @@ module RooOnRails
         true
       end
 
+      def will_publish?
+        Config.routemaster_publishing_enabled? && publish?
+      end
+
       def publish!
-        @client.send(event, topic, url, data: stringify_keys(data)) if publish?
+        return unless will_publish?
+        @client.send(event, topic, url, data: stringify_keys(data))
       end
 
       def topic
