@@ -1,4 +1,3 @@
-require 'routemaster/client'
 require 'roo_on_rails/routemaster/lifecycle_events'
 require 'roo_on_rails/routemaster/publishers'
 require 'roo_on_rails/routemaster/publisher'
@@ -14,14 +13,6 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
       def self.after_commit(*args)
         @after_commit_hooks << args
-      end
-
-      def self.pluralize_table_names
-        true
-      end
-
-      def self.table_name
-        "examples"
       end
 
       include RooOnRails::Routemaster::LifecycleEvents
@@ -64,11 +55,12 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
         end
       end
 
-      it "defines all three lifecycle events on an instance" do
+      it "defines all three lifecycle events and noop on an instance" do
         expect {
           subject_instance.method(:publish_lifecycle_event_on_create)
           subject_instance.method(:publish_lifecycle_event_on_update)
           subject_instance.method(:publish_lifecycle_event_on_destroy)
+          subject_instance.method(:publish_lifecycle_event_on_noop)
         }.to_not raise_error
       end
     end
