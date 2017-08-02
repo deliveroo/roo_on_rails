@@ -4,7 +4,7 @@ module RooOnRails
   module Railties
     class Routemaster < Rails::Railtie
       initializer 'roo_on_rails.routemaster' do
-        return unless Config.routemaster_enabled?
+        next unless Config.routemaster_enabled?
 
         $stderr.puts 'initializer roo_on_rails.routemaster'
 
