@@ -25,34 +25,39 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
       end
 
       include RooOnRails::Routemaster::LifecycleEvents
-      publish_lifecycle_events
     end
   end
 
- let(:publisher_spy){ spy('publisher')}
+  let(:subject_instance) { subject.new }
+  let(:publisher_spy) { spy('publisher') }
 
   describe "::publish_lifecycle_events" do
     context "when called without arguments" do
-      let(:subject_instance){ subject.new }
+      before { subject.publish_lifecycle_events }
 
       it "adds three event hooks" do
         expect(subject.after_commit_hooks).to match_array([
-          [:publish_lifecycle_event_on_create, {:on=>:create}],
-          [:publish_lifecycle_event_on_update, {:on=>:update}],
-          [:publish_lifecycle_event_on_destroy, {:on=>:destroy}]
+          [:publish_lifecycle_event_on_create, { on: :create }],
+          [:publish_lifecycle_event_on_update, { on: :update }],
+          [:publish_lifecycle_event_on_destroy, { on: :destroy }]
         ])
       end
 
-      describe "when calling a callback" do
-        [
-          [:create, :created],
-          [:update, :updated],
-          [:destroy, :deleted]
-        ].each do |lifecycle_event|
-          it "fetches a publisher for #{lifecycle_event.first.to_s}" do
+      describe "and calling a callback" do
+        events_and_types = [
+          %i(create created),
+          %i(update updated),
+          %i(destroy deleted)
+        ]
+
+        events_and_types.each do |lifecycle_event|
+          it "fetches a publisher for #{lifecycle_event.first}" do
             callback = subject.after_commit_hooks.detect { |event| event.last[:on] == lifecycle_event.first }.first
 
-            allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) { [publisher_spy] }
+            allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
+              [publisher_spy]
+            end
+
             expect(publisher_spy).to receive(:publish!)
             subject_instance.send(callback)
           end
@@ -65,6 +70,14 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
           subject_instance.method(:publish_lifecycle_event_on_update)
           subject_instance.method(:publish_lifecycle_event_on_destroy)
         }.to_not raise_error
+      end
+    end
+
+    context "when called with a 'create' lifecycle event" do
+      before { subject.publish_lifecycle_events(:create) }
+
+      it "adds a 'create' hook only" do
+        expect(subject.after_commit_hooks).to match_array([[:publish_lifecycle_event_on_create, { on: :create }]])
       end
     end
   end
