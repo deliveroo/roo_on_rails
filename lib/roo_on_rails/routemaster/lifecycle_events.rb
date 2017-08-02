@@ -34,12 +34,28 @@ module RooOnRails
         end
       end
 
+      def publish_lifecycle_event_on_create
+        publish_lifecycle_event :create
+      end
+
+      def publish_lifecycle_event_on_update
+        publish_lifecycle_event :update
+      end
+
+      def publish_lifecycle_event_on_destroy
+        publish_lifecycle_event :destroy
+      end
+
+      def publish_lifecycle_event_on_noop
+        publish_lifecycle_event :noop
+      end
+
       module ClassMethods
         def publish_lifecycle_events(*events)
           events = events.any? ? events : %i(create update destroy)
           events.each do |event|
             after_commit(
-              -> { publish_lifecycle_event(event) },
+              :"publish_lifecycle_event_on_#{event}",
               on: event
             )
           end
