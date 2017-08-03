@@ -13,7 +13,7 @@ module RooOnRails
       end
 
       def publish?
-        true
+        noop? || @model.new_record? || @model.previous_changes.any?
       end
 
       def will_publish?
@@ -22,7 +22,7 @@ module RooOnRails
 
       def publish!
         return unless will_publish?
-        @client.send(event, topic, url, data: stringify_keys(data))
+        @client.send(@event, topic, url, data: stringify_keys(data))
       end
 
       def topic
@@ -39,7 +39,7 @@ module RooOnRails
 
       %i(created updated deleted noop).each do |event_type|
         define_method :"#{event_type}?" do
-          event.to_sym == event_type
+          @event.to_sym == event_type
         end
       end
 

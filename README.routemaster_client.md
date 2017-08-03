@@ -57,9 +57,7 @@ require 'roo_on_rails/routemaster/publisher'
 class BasePublisher < RooOnRails::Routemaster::Publisher
   include Rails.application.routes.url_helpers
 
-  def publish?
-    noop? || model.new_record? || model.previous_changes.any?
-  end
+  # Add your method overrides here if needed
 end
 ```
 
