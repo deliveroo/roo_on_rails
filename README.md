@@ -206,7 +206,7 @@ When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaste
 * `ROOBUS_URL` – the full URL of your Routemaster application (mandatory)
 * `ROOBUS_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
 
-If you then want to enable the publishing of events onto the event but, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
+If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
 ## Command features
 
