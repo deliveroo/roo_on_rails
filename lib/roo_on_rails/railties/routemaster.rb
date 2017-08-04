@@ -8,28 +8,28 @@ module RooOnRails
 
         $stderr.puts 'initializer roo_on_rails.routemaster'
 
-        abort 'Aborting: ROOBUS_URL and ROOBUS_UUID are required' if roobus_credentials_blank?
+        abort 'Aborting: ROUTEMASTER_URL and ROUTEMASTER_UUID are required' if event_bus_credentials_blank?
 
         require 'routemaster/client'
 
         ::Routemaster::Client.configure do |config|
-          config.url = roobus_url
-          config.uuid = roobus_uuid
+          config.url = routemaster_url
+          config.uuid = routemaster_uuid
         end
       end
 
       private
 
-      def roobus_credentials_blank?
-        roobus_url.blank? && roobus_uuid.blank?
+      def event_bus_credentials_blank?
+        routemaster_url.blank? && routemaster_uuid.blank?
       end
 
-      def roobus_url
-        ENV.fetch('ROOBUS_URL')
+      def routemaster_url
+        ENV.fetch('ROUTEMASTER_URL')
       end
 
-      def roobus_uuid
-        ENV.fetch('ROOBUS_UUID')
+      def routemaster_uuid
+        ENV.fetch('ROUTEMASTER_UUID')
       end
     end
   end

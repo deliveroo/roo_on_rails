@@ -15,7 +15,7 @@ describe 'Routemaster Client' do
     context 'if ROUTEMASTER_ENABLED is true' do
       let(:app_env_vars) { ["ROUTEMASTER_ENABLED=true", super()].join("\n") }
 
-      context 'and ROOBUS_URL/ROOBUS_UUID are not set' do
+      context 'and ROUTEMASTER_URL/ROUTEMASTER_UUID are not set' do
         it 'the app fails to load' do
           app.wait_log /Exiting/
           app.stop
@@ -23,7 +23,7 @@ describe 'Routemaster Client' do
         end
 
         it 'the app logs the failure' do
-          app.wait_log /ROOBUS_URL and ROOBUS_UUID are required/
+          app.wait_log /ROUTEMASTER_URL and ROUTEMASTER_UUID are required/
         end
       end
     end
