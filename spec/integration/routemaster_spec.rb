@@ -23,7 +23,7 @@ describe 'Routemaster Client' do
         end
 
         it 'the app logs the failure' do
-          app.wait_log /ROUTEMASTER_URL and ROUTEMASTER_UUID are required/
+          app.wait_log /ROUTEMASTER_URL & ROUTEMASTER_UUID are required/
         end
       end
     end
