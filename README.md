@@ -16,7 +16,7 @@
 **Table of Contents**
 
 - [Installation](#installation)
-- [Configuration and usage](#configuration-and-usage)
+- [Library usage](#library-usage)
   - [New Relic configuration](#new-relic-configuration)
   - [Rack middleware](#rack-middleware)
   - [Database configuration](#database-configuration)
@@ -59,7 +59,7 @@ And then execute:
 
 Then re-run your test suite to make sure everything is shipshape.
 
-## Configuration and usage
+## Library usage
 
 ### New Relic configuration
 

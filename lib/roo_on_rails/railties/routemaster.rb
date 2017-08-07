@@ -8,7 +8,7 @@ module RooOnRails
 
         $stderr.puts 'initializer roo_on_rails.routemaster'
 
-        abort 'Aborting: ROUTEMASTER_URL & ROUTEMASTER_UUID are required' if bus_credentials_blank?
+        abort 'Aborting: ROUTEMASTER_URL and ROUTEMASTER_UUID are required' if bus_details_missing?
 
         require 'routemaster/client'
 
@@ -20,8 +20,8 @@ module RooOnRails
 
       private
 
-      def bus_credentials_blank?
-        routemaster_url.blank? && routemaster_uuid.blank?
+      def bus_details_missing?
+        routemaster_url.blank? || routemaster_uuid.blank?
       end
 
       def routemaster_url
