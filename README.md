@@ -16,16 +16,18 @@
 **Table of Contents**
 
 - [Installation](#installation)
-- [Usage](#usage)
-- [Library features](#library-features)
-    - [New Relic configuration](#new-relic-configuration)
-    - [Rack middleware](#rack-middleware)
-    - [Database configuration](#database-configuration)
-    - [Sidekiq](#sidekiq)
-    - [HireFire Workers](#hirefire-workers)
-    - [Logging](#logging)
-    - [Google Oauth](#google-oauth)
+- [Library usage](#library-usage)
+  - [New Relic configuration](#new-relic-configuration)
+  - [Rack middleware](#rack-middleware)
+  - [Database configuration](#database-configuration)
+  - [Sidekiq](#sidekiq)
+  - [HireFire (for Sidekiq workers)](#hirefire-for-sidekiq-workers)
+  - [Logging](#logging)
+  - [Google OAuth authentication](#google-oauth-authentication)
+  - [Routemaster Client](#routemaster-client)
 - [Command features](#command-features)
+  - [Usage](#usage)
+  - [Description](#description)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -57,9 +59,7 @@ And then execute:
 
 Then re-run your test suite to make sure everything is shipshape.
 
-## Usage
-
-## Configuration and usage
+## Library usage
 
 ### New Relic configuration
 
@@ -199,6 +199,14 @@ application.
 
 A simple but secure example is detailed in `README.google_oauth2.md`.
 
+### Routemaster Client
+
+When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen you need to set the following environment variables:
+
+* `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
+* `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
+
+If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
 ## Command features
 
