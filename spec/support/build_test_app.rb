@@ -6,7 +6,7 @@ module ROR
   module BuildTestApp
     ROOT = Pathname.new('../../..').expand_path(__FILE__)
     TEST_DIR = ROOT.join('tmp/scaffold')
-    BUNDLE_CACHE = TEST_DIR.join('bundle')
+    BUNDLE_CACHE = ROOT.join('vendor/bundle-scaffold').join(RUBY_VERSION)
     RAILS_NEW_BASE_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'.freeze
 
     class Helper < Thor::Group

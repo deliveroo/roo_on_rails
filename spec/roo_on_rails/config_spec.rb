@@ -2,6 +2,12 @@ require 'spec_helper'
 require 'roo_on_rails/config'
 
 RSpec.describe RooOnRails::Config do
+  FEATURES = [
+    { name: "sidekiq", default: true },
+    { name: "google_auth", default: false },
+    { name: "routemaster", default: false },
+    { name: "routemaster_publishing", default: false }
+  ]
 
   describe "::load" do
     subject { described_class.load }
@@ -14,63 +20,36 @@ RSpec.describe RooOnRails::Config do
     end
   end
 
-  describe "sidekiq_enabled?" do
-    subject { described_class.sidekiq_enabled? }
+  FEATURES.each do |feature|
+    describe "#{feature[:name]}_enabled?" do
+      subject { described_class.send(:"#{feature[:name]}_enabled?") }
+      let(:feature_env_var) { "#{feature[:name].upcase}_ENABLED" }
 
-    before { @original = ENV['SIDEKIQ_ENABLED'] }
-    after  { ENV['SIDEKIQ_ENABLED'] = @original }
+      before { @original = ENV[feature_env_var] }
+      after  { ENV[feature_env_var] = @original }
 
-    def set_env(value)
-      ENV['SIDEKIQ_ENABLED'] = value
-    end
+      def set_env(value)
+        ENV[feature_env_var] = value
+      end
 
-    specify "without any configured value it defaults to true" do
-      set_env nil
-      expect(subject).to be true
-    end
+      specify "without any configured value it defaults to #{feature[:default].to_s}" do
+        set_env nil
+        expect(subject).to be feature[:default]
+      end
 
-    specify "with a truthy setting it returns true" do
-      set_env "true"
-      expect(subject).to be true
-      set_env "1"
-      expect(subject).to be true
-    end
+      specify "with a truthy setting it returns true" do
+        set_env "true"
+        expect(subject).to be true
+        set_env "1"
+        expect(subject).to be true
+      end
 
-    specify "with a non truthy setting it returns false" do
-      set_env "false"
-      expect(subject).to be false
-      set_env "bangerang"
-      expect(subject).to be false
-    end
-  end
-
-  describe "google_auth_enabled?" do
-    subject { described_class.google_auth_enabled? }
-
-    before { @original = ENV['GOOGLE_AUTH_ENABLED'] }
-    after  { ENV['GOOGLE_AUTH_ENABLED'] = @original }
-
-    def set_env(value)
-      ENV['GOOGLE_AUTH_ENABLED'] = value
-    end
-
-    specify "without any configured value it defaults to false" do
-      set_env nil
-      expect(subject).to be false
-    end
-
-    specify "with a truthy setting it returns true" do
-      set_env "true"
-      expect(subject).to be true
-      set_env "1"
-      expect(subject).to be true
-    end
-
-    specify "with a non truthy setting it returns false" do
-      set_env "false"
-      expect(subject).to be false
-      set_env "bangerang"
-      expect(subject).to be false
+      specify "with a non truthy setting it returns false" do
+        set_env "false"
+        expect(subject).to be false
+        set_env "bangerang"
+        expect(subject).to be false
+      end
     end
   end
 end

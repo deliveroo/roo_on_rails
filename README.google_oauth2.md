@@ -1,7 +1,5 @@
 ## Using the Google OAuth feature
 
-This feature is only supported when using Rails 5+.
-
 `roo_on_rails` provides a pre-baked Omniauth setup to help protect your app with
 Google authentication. Read the main `README` first to set things up; you'll
 need at least `GOOGLE_AUTH_ENABLED=YES`, and `GOOGLE_AUTH_CLIENT_ID` and
