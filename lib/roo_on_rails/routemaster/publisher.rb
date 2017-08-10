@@ -22,7 +22,7 @@ module RooOnRails
 
       def publish!
         return unless will_publish?
-        @client.send(@event, topic, url, data: stringify_keys(data))
+        @client.send(@event, topic, url, async: async?, data: stringify_keys(data))
       end
 
       def topic
@@ -31,6 +31,10 @@ module RooOnRails
 
       def url
         raise NotImplementedError
+      end
+
+      def async?
+        false
       end
 
       def data

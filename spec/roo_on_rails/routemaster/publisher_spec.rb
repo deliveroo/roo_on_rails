@@ -27,10 +27,13 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
         :noop,
         "test_models",
         "https://deliveroo.test/url",
-        { data: {
-          "test_key_1" => "Test value 1",
-          "test_key_2" => "Test value 2"
-        }}
+        {
+          async: false,
+          data: {
+            "test_key_1" => "Test value 1",
+            "test_key_2" => "Test value 2"
+          }
+        }
       )
       publisher.publish!
     end
@@ -41,6 +44,10 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
 
     it 'should have the correct URL' do
       expect(publisher.url).to eq("https://deliveroo.test/url")
+    end
+
+    it 'should default to publishing synchronously' do
+      expect(publisher).to_not be_async
     end
 
     it 'should have the correct event type' do
