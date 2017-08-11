@@ -8,39 +8,29 @@ It also assumes that your app has an API for the resources you want to publish l
 
 ### Setup lifecycle events for your models
 
-We will most likely want to publish lifecycle events for several models, so to write slightly less code let's create a model concern first:
-
-```ruby
-# app/models/concerns/routemaster_lifecycle_events.rb
-require 'roo_on_rails/routemaster/lifecycle_events'
-
-module RoutemasterLifecycleEvents
-  extend ActiveSupport::Concern
-  include RooOnRails::Routemaster::LifecycleEvents
-
-  included do
-    publish_lifecycle_events
-  end
-end
-```
-
-Then let's include this concern to the relevant model(s):
+You can use publish events on create, update, and destroy by including the `PublishLifecycleEvents` module:
 
 ```ruby
 # app/models/order.rb
+require 'roo_on_rails/routemaster/publish_lifecycle_events'
+
 class Order < ApplicationRecord
-  include RoutemasterLifecycleEvents
+  include RooOnRails::Routemaster::PublishLifecycleEvents
 
   # ...
 end
 ```
 
-And another one for the example:
+If you need more control over which events are published you can use the base module `LifecycleEvents` and specify them explicitly:
 
 ```ruby
 # app/models/rider.rb
+require 'roo_on_rails/routemaster/lifecycle_events'
+
 class Rider < ApplicationRecord
-  include RoutemasterLifecycleEvents
+  include RooOnRails::Routemaster::LifecycleEvents
+
+  publish_lifecycle_events :create, :destroy
 
   # ...
 end
@@ -48,26 +38,31 @@ end
 
 ### Create publishers for lifecycle events
 
-We have now configured our models to publish lifecycle events to Routemaster, but it won't send anything until you have enabled publishing and created matching publishers. Let's start with creating a `BasePublisher` that we can then inherit from:
+We have now configured our models to publish lifecycle events to Routemaster, but it won't send anything until you have enabled publishing and created matching publishers. Let's start with creating an `ApplicationPublisher` that we can use as our default.
 
 ```ruby
-# app/publishers/base_publisher.rb
+# app/publishers/application_publisher.rb
 require 'roo_on_rails/routemaster/publisher'
 
-class BasePublisher < RooOnRails::Routemaster::Publisher
+class ApplicationPublisher < RooOnRails::Routemaster::Publisher
   include Rails.application.routes.url_helpers
+
+  def url
+    url_helper = :"api_#{model.class.name.underscore}_url"
+    public_send(url_helper, model.id, host: ENV.fetch('API_HOST'), protocol: 'https')
+  end
 
   # Add your method overrides here if needed
 end
 ```
 
-Then create a publisher for each model with lifecycle events enabled:
+If different behaviour is needed for specific models then you can override the defaults in their publishers:
 
 ```ruby
 # app/publishers/order_publisher.rb
-class OrderPublisher < BasePublisher
-  def url
-    api_order_url(model, host: ENV.fetch('API_HOST'), protocol: 'https')
+class OrderPublisher < ApplicationPublisher
+  def async?
+    true
   end
 end
 ```
@@ -76,9 +71,9 @@ and
 
 ```ruby
 # app/publishers/rider_publisher.rb
-class RiderPublisher < BasePublisher
-  def url
-    api_rider_url(model, host: ENV.fetch('API_HOST'), protocol: 'https')
+class RiderPublisher < ApplicationPublisher
+  def topic
+    'a_different_rider_topic'
   end
 end
 ```
@@ -96,10 +91,11 @@ PUBLISHERS = [
   RiderPublisher
 ].freeze
 
+RooOnRails::Routemaster::Publishers.register_default(ApplicationPublisher)
 PUBLISHERS.each do |publisher|
   model_class = publisher.to_s.gsub("Publisher", "").constantize
   RooOnRails::Routemaster::Publishers.register(publisher, model_class: model_class)
 end
 ```
 
-We should now be all set for our app to publish lifecycle events for `orders` and `riders` onto the event bus, so that other apps can listen to them.
+We should now be all set for our app to publish lifecycle events for all our models onto the event bus, with special behaviour for `orders` and `riders`, so that other apps can listen to them.
