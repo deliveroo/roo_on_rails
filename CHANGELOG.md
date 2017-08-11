@@ -1,3 +1,9 @@
+# HEAD
+
+Features:
+
+- Asynchronous publishing of events to Routemaster (#56)
+
 # v1.9.0 (2017-08-08)
 
 Features:
