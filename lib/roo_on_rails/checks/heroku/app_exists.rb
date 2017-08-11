@@ -17,9 +17,9 @@ module RooOnRails
       # - heroku.app.{env}: an app name.
       class AppExists < EnvSpecific
         ACCEPTABLE_ENV_NAMES = {
-          'production' => ['prod', 'production'],
-          'staging'    => ['stg', 'staging']
-        }
+          'production' => %w(prd production),
+          'staging'    => %w(stg staging)
+        }.freeze
         requires Git::Origin, Heroku::Token
 
         def intro

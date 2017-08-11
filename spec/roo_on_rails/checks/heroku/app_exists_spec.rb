@@ -21,7 +21,7 @@ describe RooOnRails::Checks::Heroku::AppExists, type: :check do
   end
 
   context 'when multiple matching apps exist' do
-    let(:existing_apps) { %w[ fubar-app-production fubar-app-prod ] }
+    let(:existing_apps) { %w[ fubar-app-production fubar-app-prd ] }
     it_expects_check_to_fail
   end
 
@@ -33,10 +33,10 @@ describe RooOnRails::Checks::Heroku::AppExists, type: :check do
   end
 
   context 'when exactly one match exists with acceptable env abbreviation' do
-    let(:existing_apps) { %w[ fubar-app-prod ] }
+    let(:existing_apps) { %w[ fubar-app-prd ] }
     it_expects_check_to_pass
 
-    it { expect { perform }.to change { context.heroku.app_.production }.to 'fubar-app-prod' }
+    it { expect { perform }.to change { context.heroku.app_.production }.to 'fubar-app-prd' }
   end
 
 end
