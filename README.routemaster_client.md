@@ -25,7 +25,7 @@ If you need more control over which events are published you can use the base mo
 
 ```ruby
 # app/models/rider.rb
-require 'roo_on_rails/routemaster/publish_lifecycle_events'
+require 'roo_on_rails/routemaster/lifecycle_events'
 
 class Rider < ApplicationRecord
   include RooOnRails::Routemaster::LifecycleEvents
