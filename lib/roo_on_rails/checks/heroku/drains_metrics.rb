@@ -18,7 +18,7 @@ module RooOnRails
         requires Heroku::AppExists, MetricsBridgeConfigured
 
         def intro
-          "Checking for metrics drain on #{bold app_name}"
+          'Checking for metrics drain...'
         end
 
         def call
@@ -28,7 +28,7 @@ module RooOnRails
 
           fail! 'No matching drain found' if url.nil?
           final_fail! 'Misconfigured drain found' if url != drain_uri
-          pass 'Drain is connected'
+          pass "Drain is connected to #{bold app_name}"
         end
 
         private

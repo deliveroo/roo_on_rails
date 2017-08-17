@@ -15,7 +15,7 @@ module RooOnRails
           if File.exist?('config/sidekiq.yml')
             message = [
               'Custom Sidekiq settings found.',
-              '  Please see the Roo On Rails readme for more information.'
+              'Please see the Roo On Rails readme for more information.'
             ].join("\n")
 
             fail! message

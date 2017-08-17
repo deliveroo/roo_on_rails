@@ -215,7 +215,7 @@ If you then want to enable the publishing of events onto the event bus, you need
 Run the following from your app's top-level directory:
 
 ```
-bundle exec roo_on_rails
+roo_on_rails harness
 ```
 
 That command will sequentially run a number of checks. For it to run successfully, you will need:
@@ -223,17 +223,18 @@ That command will sequentially run a number of checks. For it to run successfull
 - a GitHub API token that can read your GitHub repository's settings placed in `~/.roo_on_rails/github-token`
 - the Heroku toolbelt installed and logged in
 - admin privileges on the `roo-dd-bridge-production` (this will be addressed eventually)
-- checks are run sequentially for staging and then for production. The process halts at any non-fixable failing check. To process only specific environments, you can set a config variable while running the command, like so:
+
+The command can automatically fix most of the failing checks automatically;
+simply run it with the `--fix` flag:
 
 ```
-# the default behaviour:
-ROO_ON_RAILS_ENVIRONMENTS=staging,production bundle exec roo_on_rails
+roo_on_rails harness --fix
+```
 
-# run checks only on staging:
-ROO_ON_RAILS_ENVIRONMENTS=staging bundle exec roo_on_rails
+To run checks for only one environment, use the `--env` flag:
 
-# run checks only on production:
-ROO_ON_RAILS_ENVIRONMENTS=production bundle exec roo_on_rails
+```
+roo_on_rails harness --env staging
 ```
 
 

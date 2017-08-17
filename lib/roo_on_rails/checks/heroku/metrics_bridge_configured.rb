@@ -22,7 +22,7 @@ module RooOnRails
         BRIDGE_APP = 'roo-dd-bridge-production'.freeze
 
         def intro
-          "Checking whether metrics bridge is configured for #{bold app_name}"
+          'Checking whether metrics bridge is configured...'
         end
 
         def call
@@ -33,7 +33,7 @@ module RooOnRails
           fail! 'Bridge lacks credentials for this app' unless config[token_var]
           fail! 'Bridge lacks tags for this app'        unless config[tags_var]
 
-          pass 'Bridge is configured'
+          pass "Bridge is configured for #{bold app_name}"
           context.heroku.metric_bridge_token![env] = config[token_var]
         end
 

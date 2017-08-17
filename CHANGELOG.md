@@ -1,3 +1,13 @@
+# HEAD
+
+Features:
+
+- The `roo_on_rails` test harness now defaults to not fixing issues, and has extra
+  `--env` and `--fix` flags
+- All checks will now run regardless of previous failure to avoid
+  back-and-forthing (#57)
+
+
 # v1.10.0 (2017-08-11)
 
 Features:

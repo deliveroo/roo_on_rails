@@ -16,6 +16,7 @@ module RooOnRails
             return
           end
           check_for_procfile
+          pass 'found valid Procfile'
         end
 
         def fix
