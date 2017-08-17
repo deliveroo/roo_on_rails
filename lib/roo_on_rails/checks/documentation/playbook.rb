@@ -14,7 +14,7 @@ module RooOnRails
         def call
           fail! "no playbook at #{LOCATION}." if playbook_missing?
           final_fail! 'playbook still contains FIXME template sections' if playbook_unfinished?
-          pass  'playbook found, legion on-call engineers thank you.'
+          pass 'playbook found, legion on-call engineers thank you.'
         end
 
         def fix

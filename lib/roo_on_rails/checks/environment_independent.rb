@@ -11,15 +11,12 @@ module RooOnRails
       requires Sidekiq::Settings
 
       def intro
-        "Validating environment-independent setup"
+        'Validating environment-independent setup'
       end
 
       def call
-        say "All good", :green
+        say 'All good', :green
       end
-
-      protected
-
     end
   end
 end

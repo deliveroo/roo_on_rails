@@ -18,7 +18,7 @@ module RooOnRails
         requires Heroku::AppExists, MetricsBridgeConfigured
 
         def intro
-          "Checking for metrics drain..."
+          'Checking for metrics drain...'
         end
 
         def call

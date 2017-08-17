@@ -26,7 +26,7 @@ module RooOnRails
         requires LogDestinationExists
 
         def intro
-          "Checking that the app is logging to Papertrail..."
+          'Checking that the app is logging to Papertrail...'
         end
 
         def call

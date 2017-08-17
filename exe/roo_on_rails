@@ -3,7 +3,6 @@
 require 'rubygems'
 require 'roo_on_rails/config'
 
-
 module RooOnRails
   module CLI
     class Base
@@ -69,7 +68,7 @@ module RooOnRails
         OptionParser.new do |o|
           o.banner = usage
 
-          o.on('-f', '--fix', 'Attempt to fix failed checks') do |v|
+          o.on('-f', '--fix', 'Attempt to fix failed checks') do
             _options[:fix] = true
           end
 

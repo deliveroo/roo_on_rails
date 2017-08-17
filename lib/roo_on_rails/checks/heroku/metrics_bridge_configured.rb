@@ -22,7 +22,7 @@ module RooOnRails
         BRIDGE_APP = 'roo-dd-bridge-production'.freeze
 
         def intro
-          "Checking whether metrics bridge is configured..."
+          'Checking whether metrics bridge is configured...'
         end
 
         def call

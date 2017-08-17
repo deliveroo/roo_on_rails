@@ -36,7 +36,7 @@ module RooOnRails
 
         begin
           call
-        rescue Failure => e
+        rescue Failure
           return false unless @fix
           say "\t· attempting to fix", %i[yellow]
           fix
@@ -99,7 +99,7 @@ module RooOnRails
         context.deps ||= {}
         deps.map { |dep|
           sig = dep.signature.join('/')
-          if context.deps.has_key?(sig)
+          if context.deps.key?(sig)
             context.deps[sig]
           else
             context.deps[sig] = dep.run

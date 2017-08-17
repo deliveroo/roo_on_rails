@@ -12,7 +12,7 @@ module RooOnRails
         requires Git::Origin, Heroku::AppExists
 
         def intro
-          "Checking preboot status..."
+          'Checking preboot status...'
         end
 
         def call

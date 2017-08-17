@@ -21,7 +21,7 @@ module RooOnRails
         requires SystemExists
 
         def intro
-          "Checking that the app is named in Papertrail"
+          'Checking that the app is named in Papertrail'
         end
 
         def call

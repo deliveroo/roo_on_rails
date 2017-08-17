@@ -22,7 +22,7 @@ module RooOnRails
         requires LogDestinationExists
 
         def intro
-          "Checking for Papertrail drain..."
+          'Checking for Papertrail drain...'
         end
 
         def call
