@@ -22,10 +22,8 @@ module RooOnRails
         $stderr.puts message
       end
 
-      def _assert_argv(enum)
-        return if enum.include?(argv.length)
-        $stderr.puts enum.inspect
-        $stderr.puts argv.inspect
+      def _assert_argv_length(range)
+        return if range.include?(argv.length)
         _log 'Wrong number of arguments.'
         _log "Usage: #{usage}"
         exit 1
@@ -38,7 +36,7 @@ module RooOnRails
       end
 
       def run
-        _assert_argv(0..0)
+        _assert_argv_length(0..0)
         require 'roo_on_rails/sidekiq/loader'
         RooOnRails::Sidekiq::Loader.run
       end
@@ -51,7 +49,7 @@ module RooOnRails
 
       def run
         _parser.parse!(argv)
-        _assert_argv(0..0)
+        _assert_argv_length(0..0)
         require 'roo_on_rails/harness'
         RooOnRails::Harness.new(try_fix: _options[:fix], context: Config.load).run
       end
