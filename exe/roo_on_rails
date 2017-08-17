@@ -70,7 +70,7 @@ module RooOnRails
             _options[:fix] = true
           end
 
-          o.on('-e', '--environment', 'Application environments to check') do |v|
+          o.on('-e', '--env', 'Application environments to check (comma-separated)') do |v|
             _options[:env] = v
           end
         end
