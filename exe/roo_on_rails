@@ -3,12 +3,104 @@
 require 'rubygems'
 require 'roo_on_rails/config'
 
-if ARGV.include? 'sidekiq'
-  require 'roo_on_rails/sidekiq/loader'
-  RooOnRails::Sidekiq::Loader.run
-else
-  require 'roo_on_rails/harness'
-  module RooOnRails
-    Harness.new(try_fix: true, context: Config.load).run
+
+module RooOnRails
+  module CLI
+    class Base
+      attr_reader :argv
+
+      def initialize(argv)
+        @argv = argv
+      end
+
+      def usage
+        raise NotImplementedError
+      end
+
+      protected
+
+      def _log(message)
+        $stderr.puts message
+      end
+
+      def _assert_argv(enum)
+        return if enum.include?(argv.length)
+        $stderr.puts enum.inspect
+        $stderr.puts argv.inspect
+        _log 'Wrong number of arguments.'
+        _log "Usage: #{usage}"
+        exit 1
+      end
+    end
+
+    class Sidekiq < Base
+      def usage
+        'roo_on_rails sidekiq'
+      end
+
+      def run
+        _assert_argv(0..0)
+        require 'roo_on_rails/sidekiq/loader'
+        RooOnRails::Sidekiq::Loader.run
+      end
+    end
+
+    class Harness < Base
+      def usage
+        'roo_on_rails harness [-f|--fix]'
+      end
+
+      def run
+        _parser.parse!(argv)
+        _assert_argv(0..0)
+        require 'roo_on_rails/harness'
+        RooOnRails::Harness.new(try_fix: _options[:fix], context: Config.load).run
+      end
+
+      private
+
+      def _options
+        @options ||= { fix: false, env: nil }
+      end
+
+      def _parser
+        require 'optionparser'
+
+        OptionParser.new do |o|
+          o.banner = usage
+
+          o.on('-f', '--fix', 'Attempt to fix failed checks') do |v|
+            _options[:fix] = true
+          end
+
+          o.on('-e', '--environment', 'Application environments to check') do |v|
+            _options[:env] = v
+          end
+        end
+      end
+    end
+
+    class Toplevel < Base
+      def usage
+        'roo_on_rails [sidekiq|harness] [options]'
+      end
+
+      def run
+        case argv.first
+        when 'sidekiq' then
+          argv.shift
+          Sidekiq.new(argv).run
+        when 'harness', nil then
+          argv.shift
+          Harness.new(argv).run
+        else
+          _log 'Incorrect arguments.'
+          _log "Usage: #{usage}"
+          exit 1
+        end
+      end
+    end
   end
 end
+
+RooOnRails::CLI::Toplevel.new(ARGV).run

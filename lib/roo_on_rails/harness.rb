@@ -9,10 +9,11 @@ module RooOnRails
   class Harness
     include Thor::Shell
 
-    def initialize(try_fix: false, context: Hashie::Mash.new, dry_run: false)
+    def initialize(try_fix: false, environments: nil, context: Hashie::Mash.new, dry_run: false)
       @try_fix = try_fix
       @context = context
       @dry_run = dry_run
+      @environments = environments
     end
 
     def run
@@ -37,7 +38,8 @@ module RooOnRails
     private
 
     def environments
-      ENV.fetch('ROO_ON_RAILS_ENVIRONMENTS', 'staging,production').split(',')
+      as_string = @environments || ENV.fetch('ROO_ON_RAILS_ENVIRONMENTS', 'staging,production')
+      as_string.split(',')
     end
   end
 end
