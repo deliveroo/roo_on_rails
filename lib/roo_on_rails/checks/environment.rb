@@ -1,5 +1,4 @@
 require 'roo_on_rails/checks/env_specific'
-require 'roo_on_rails/checks/github/branch_protection'
 require 'roo_on_rails/checks/heroku/app_exists'
 require 'roo_on_rails/checks/heroku/preboot_enabled'
 require 'roo_on_rails/checks/heroku/app_exists'
@@ -9,19 +8,18 @@ require 'roo_on_rails/checks/papertrail/all'
 module RooOnRails
   module Checks
     class Environment < EnvSpecific
-      requires GitHub::BranchProtection
       requires Heroku::DrainsMetrics
       requires Heroku::PrebootEnabled
       requires Papertrail::All
 
       def call
-        # nothing to do
+        pass 'all good'
       end
 
       protected
 
       def intro
-        "Validated #{bold @env} environment"
+        "Validating #{bold @env} environment"
       end
     end
   end

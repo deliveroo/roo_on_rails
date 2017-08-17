@@ -12,15 +12,15 @@ module RooOnRails
         requires Git::Origin, Heroku::AppExists
 
         def intro
-          "Checking preboot status on #{bold app_name}"
+          "Checking preboot status..."
         end
 
         def call
           status = client.app_feature.info(app_name, 'preboot')
           if status['enabled']
-            pass 'preboot enabled'
+            pass "preboot enabled on #{bold app_name}"
           else
-            fail! 'preboot disabled'
+            fail! "preboot disabled on #{bold app_name}"
           end
         end
 

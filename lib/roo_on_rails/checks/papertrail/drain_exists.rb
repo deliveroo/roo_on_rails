@@ -22,20 +22,20 @@ module RooOnRails
         requires LogDestinationExists
 
         def intro
-          "Checking for Papertrail drain on #{bold app_name}..."
+          "Checking for Papertrail drain..."
         end
 
         def call
           # find the PT drain
           data = client.log_drain.list(app_name).
                  select { |h| h['url'] =~ /papertrailapp/ }
-          fail! 'no Papertrail drain found' if data.empty?
-          fail! 'multiple Papertrail drains found' if data.length > 1
+          fail! "no Papertrail drain found on #{bold app_name}" if data.empty?
+          fail! "multiple Papertrail drains found on #{bold app_name}" if data.length > 1
 
           data = data.first
           fail! "app is draining to #{data['url']} instead of #{papertrail_url}" if data['url'] != papertrail_url
 
-          pass "found drain setup with token #{data['token']}"
+          pass "found drain setup with token #{data['token']} on #{bold app_name}"
           context.papertrail.system_name![env] = data['token']
         end
 
