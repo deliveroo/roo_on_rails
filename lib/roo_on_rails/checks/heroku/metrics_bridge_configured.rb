@@ -48,10 +48,14 @@ module RooOnRails
             token_var    => SecureRandom.hex(16),
             app_list_var => app_list.to_a.join(',')
           )
+        rescue Excon::Error::Forbidden
+          fail! "You are missing 'operate' permissions for #{bold BRIDGE_APP}"
         end
 
         def current_config
           client.config_var.info_for_app(BRIDGE_APP)
+        rescue Excon::Error::Forbidden
+          fail! "You are missing 'deploy' permissions for #{bold BRIDGE_APP}"
         end
 
         def app_list_var
