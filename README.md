@@ -24,6 +24,7 @@
   - [HireFire (for Sidekiq workers)](#hirefire-for-sidekiq-workers)
   - [Logging](#logging)
   - [Google OAuth authentication](#google-oauth-authentication)
+  - [DataDog Integration](#datadog-integration)
   - [Routemaster Client](#routemaster-client)
 - [Command features](#command-features)
   - [Usage](#usage)
@@ -198,6 +199,22 @@ This feature is bring-your-own-controller — it won't magically protect your
 application.
 
 A simple but secure example is detailed in `README.google_oauth2.md`.
+
+### DataDog Integration
+
+To get DataDog working you need to add the build pack [`heroku-buildpack-datadog`](https://github.com/deliveroo/heroku-buildpack-datadog) which enables the integration with roo_dd_bridge.
+
+After that you can access the StatsD client using `RooOnRails.statsd.increment("my tags")`
+
+The following environment variables are being used.  The default values are fine except for STATSD_ENV which should be set in Heroku Setting .
+
+Parameters:
+
+- `STATSD_ENV`
+- `DYNO`
+- `HEROKU_APP_NAME`
+- `STATSD_HOST`
+- `STATSD_PORT`
 
 ### Routemaster Client
 
