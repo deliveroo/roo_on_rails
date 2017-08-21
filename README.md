@@ -208,6 +208,7 @@ After that you can access the StatsD client using `RooOnRails.statsd.increment("
 
 The following environment variables are being used.  The default values are fine except for STATSD_ENV which should be set in Heroku Setting .
 
+
 Parameters:
 
 - `STATSD_ENV`
