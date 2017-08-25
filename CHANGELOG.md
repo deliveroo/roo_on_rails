@@ -7,6 +7,7 @@ Features:
 - All checks will now run regardless of previous failure to avoid
   back-and-forthing (#57)
 - Friendlier error message when facing Heroku permission errors (#58)
+- Replaces the Rails logger with a structured logger (#60)
 
 
 # v1.10.0 (2017-08-11)
