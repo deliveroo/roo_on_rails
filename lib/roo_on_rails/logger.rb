@@ -48,10 +48,6 @@ module RooOnRails
       nil
     end
 
-    def clear_context!
-      _context_stack.replace([{}])
-    end
-
     def set_log_level
       self.level = ::Logger::Severity.const_get(ENV.fetch('LOG_LEVEL', 'DEBUG'))
     end
@@ -95,14 +91,6 @@ module RooOnRails
       # We use our object ID here to avoid conflicting with other instances
       thread_key = @_context_stack_key ||= "roo_on_rails:logging_context:#{object_id}".freeze
       Thread.current[thread_key] ||= [{}]
-    end
-
-    def context_text
-      context = current_context
-      return nil if context.empty?
-
-      merged_context = context.each_with_object({}) { |ctx, acc| acc.merge!(ctx) }
-      ' ' + Logfmt.dump(merged_context)
     end
   end
 end
