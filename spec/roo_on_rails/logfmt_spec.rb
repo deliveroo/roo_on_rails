@@ -48,6 +48,14 @@ RSpec.describe RooOnRails::Logfmt do
       end
     end
 
+    context 'when the hash contains a string with returns' do
+      let(:hash) { { s: "multiple\r\nlines" } }
+
+      it 'should quote the string and escape the backslashes' do
+        should eq 's="multiple\r\nlines"'
+      end
+    end
+
     context 'when the hash contains a nested hash' do
       let(:hash) { { h: { s: 'more stuff', i: 1234 } } }
 
