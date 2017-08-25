@@ -3,7 +3,7 @@ module RooOnRails
     class Database < Rails::Railtie
       initializer 'roo_on_rails.database', after: 'active_record.initialize_database' do
         ActiveSupport.on_load :active_record do
-          $stderr.puts 'initializer roo_on_rails.database'
+          Rails.logger.debug 'initializer roo_on_rails.database'
 
           config = ActiveRecord::Base.configurations[Rails.env]
           config['variables'] ||= {}

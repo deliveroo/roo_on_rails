@@ -2,7 +2,7 @@ module RooOnRails
   module Railties
     class NewRelic < Rails::Railtie
       initializer 'roo_on_rails.new_relic' do
-        $stderr.puts 'initializer roo_on_rails.new_relic'
+        Rails.logger.debug 'initializer roo_on_rails.new_relic'
 
         license_key = ENV['NEW_RELIC_LICENSE_KEY']
 

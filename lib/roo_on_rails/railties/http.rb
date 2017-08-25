@@ -2,7 +2,7 @@ module RooOnRails
   module Railties
     class HTTP < Rails::Railtie
       initializer 'roo_on_rails.http' do |app|
-        $stderr.puts 'initializer roo_on_rails.http'
+        Rails.logger.debug 'initializer roo_on_rails.http'
         require 'rack/timeout/base'
         require 'rack/ssl-enforcer'
 

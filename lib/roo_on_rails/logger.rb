@@ -8,9 +8,9 @@ module RooOnRails
       @show_timestamp = io.tty?
       logger = ::Logger.new(io).tap do |l|
         l.formatter = method(:_formatter)
-        l.level     = ::Logger::Severity.const_get(_log_level)
       end
       super(logger)
+      set_log_level
     end
 
     def with(context = {})
@@ -36,6 +36,10 @@ module RooOnRails
       _context_stack.replace([{}])
     end
 
+    def set_log_level
+      self.level = ::Logger::Severity.const_get(ENV.fetch('LOG_LEVEL', 'DEBUG'))
+    end
+
     private
 
     class Proxy < SimpleDelegator
@@ -57,7 +61,7 @@ module RooOnRails
 
     def _formatter(severity, datetime, _progname, message)
       if @show_timestamp
-        "[%s] %s | %s %s\n" % [
+        "[%s] %7s | %s %s\n" % [
           datetime.utc.strftime(TIMESTAMP_FORMAT),
           severity,
           message,
@@ -69,10 +73,6 @@ module RooOnRails
           msg:  message
         }.merge(_context_stack.last))
       end
-    end
-
-    def _log_level
-      ENV.fetch('LOG_LEVEL', 'INFO')
     end
 
     def _context_stack

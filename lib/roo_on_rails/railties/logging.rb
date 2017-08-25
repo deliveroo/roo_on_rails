@@ -1,12 +1,15 @@
-require 'roo_on_rails/logger'
-
 module RooOnRails
   module Railties
     class Logging < Rails::Railtie
-      initializer 'roo_on_rails.logging', before: :initialize_logger do
-        $stderr.puts 'initializer roo_on_rails.logging'
+      initializer 'roo_on_rails.logging.before', before: :initialize_logger do
+        require 'roo_on_rails/logger'
+        Rails.logger = config.logger = RooOnRails::Logger.new
+        Rails.logger.debug 'initializer roo_on_rails.logging.before'
+      end
 
-        ::Rails.logger = config.logger = RooOnRails::Logger.new
+      initializer 'roo_on_rails.logging.after', after: :initialize_logger do
+        Rails.logger.set_log_level
+        Rails.logger.debug 'initializer roo_on_rails.logging.after'
       end
     end
   end

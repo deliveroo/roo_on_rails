@@ -6,7 +6,7 @@ module RooOnRails
       initializer 'roo_on_rails.routemaster' do
         next unless Config.routemaster_enabled?
 
-        $stderr.puts 'initializer roo_on_rails.routemaster'
+        Rails.logger.debug 'initializer roo_on_rails.routemaster'
 
         abort 'Aborting: ROUTEMASTER_URL and ROUTEMASTER_UUID are required' if bus_details_missing?
 
