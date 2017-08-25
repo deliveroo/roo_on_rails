@@ -54,17 +54,4 @@ RSpec.describe RooOnRails::Logger do
       end
     end
   end
-
-  # describe '#flush' do
-  #   before do
-  #     logger.with(i: 123, s: 'stuff') do
-  #       logger.flush
-  #       logger.info('hello-world')
-  #     end
-  #   end
-
-  #   it 'should clear the current context' do
-  #     expect(output).to eq 'hello-world'
-  #   end
-  # end
 end
