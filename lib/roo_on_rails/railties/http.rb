@@ -10,7 +10,7 @@ module RooOnRails
 
         ::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i
         ::Rack::Timeout.wait_timeout = ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
-        ::Rack::Timeout::Logger.level = Logger::WARN
+        ::Rack::Timeout::Logger.level = ::Logger::WARN
 
         app.config.middleware.insert_before(
           ::Rack::Runtime,
