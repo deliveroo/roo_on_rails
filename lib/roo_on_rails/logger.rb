@@ -7,7 +7,7 @@ module RooOnRails
   # to `ActiveSupport::TaggedLogging` but with key/value pairs in logfmt format.
   #
   #   logger = RooOnRails::Logger.new(STDOUT)
-  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' } 
+  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' }
   #   # Logs "at=INFO msg=Stuff a=1 b=2"
   #
   #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
