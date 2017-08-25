@@ -75,7 +75,7 @@ module RooOnRails
     end
 
     def self.new(logger)
-      warn "RooOnRails::ContextLogging is deprecated. Please use Rails.logger."
+      warn 'RooOnRails::ContextLogging is deprecated. Please use Rails.logger.'
       # Ensure we set a default formatter so we aren't extending nil!
       logger.formatter ||=
         if ActiveSupport::VERSION::MAJOR >= 4

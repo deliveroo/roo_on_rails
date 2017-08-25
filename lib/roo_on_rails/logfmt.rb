@@ -24,7 +24,7 @@ module RooOnRails
               end
 
         @_escape_re ||= /[[:space:]"']/
-        return str unless @_escape_re === str
+        return str unless @_escape_re =~ str
         str.inspect
       end
     end

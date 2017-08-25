@@ -3,22 +3,30 @@ require 'delegate'
 require 'roo_on_rails/logfmt'
 
 module RooOnRails
-  # A compatible replacement for the standard Logger to provide context, similar to `ActiveSupport::TaggedLogging`
-  # but with key/value pairs in logfmt format.
+  # A compatible replacement for the standard Logger to provide context, similar
+  # to `ActiveSupport::TaggedLogging` but with key/value pairs in logfmt format.
   #
   #   logger = RooOnRails::Logger.new(STDOUT)
-  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' }                   # Logs "at=INFO msg=Stuff a=1 b=2"
-  #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }  # Logs "at=INFO msg=Stuff a=1 b=2"
+  #   logger.with(a: 1, b: 2) { logger.info 'Stuff' } 
+  #   # Logs "at=INFO msg=Stuff a=1 b=2"
   #
-  # The above methods persist the context in thread local storage so it will be attached to
-  # any logs made within the scope of the block, even in called methods. However, if your
-  # context only applies to the current log then you can chain off the `with` method.
+  #   logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
+  #   # Logs "at=INFO msg=Stuff a=1 b=2"
   #
-  #   logger.with(a: 1, b: 2).info('Stuff')                   # Logs "at=INFO msg=Stuff a=1 b=2"
-  #   logger.with(a: 1) { logger.with(b: 2).info('Stuff')  }  # Logs "at=INFO msg=Stuff a=1 b=2"
+  # The above methods persist the context in thread local storage so it will be
+  # attached to any logs made within the scope of the block, even in called
+  # methods. However, if your context only applies to the current log then you
+  # can chain off the `with` method.
   #
-  # Hashes, arrays and any complex object that supports `#to_json` will be output in escaped
-  # JSON format so that it can be parsed out of the attribute values.
+  #   logger.with(a: 1, b: 2).info('Stuff')
+  #   # Logs "at=INFO msg=Stuff a=1 b=2"
+  #
+  #   logger.with(a: 1) { logger.with(b: 2).info('Stuff')  }
+  #   # Logs "at=INFO msg=Stuff a=1 b=2"
+  #
+  # Hashes, arrays and any complex object that supports `#to_json` will be
+  # output in escaped JSON format so that it can be parsed out of the attribute
+  # values.
   class Logger < SimpleDelegator
     def initialize(io = STDOUT)
       @show_timestamp = io.tty?
@@ -30,9 +38,7 @@ module RooOnRails
     end
 
     def with(context = {})
-      unless block_given?
-        return Proxy.new(self, context)
-      end
+      return Proxy.new(self, context) unless block_given?
 
       new_context = (_context_stack.last || {}).merge(context)
       Thread.handle_interrupt(Exception => :never) do
@@ -60,7 +66,7 @@ module RooOnRails
         super(logger)
       end
 
-      %w[add debug info warn error fatal unknown].each do |name|
+      %w(add debug info warn error fatal unknown).each do |name|
         define_method name do |*args, &block|
           __getobj__.with(@context) do
             __getobj__.public_send(name, *args, &block)
@@ -69,7 +75,9 @@ module RooOnRails
       end
     end
 
-    TIMESTAMP_FORMAT = '%F %T.%L'
+    private_constant :Proxy
+
+    TIMESTAMP_FORMAT = '%F %T.%L'.freeze
 
     def _formatter(severity, datetime, _progname, message)
       if @show_timestamp
