@@ -32,6 +32,7 @@ jobs:
               2) ruby=2.3.4 ; variant=rails_5 ;;
             esac ;
             rbenv local $ROR_RUBY ;
+            gem install bundler ;
             bundle config --local gemfile gemfiles/${variant}.gemfile
 
       - run: 
