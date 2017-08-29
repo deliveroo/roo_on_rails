@@ -8,15 +8,19 @@ module RooOnRails
   module Railties
     class Sidekiq < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
-        require 'hirefire-resource'
-        
-        if RooOnRails::Config.sidekiq_enabled?
-          Rails.logger.debug 'initializer roo_on_rails.sidekiq'
+        Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
+          
+          unless RooOnRails::Config.sidekiq_enabled?
+            logger.debug 'skipping'
+            next
+          end
+
+          log.debug 'loading'
+          require 'hirefire-resource'
+         
           config_sidekiq
           config_sidekiq_metrics
           config_hirefire(app)
-        else
-          Rails.logger.debug 'skipping initializer roo_on_rails.sidekiq'
         end
       end
 
