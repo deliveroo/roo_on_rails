@@ -1,16 +1,16 @@
 version: 2
 jobs:
-  build_base:
+  build:
     docker:
-      - image: circleci/ruby:2.3.4
+      - image: deliveroo/multiruby
     steps: &shared_steps
       - checkout
 
-      - run:
-          name: install parallelism script
-          command: |
-            curl -fsSL https://git.io/v2Ifs -o ./circleci-matrix ;
-            chmod +x ./circleci-matrix
+      # - run:
+      #     name: install parallelism script
+      #     command: |
+      #       curl -fsSL https://git.io/v2Ifs -o ~/circleci-matrix ;
+      #       chmod +x ~/circleci-matrix
 
       # - run: 
       #     name: compute cache key
@@ -22,6 +22,18 @@ jobs:
       # - type: cache-restore
       #   key: bundle-{{ checksum ".cache-key" }}
 
+      - run:
+          name: select build variant
+          command: |
+            set -ex ;
+            case $CIRCLE_NODE_INDEX in
+              0) ruby=2.3.4 ; variant=rails_3 ;;
+              1) ruby=2.4.1 ; variant=rails_4 ;;
+              2) ruby=2.3.4 ; variant=rails_5 ;;
+            esac ;
+            rbenv local $ROR_RUBY ;
+            bundle config --local gemfile gemfiles/${variant}.gemfile
+
       - run: 
           name: install dependencies
           command: |
@@ -32,9 +44,7 @@ jobs:
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
-            mkdir -p $PWD/tmp &&
-            sudo mount -t tmpfs -o size=1024m tmpfs $PWD/tmp &&
-            ./circleci-matrix --config .circleci/matrix.yml
+            bundle exec 
 
       # - type: cache-save
       #   key: bundle-{{ checksum ".cache-key" }}
@@ -42,32 +52,3 @@ jobs:
       #     - ~/project/vendor/bundle
       #     - ~/project/vendor/bundle-scaffold
 
-
-  build_227:
-    parallelism: 2
-    docker:
-      - image: circleci/ruby:2.2.7
-      - image: circleci/postgres:9.6.4-alpine-ram
-    steps: *shared_steps
-
-  build_234:
-    parallelism: 2
-    docker:
-      - image: circleci/ruby:2.3.4
-      - image: circleci/postgres:9.6.4-alpine-ram
-    steps: *shared_steps
-
-  build_241:
-    parallelism: 2
-    docker:
-      - image: circleci/ruby:2.4.1
-      - image: circleci/postgres:9.6.4-alpine-ram
-    steps: *shared_steps
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build_227
-      - build_234
-      - build_241

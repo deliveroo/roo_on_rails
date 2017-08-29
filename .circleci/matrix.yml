@@ -1,6 +1,0 @@
-env:
-  - ROR_VARIANT=rails-3
-  - ROR_VARIANT=rails-4
-
-command:
-  - bundle exec appraisal $ROR_VARIANT
