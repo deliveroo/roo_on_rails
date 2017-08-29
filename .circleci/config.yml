@@ -25,7 +25,6 @@ jobs:
       - run: 
           name: install dependencies
           command: |
-            cd ~/ror &&
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
