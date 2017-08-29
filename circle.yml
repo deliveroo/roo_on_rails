@@ -1,0 +1,73 @@
+version: 2
+jobs:
+  build_base:
+    docker:
+      - image: circleci/ruby:2.3.4
+    steps: &shared_steps
+      - run:
+          name: install parallelism script
+          command: |
+            curl -fsSL https://git.io/v2Ifs -o ./circleci-matrix ;
+            chmod +x ./circleci-matrix
+
+      - checkout
+
+      - run: 
+          name: compute cache key
+          command: |
+            cat Gemfile.lock gemfiles/*.lock > .cache-key ;
+            ruby -v >> .cache-key
+
+      - type: cache-restore
+        key: bundle-{{ checksum ".cache-key" }}
+
+      - run: 
+          name: install dependencies
+          command: |
+            bundle install --jobs=3 --retry=3 --path=vendor/bundle
+
+      - type: cache-save
+        key: bundle-{{ checksum ".cache-key" }}
+        paths:
+          - vendor/bundle
+          - vendor/bundle-scaffold
+
+      - run:
+          name: run tests
+          command: |
+            unset RACK_ENV ;
+            unset RAILS_ENV ;
+            mkdir -p $PWD/tmp && sudo mount -t tmpfs -o size=1024m tmpfs $PWD/tmp ;
+            ./circleci-matrix --config circle-matrix.yml
+
+  build_227:
+    working_directory: ~/ror
+    parallelism: 2
+    docker:
+      - image: circleci/ruby:2.2.7
+      - image: circleci/postgres:9.6.4-alpine-ram
+    steps: *shared_steps
+
+  build_234:
+    working_directory: ~/ror
+    parallelism: 2
+    docker:
+      - image: circleci/ruby:2.3.4
+      - image: circleci/postgres:9.6.4-alpine-ram
+    steps: *shared_steps
+
+  build_241:
+    working_directory: ~/ror
+    parallelism: 2
+    docker:
+      - image: circleci/ruby:2.4.1
+      - image: circleci/postgres:9.6.4-alpine-ram
+    steps: *shared_steps
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build_227
+      - build_234
+      - build_241
