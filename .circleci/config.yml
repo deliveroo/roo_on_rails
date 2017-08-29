@@ -32,7 +32,7 @@ jobs:
               1) ruby=2.4.1 ; variant=rails_4 ;;
               2) ruby=2.3.4 ; variant=rails_5 ;;
             esac ;
-            rbenv local $ROR_RUBY ;
+            rbenv local $ruby ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/${variant}.gemfile
 
