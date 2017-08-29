@@ -3,6 +3,7 @@ jobs:
   build:
     docker:
       - image: deliveroo/multiruby
+    parallelism: 3
     steps: &shared_steps
       - checkout
 
