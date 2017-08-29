@@ -12,15 +12,15 @@ jobs:
             curl -fsSL https://git.io/v2Ifs -o ./circleci-matrix ;
             chmod +x ./circleci-matrix
 
-      - run: 
-          name: compute cache key
-          command: |
-            cd ~/project &&
-            cat Gemfile.lock gemfiles/*.lock > .cache-key &&
-            ruby -v >> .cache-key
+      # - run: 
+      #     name: compute cache key
+      #     command: |
+      #       cd ~/project &&
+      #       cat Gemfile.lock gemfiles/*.lock > .cache-key &&
+      #       ruby -v >> .cache-key
 
-      - type: cache-restore
-        key: bundle-{{ checksum ".cache-key" }}
+      # - type: cache-restore
+      #   key: bundle-{{ checksum ".cache-key" }}
 
       - run: 
           name: install dependencies
@@ -37,11 +37,11 @@ jobs:
             sudo mount -t tmpfs -o size=1024m tmpfs $PWD/tmp &&
             ./circleci-matrix --config .circleci/matrix.yml
 
-      - type: cache-save
-        key: bundle-{{ checksum ".cache-key" }}
-        paths:
-          - ~/project/vendor/bundle
-          - ~/project/vendor/bundle-scaffold
+      # - type: cache-save
+      #   key: bundle-{{ checksum ".cache-key" }}
+      #   paths:
+      #     - ~/project/vendor/bundle
+      #     - ~/project/vendor/bundle-scaffold
 
 
   build_227:
