@@ -46,7 +46,7 @@ jobs:
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
-            bundle exec 
+            bundle exec rspec
 
       # - type: cache-save
       #   key: bundle-{{ checksum ".cache-key" }}
