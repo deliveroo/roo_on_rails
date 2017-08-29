@@ -4,13 +4,13 @@ jobs:
     docker:
       - image: circleci/ruby:2.3.4
     steps: &shared_steps
+      - checkout
+
       - run:
           name: install parallelism script
           command: |
             curl -fsSL https://git.io/v2Ifs -o ./circleci-matrix ;
             chmod +x ./circleci-matrix
-
-      - checkout
 
       - run: 
           name: compute cache key
