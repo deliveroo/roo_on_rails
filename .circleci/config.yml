@@ -38,7 +38,7 @@ jobs:
             unset RACK_ENV ;
             unset RAILS_ENV ;
             mkdir -p $PWD/tmp && sudo mount -t tmpfs -o size=1024m tmpfs $PWD/tmp ;
-            ./circleci-matrix --config circle-matrix.yml
+            ./circleci-matrix --config .circleci/matrix.yml
 
   build_227:
     working_directory: ~/ror
