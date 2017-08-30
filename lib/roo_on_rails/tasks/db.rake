@@ -20,6 +20,7 @@ if defined?(ActiveRecord)
 
   %i[
     db:create
+    db:drop
     db:migrate
     db:migrate:down
     db:rollback
