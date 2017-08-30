@@ -65,7 +65,7 @@ module ROR
       end
 
       def unpack_scaffold_at(path)
-        path.mkpath
+				shell_run "mkdir -p #{path}"
         shell_run "tar -C #{path} -xf #{scaffold_path}"
         self
       end
