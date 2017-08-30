@@ -47,12 +47,12 @@ module ROR
         end
 
         append_to_file scaffold_dir.join('Gemfile'), %{
-          gem 'roo_on_rails', path: '../../..'
+          gem 'roo_on_rails', path: '#{ROOT}'
         }
 
 
         Bundler.with_clean_env do
-          shell_run "cd #{scaffold_dir} && bundle install -j4 --path=#{BUNDLE_CACHE}"
+          shell_run "cd #{scaffold_dir} && bundle install -j4 --retry=3 --path=#{BUNDLE_CACHE}"
         end
 
         shell_run "tar -C #{scaffold_dir} -cf #{scaffold_path} ."
