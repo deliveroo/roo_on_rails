@@ -34,7 +34,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby <%= ruby %>, <%= variant %>)
           command: |
             echo <%= ruby %> >> .cache-key ;
             echo <%= variant %> >> .cache-key ;
@@ -49,12 +49,12 @@ jobs:
             - bundle-<%= ruby %>
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&

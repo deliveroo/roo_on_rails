@@ -20,7 +20,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.2.7, rails_3)
           command: |
             echo 2.2.7 >> .cache-key ;
             echo rails_3 >> .cache-key ;
@@ -35,12 +35,12 @@ jobs:
             - bundle-2.2.7
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -78,7 +78,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.3.4, rails_3)
           command: |
             echo 2.3.4 >> .cache-key ;
             echo rails_3 >> .cache-key ;
@@ -93,12 +93,12 @@ jobs:
             - bundle-2.3.4
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -136,7 +136,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.2.7, rails_4)
           command: |
             echo 2.2.7 >> .cache-key ;
             echo rails_4 >> .cache-key ;
@@ -151,12 +151,12 @@ jobs:
             - bundle-2.2.7
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -194,7 +194,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.3.4, rails_4)
           command: |
             echo 2.3.4 >> .cache-key ;
             echo rails_4 >> .cache-key ;
@@ -209,12 +209,12 @@ jobs:
             - bundle-2.3.4
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -252,7 +252,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.4.1, rails_4)
           command: |
             echo 2.4.1 >> .cache-key ;
             echo rails_4 >> .cache-key ;
@@ -267,12 +267,12 @@ jobs:
             - bundle-2.4.1
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -310,7 +310,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.2.7, rails_5)
           command: |
             echo 2.2.7 >> .cache-key ;
             echo rails_5 >> .cache-key ;
@@ -325,12 +325,12 @@ jobs:
             - bundle-2.2.7
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -368,7 +368,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.3.4, rails_5)
           command: |
             echo 2.3.4 >> .cache-key ;
             echo rails_5 >> .cache-key ;
@@ -383,12 +383,12 @@ jobs:
             - bundle-2.3.4
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -426,7 +426,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.4.1, rails_5)
           command: |
             echo 2.4.1 >> .cache-key ;
             echo rails_5 >> .cache-key ;
@@ -441,12 +441,12 @@ jobs:
             - bundle-2.4.1
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -484,7 +484,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.2.7, rails_5_1)
           command: |
             echo 2.2.7 >> .cache-key ;
             echo rails_5_1 >> .cache-key ;
@@ -499,12 +499,12 @@ jobs:
             - bundle-2.2.7
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -542,7 +542,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.3.4, rails_5_1)
           command: |
             echo 2.3.4 >> .cache-key ;
             echo rails_5_1 >> .cache-key ;
@@ -557,12 +557,12 @@ jobs:
             - bundle-2.3.4
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
@@ -600,7 +600,7 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: select build variant
+          name: Select build variant (Ruby 2.4.1, rails_5_1)
           command: |
             echo 2.4.1 >> .cache-key ;
             echo rails_5_1 >> .cache-key ;
@@ -615,12 +615,12 @@ jobs:
             - bundle-2.4.1
 
       - run: 
-          name: install dependencies
+          name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=vendor/bundle
 
       - run:
-          name: run tests
+          name: Run test suite
           command: |
             unset RACK_ENV &&
             unset RAILS_ENV &&
