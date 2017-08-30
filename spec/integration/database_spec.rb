@@ -8,6 +8,15 @@ describe 'Database setup', rails_min_version: 4 do
   context 'with a postgresql database' do
     let(:app_options) {{ database: 'postgresql' }}
 
+    # fix database.yml
+    before do
+      data = Pathname.new(__FILE__).join('../../support/database.yml').read
+      app_path.join('config/database.yml').tap do |db_yml|
+        app_helper.remove_file(db_yml)
+        app_helper.create_file(db_yml, data)
+      end
+    end
+
     before { app.wait_start }
 
     context 'When booting' do
@@ -77,3 +86,17 @@ describe 'Database setup', rails_min_version: 4 do
     end
   end
 end
+
+# > default: &default
+# >   adapter: postgresql
+# >   host: localhost
+# >   port: 5432
+# >   username: postgres
+# > development:
+# >   <<: *default
+# >   database: app_test
+# > test:
+# >   <<: *default
+# >   database: app_test2
+# > EOF
+
