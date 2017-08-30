@@ -16,6 +16,13 @@ jobs:
             echo $CIRCLE_NODE_INDEX >> .cache-key
 
       - run:
+          name: Setup RAM disk
+          command: |
+            rm -rf ~/project/tmp ;
+            mkdir /dev/shm/tmp ;
+            ln -s /dev/shm/tmp ~/project/tmp
+
+      - run:
           name: select build variant
           command: |
             set -ex ;
