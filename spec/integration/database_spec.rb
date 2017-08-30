@@ -86,17 +86,3 @@ describe 'Database setup', rails_min_version: 4 do
     end
   end
 end
-
-# > default: &default
-# >   adapter: postgresql
-# >   host: localhost
-# >   port: 5432
-# >   username: postgres
-# > development:
-# >   <<: *default
-# >   database: app_test
-# > test:
-# >   <<: *default
-# >   database: app_test2
-# > EOF
-
