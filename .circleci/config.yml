@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: deliveroo/multiruby
-      - image: circleci/postgres:9.6.4-alpine-ram
+      - image: postgres:9.6-alpine
       - image: redis:3-alpine
     parallelism: 3
     steps: &shared_steps
