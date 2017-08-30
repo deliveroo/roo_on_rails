@@ -5,7 +5,7 @@ jobs:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
-    parallelism: 3
+    parallelism: 11
     steps: &shared_steps
       - checkout
 
