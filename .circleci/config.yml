@@ -30,9 +30,17 @@ jobs:
           command: |
             set -ex ;
             case $CIRCLE_NODE_INDEX in
-              0) ruby=2.3.4 ; variant=rails_3 ;;
-              1) ruby=2.4.1 ; variant=rails_4 ;;
-              2) ruby=2.3.4 ; variant=rails_5 ;;
+              0)  ruby=2.2.7 ; variant=rails_3 ;;
+              1)  ruby=2.3.4 ; variant=rails_3 ;;
+              2)  ruby=2.2.7 ; variant=rails_4 ;;
+              3)  ruby=2.3.4 ; variant=rails_4 ;;
+              4)  ruby=2.4.1 ; variant=rails_4 ;;
+              5)  ruby=2.2.7 ; variant=rails_5 ;;
+              6)  ruby=2.3.4 ; variant=rails_5 ;;
+              7)  ruby=2.4.1 ; variant=rails_5 ;;
+              8)  ruby=2.2.7 ; variant=rails_5_1 ;;
+              9)  ruby=2.3.4 ; variant=rails_5_1 ;;
+              10) ruby=2.4.1 ; variant=rails_5_1 ;;
             esac ;
             rbenv local $ruby ;
             gem install bundler ;
