@@ -20,7 +20,7 @@ jobs:
 <% builds.each do |ruby,variant| %>
   build_<%= ruby %>_<%= variant %>:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:<%= ruby %>-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -30,15 +30,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby <%= ruby %>, <%= variant %>)
           command: |
-            echo <%= ruby %> >> .cache-key ;
-            echo <%= variant %> >> .cache-key ;
-            rbenv local <%= ruby %> ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/<%= variant %>.gemfile
 

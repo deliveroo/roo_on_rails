@@ -6,7 +6,7 @@ jobs:
 
   build_2.2.7_rails_3:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.2.7-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -16,15 +16,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.2.7, rails_3)
           command: |
-            echo 2.2.7 >> .cache-key ;
-            echo rails_3 >> .cache-key ;
-            rbenv local 2.2.7 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_3.gemfile
 
@@ -64,7 +61,7 @@ jobs:
 
   build_2.3.4_rails_3:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.3.4-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -74,15 +71,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.3.4, rails_3)
           command: |
-            echo 2.3.4 >> .cache-key ;
-            echo rails_3 >> .cache-key ;
-            rbenv local 2.3.4 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_3.gemfile
 
@@ -122,7 +116,7 @@ jobs:
 
   build_2.2.7_rails_4:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.2.7-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -132,15 +126,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.2.7, rails_4)
           command: |
-            echo 2.2.7 >> .cache-key ;
-            echo rails_4 >> .cache-key ;
-            rbenv local 2.2.7 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_4.gemfile
 
@@ -180,7 +171,7 @@ jobs:
 
   build_2.3.4_rails_4:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.3.4-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -190,15 +181,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.3.4, rails_4)
           command: |
-            echo 2.3.4 >> .cache-key ;
-            echo rails_4 >> .cache-key ;
-            rbenv local 2.3.4 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_4.gemfile
 
@@ -238,7 +226,7 @@ jobs:
 
   build_2.4.1_rails_4:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.4.1-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -248,15 +236,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.4.1, rails_4)
           command: |
-            echo 2.4.1 >> .cache-key ;
-            echo rails_4 >> .cache-key ;
-            rbenv local 2.4.1 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_4.gemfile
 
@@ -296,7 +281,7 @@ jobs:
 
   build_2.2.7_rails_5:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.2.7-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -306,15 +291,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.2.7, rails_5)
           command: |
-            echo 2.2.7 >> .cache-key ;
-            echo rails_5 >> .cache-key ;
-            rbenv local 2.2.7 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_5.gemfile
 
@@ -354,7 +336,7 @@ jobs:
 
   build_2.3.4_rails_5:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.3.4-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -364,15 +346,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.3.4, rails_5)
           command: |
-            echo 2.3.4 >> .cache-key ;
-            echo rails_5 >> .cache-key ;
-            rbenv local 2.3.4 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_5.gemfile
 
@@ -412,7 +391,7 @@ jobs:
 
   build_2.4.1_rails_5:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.4.1-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -422,15 +401,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.4.1, rails_5)
           command: |
-            echo 2.4.1 >> .cache-key ;
-            echo rails_5 >> .cache-key ;
-            rbenv local 2.4.1 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_5.gemfile
 
@@ -470,7 +446,7 @@ jobs:
 
   build_2.2.7_rails_5_1:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.2.7-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -480,15 +456,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.2.7, rails_5_1)
           command: |
-            echo 2.2.7 >> .cache-key ;
-            echo rails_5_1 >> .cache-key ;
-            rbenv local 2.2.7 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_5_1.gemfile
 
@@ -528,7 +501,7 @@ jobs:
 
   build_2.3.4_rails_5_1:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.3.4-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -538,15 +511,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.3.4, rails_5_1)
           command: |
-            echo 2.3.4 >> .cache-key ;
-            echo rails_5_1 >> .cache-key ;
-            rbenv local 2.3.4 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_5_1.gemfile
 
@@ -586,7 +556,7 @@ jobs:
 
   build_2.4.1_rails_5_1:
     docker:
-      - image: deliveroo/multiruby
+      - image: circleci/ruby:2.4.1-node
       - image: postgres:9.6-alpine
       - image: redis:3-alpine
     steps:
@@ -596,15 +566,12 @@ jobs:
           name: Setup RAM disk
           command: |
             rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
+            mkdir /dev/shm/tmp ;		
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
           name: Select build variant (Ruby 2.4.1, rails_5_1)
           command: |
-            echo 2.4.1 >> .cache-key ;
-            echo rails_5_1 >> .cache-key ;
-            rbenv local 2.4.1 ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/rails_5_1.gemfile
 
