@@ -9,12 +9,6 @@ jobs:
     steps: &shared_steps
       - checkout
 
-      - run: 
-          name: Compute cache key
-          command: |
-            cat ~/project/.git/HEAD >> .cache-key
-            echo $CIRCLE_NODE_INDEX >> .cache-key
-
       - run:
           name: Setup RAM disk
           command: |
