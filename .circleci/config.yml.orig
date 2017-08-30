@@ -22,7 +22,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_3)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.2.7 >> .cache-key ;
+            echo rails_3 >> .cache-key ;
             rbenv local 2.2.7 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_3.gemfile
 
@@ -78,7 +84,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_3)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.3.4 >> .cache-key ;
+            echo rails_3 >> .cache-key ;
             rbenv local 2.3.4 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_3.gemfile
 
@@ -134,7 +146,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_4)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.2.7 >> .cache-key ;
+            echo rails_4 >> .cache-key ;
             rbenv local 2.2.7 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
@@ -190,7 +208,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_4)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.3.4 >> .cache-key ;
+            echo rails_4 >> .cache-key ;
             rbenv local 2.3.4 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
@@ -246,7 +270,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.4.1, rails_4)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.4.1 >> .cache-key ;
+            echo rails_4 >> .cache-key ;
             rbenv local 2.4.1 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
@@ -302,7 +332,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_5)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.2.7 >> .cache-key ;
+            echo rails_5 >> .cache-key ;
             rbenv local 2.2.7 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
@@ -358,7 +394,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_5)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.3.4 >> .cache-key ;
+            echo rails_5 >> .cache-key ;
             rbenv local 2.3.4 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
@@ -414,7 +456,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.4.1, rails_5)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.4.1 >> .cache-key ;
+            echo rails_5 >> .cache-key ;
             rbenv local 2.4.1 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
@@ -470,7 +518,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_5_1)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.2.7 >> .cache-key ;
+            echo rails_5_1 >> .cache-key ;
             rbenv local 2.2.7 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
@@ -526,7 +580,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_5_1)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.3.4 >> .cache-key ;
+            echo rails_5_1 >> .cache-key ;
             rbenv local 2.3.4 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
@@ -582,7 +642,13 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.4.1, rails_5_1)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo 2.4.1 >> .cache-key ;
+            echo rails_5_1 >> .cache-key ;
             rbenv local 2.4.1 ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 

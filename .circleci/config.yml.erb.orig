@@ -36,7 +36,13 @@ jobs:
       - run:
           name: Select build variant (Ruby <%= ruby %>, <%= variant %>)
           command: |
+<<<<<<< HEAD
+            cd ~/project ;
+=======
+            echo <%= ruby %> >> .cache-key ;
+            echo <%= variant %> >> .cache-key ;
             rbenv local <%= ruby %> ;
+>>>>>>> parent of ca18754... attempt to use standard circleci images
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
 
