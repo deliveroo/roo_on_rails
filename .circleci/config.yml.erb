@@ -42,9 +42,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
-            - v3-bundle-<%= ruby %>-<%= variant %>
-            - v3-bundle-<%= ruby %>
+            - v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
+            - v2-bundle-<%= ruby %>-<%= variant %>
+            - v2-bundle-<%= ruby %>
 
       - run: 
           name: Install dependencies
@@ -59,17 +59,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
+          key: v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-<%= ruby %>-<%= variant %>
+          key: v2-bundle-<%= ruby %>-<%= variant %>
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-<%= ruby %>
+          key: v2-bundle-<%= ruby %>
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold

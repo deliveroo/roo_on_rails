@@ -28,9 +28,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.2.7-rails_3-{{ .Branch }}
-            - v3-bundle-2.2.7-rails_3
-            - v3-bundle-2.2.7
+            - v2-bundle-2.2.7-rails_3-{{ .Branch }}
+            - v2-bundle-2.2.7-rails_3
+            - v2-bundle-2.2.7
 
       - run: 
           name: Install dependencies
@@ -45,17 +45,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.2.7-rails_3-{{ .Branch }}
+          key: v2-bundle-2.2.7-rails_3-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7-rails_3
+          key: v2-bundle-2.2.7-rails_3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7
+          key: v2-bundle-2.2.7
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -84,9 +84,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.3.4-rails_3-{{ .Branch }}
-            - v3-bundle-2.3.4-rails_3
-            - v3-bundle-2.3.4
+            - v2-bundle-2.3.4-rails_3-{{ .Branch }}
+            - v2-bundle-2.3.4-rails_3
+            - v2-bundle-2.3.4
 
       - run: 
           name: Install dependencies
@@ -101,17 +101,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.3.4-rails_3-{{ .Branch }}
+          key: v2-bundle-2.3.4-rails_3-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4-rails_3
+          key: v2-bundle-2.3.4-rails_3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4
+          key: v2-bundle-2.3.4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -140,9 +140,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.2.7-rails_4-{{ .Branch }}
-            - v3-bundle-2.2.7-rails_4
-            - v3-bundle-2.2.7
+            - v2-bundle-2.2.7-rails_4-{{ .Branch }}
+            - v2-bundle-2.2.7-rails_4
+            - v2-bundle-2.2.7
 
       - run: 
           name: Install dependencies
@@ -157,17 +157,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.2.7-rails_4-{{ .Branch }}
+          key: v2-bundle-2.2.7-rails_4-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7-rails_4
+          key: v2-bundle-2.2.7-rails_4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7
+          key: v2-bundle-2.2.7
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -196,9 +196,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.3.4-rails_4-{{ .Branch }}
-            - v3-bundle-2.3.4-rails_4
-            - v3-bundle-2.3.4
+            - v2-bundle-2.3.4-rails_4-{{ .Branch }}
+            - v2-bundle-2.3.4-rails_4
+            - v2-bundle-2.3.4
 
       - run: 
           name: Install dependencies
@@ -213,17 +213,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.3.4-rails_4-{{ .Branch }}
+          key: v2-bundle-2.3.4-rails_4-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4-rails_4
+          key: v2-bundle-2.3.4-rails_4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4
+          key: v2-bundle-2.3.4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -252,9 +252,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.4.1-rails_4-{{ .Branch }}
-            - v3-bundle-2.4.1-rails_4
-            - v3-bundle-2.4.1
+            - v2-bundle-2.4.1-rails_4-{{ .Branch }}
+            - v2-bundle-2.4.1-rails_4
+            - v2-bundle-2.4.1
 
       - run: 
           name: Install dependencies
@@ -269,17 +269,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.4.1-rails_4-{{ .Branch }}
+          key: v2-bundle-2.4.1-rails_4-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.4.1-rails_4
+          key: v2-bundle-2.4.1-rails_4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.4.1
+          key: v2-bundle-2.4.1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -308,9 +308,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.2.7-rails_5-{{ .Branch }}
-            - v3-bundle-2.2.7-rails_5
-            - v3-bundle-2.2.7
+            - v2-bundle-2.2.7-rails_5-{{ .Branch }}
+            - v2-bundle-2.2.7-rails_5
+            - v2-bundle-2.2.7
 
       - run: 
           name: Install dependencies
@@ -325,17 +325,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.2.7-rails_5-{{ .Branch }}
+          key: v2-bundle-2.2.7-rails_5-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7-rails_5
+          key: v2-bundle-2.2.7-rails_5
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7
+          key: v2-bundle-2.2.7
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -364,9 +364,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.3.4-rails_5-{{ .Branch }}
-            - v3-bundle-2.3.4-rails_5
-            - v3-bundle-2.3.4
+            - v2-bundle-2.3.4-rails_5-{{ .Branch }}
+            - v2-bundle-2.3.4-rails_5
+            - v2-bundle-2.3.4
 
       - run: 
           name: Install dependencies
@@ -381,17 +381,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.3.4-rails_5-{{ .Branch }}
+          key: v2-bundle-2.3.4-rails_5-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4-rails_5
+          key: v2-bundle-2.3.4-rails_5
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4
+          key: v2-bundle-2.3.4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -420,9 +420,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.4.1-rails_5-{{ .Branch }}
-            - v3-bundle-2.4.1-rails_5
-            - v3-bundle-2.4.1
+            - v2-bundle-2.4.1-rails_5-{{ .Branch }}
+            - v2-bundle-2.4.1-rails_5
+            - v2-bundle-2.4.1
 
       - run: 
           name: Install dependencies
@@ -437,17 +437,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.4.1-rails_5-{{ .Branch }}
+          key: v2-bundle-2.4.1-rails_5-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.4.1-rails_5
+          key: v2-bundle-2.4.1-rails_5
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.4.1
+          key: v2-bundle-2.4.1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -476,9 +476,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.2.7-rails_5_1-{{ .Branch }}
-            - v3-bundle-2.2.7-rails_5_1
-            - v3-bundle-2.2.7
+            - v2-bundle-2.2.7-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.2.7-rails_5_1
+            - v2-bundle-2.2.7
 
       - run: 
           name: Install dependencies
@@ -493,17 +493,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.2.7-rails_5_1-{{ .Branch }}
+          key: v2-bundle-2.2.7-rails_5_1-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7-rails_5_1
+          key: v2-bundle-2.2.7-rails_5_1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.2.7
+          key: v2-bundle-2.2.7
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -532,9 +532,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.3.4-rails_5_1-{{ .Branch }}
-            - v3-bundle-2.3.4-rails_5_1
-            - v3-bundle-2.3.4
+            - v2-bundle-2.3.4-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.3.4-rails_5_1
+            - v2-bundle-2.3.4
 
       - run: 
           name: Install dependencies
@@ -549,17 +549,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.3.4-rails_5_1-{{ .Branch }}
+          key: v2-bundle-2.3.4-rails_5_1-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4-rails_5_1
+          key: v2-bundle-2.3.4-rails_5_1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.3.4
+          key: v2-bundle-2.3.4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -588,9 +588,9 @@ jobs:
 
       - restore_cache:
           keys: 
-            - v3-bundle-2.4.1-rails_5_1-{{ .Branch }}
-            - v3-bundle-2.4.1-rails_5_1
-            - v3-bundle-2.4.1
+            - v2-bundle-2.4.1-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.4.1-rails_5_1
+            - v2-bundle-2.4.1
 
       - run: 
           name: Install dependencies
@@ -605,17 +605,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v3-bundle-2.4.1-rails_5_1-{{ .Branch }}
+          key: v2-bundle-2.4.1-rails_5_1-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.4.1-rails_5_1
+          key: v2-bundle-2.4.1-rails_5_1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v3-bundle-2.4.1
+          key: v2-bundle-2.4.1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
