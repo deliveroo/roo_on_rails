@@ -22,7 +22,7 @@ module RooOnRails
         BRIDGE_APP = 'roo-dd-bridge-production'.freeze
 
         def intro
-          "Checking whether metrics bridge is configured for #{bold app_name}"
+          'Checking whether metrics bridge is configured...'
         end
 
         def call
@@ -33,7 +33,7 @@ module RooOnRails
           fail! 'Bridge lacks credentials for this app' unless config[token_var]
           fail! 'Bridge lacks tags for this app'        unless config[tags_var]
 
-          pass 'Bridge is configured'
+          pass "Bridge is configured for #{bold app_name}"
           context.heroku.metric_bridge_token![env] = config[token_var]
         end
 
@@ -48,10 +48,14 @@ module RooOnRails
             token_var    => SecureRandom.hex(16),
             app_list_var => app_list.to_a.join(',')
           )
+        rescue Excon::Error::Forbidden
+          fail! "You are missing 'operate' permissions for #{bold BRIDGE_APP}"
         end
 
         def current_config
           client.config_var.info_for_app(BRIDGE_APP)
+        rescue Excon::Error::Forbidden
+          fail! "You are missing 'deploy' permissions for #{bold BRIDGE_APP}"
         end
 
         def app_list_var

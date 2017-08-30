@@ -55,7 +55,7 @@ module ROR
     def stop
       return self if @pid.nil?
       _log "stopping (##{@pid})"
-      Process.kill('TERM', @pid)
+      Process.kill('INT', @pid)
 
       Timeout::timeout(10) do
         sleep(10e-3) until Process.wait(@pid, Process::WNOHANG)

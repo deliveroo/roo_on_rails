@@ -13,15 +13,11 @@ module RooOnRails
 
         def call
           fail! "no playbook at #{LOCATION}." if playbook_missing?
-          fail! 'playbook still contains FIXME template sections' if playbook_unfinished?
-          pass  'playbook found, legion on-call engineers thank you.'
+          final_fail! 'playbook still contains FIXME template sections' if playbook_unfinished?
+          pass 'playbook found, legion on-call engineers thank you.'
         end
 
         def fix
-          if !playbook_missing? && playbook_unfinished?
-            fail! 'please add detail to your playbook, removing FIXME sections'
-          end
-
           FileUtils.cp(
             File.join(__dir__, 'playbook_template.md'),
             LOCATION

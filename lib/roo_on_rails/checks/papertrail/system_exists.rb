@@ -26,14 +26,14 @@ module RooOnRails
         requires LogDestinationExists
 
         def intro
-          "Checking that #{bold app_name} is logging to Papertrail"
+          'Checking that the app is logging to Papertrail...'
         end
 
         def call
           data = context.papertrail.client.list_systems.find { |h|
             h['hostname'] == system_token
           }
-          fail! "no system with token '#{system_token}' found" if data.nil?
+          fail! "no system with token '#{system_token}' found on #{bold app_name}" if data.nil?
 
           if data.syslog.hostname != context.papertrail.dest.host ||
              data.syslog.port != context.papertrail.dest.port

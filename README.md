@@ -16,16 +16,18 @@
 **Table of Contents**
 
 - [Installation](#installation)
-- [Usage](#usage)
-- [Library features](#library-features)
-    - [New Relic configuration](#new-relic-configuration)
-    - [Rack middleware](#rack-middleware)
-    - [Database configuration](#database-configuration)
-    - [Sidekiq](#sidekiq)
-    - [HireFire Workers](#hirefire-workers)
-    - [Logging](#logging)
-    - [Google Oauth](#google-oauth)
+- [Library usage](#library-usage)
+  - [New Relic configuration](#new-relic-configuration)
+  - [Rack middleware](#rack-middleware)
+  - [Database configuration](#database-configuration)
+  - [Sidekiq](#sidekiq)
+  - [HireFire (for Sidekiq workers)](#hirefire-for-sidekiq-workers)
+  - [Logging](#logging)
+  - [Google OAuth authentication](#google-oauth-authentication)
+  - [Routemaster Client](#routemaster-client)
 - [Command features](#command-features)
+  - [Usage](#usage)
+  - [Description](#description)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -57,9 +59,7 @@ And then execute:
 
 Then re-run your test suite to make sure everything is shipshape.
 
-## Usage
-
-## Configuration and usage
+## Library usage
 
 ### New Relic configuration
 
@@ -149,38 +149,47 @@ be used:
 
 ### Logging
 
-For clearer and machine-parseable log output, there in an extension to be able
-to add context to your logs which is output as
-[logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
+For clearer and machine-parseable log output, the Rails logger is replaced by an
+extended logger to add context to your logs, which is output as
+[logfmt](https://brandur.org/logfmt) key/value pairs along with the log message.
+
+You can use the logger as usual:
 
 ```ruby
-# application.rb
-
-require 'roo_on_rails/context_logging'
-
-class Application < Rails::Application
-
-  # add this block somewhere within the application class
-  logger = config.logger
-  if logger.nil?
-    logger = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
-  end
-  logger = ActiveSupport::TaggedLogging.new(logger) unless logger.respond_to?(:tagged)
-  config.logger = RooOnRails::ContextLogging.new(logger)
-
-end
+Rails.logger.info { 'hello world' }
 ```
 
-You can then add context using the `with` method:
+From your console, the output will include the timestamp, severity, and message:
+
+```
+[2017-08-25 14:34:54.899]    INFO | hello world
+```
+
+In production (or whenever the output isn't a TTY), the timestamp is stripped
+(as it's provided by the logging pipes) and the output is fully valid `logfmt`:
+
+```
+at=INFO msg="hello world"
+```
+
+One can also add context using the `with` method:
 
 ```ruby
 logger.with(a: 1, b: 2) { logger.info 'Stuff' }
-logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
-logger.with(a: 1, b: 2).info('Stuff')
+# => at=INFO msg=Stuff a=1 b=2
 ```
 
-See the [class documentation](lib/roo_on_rails/context_logging.rb) for further
+```ruby
+logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
+# => at=INFO msg=Stuff a=1 b=2
+```
+
+```ruby
+logger.with(a: 1, b: 2).info('Stuff')
+# => at=INFO msg=Stuff a=1 b=2
+```
+
+See the [class documentation](lib/roo_on_rails/logger.rb) for further
 details.
 
 ### Google OAuth authentication
@@ -199,6 +208,14 @@ application.
 
 A simple but secure example is detailed in `README.google_oauth2.md`.
 
+### Routemaster Client
+
+When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen you need to set the following environment variables:
+
+* `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
+* `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
+
+If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
 ## Command features
 
@@ -207,7 +224,7 @@ A simple but secure example is detailed in `README.google_oauth2.md`.
 Run the following from your app's top-level directory:
 
 ```
-bundle exec roo_on_rails
+roo_on_rails harness
 ```
 
 That command will sequentially run a number of checks. For it to run successfully, you will need:
@@ -215,17 +232,18 @@ That command will sequentially run a number of checks. For it to run successfull
 - a GitHub API token that can read your GitHub repository's settings placed in `~/.roo_on_rails/github-token`
 - the Heroku toolbelt installed and logged in
 - admin privileges on the `roo-dd-bridge-production` (this will be addressed eventually)
-- checks are run sequentially for staging and then for production. The process halts at any non-fixable failing check. To process only specific environments, you can set a config variable while running the command, like so:
+
+The command can automatically fix most of the failing checks automatically;
+simply run it with the `--fix` flag:
 
 ```
-# the default behaviour:
-ROO_ON_RAILS_ENVIRONMENTS=staging,production bundle exec roo_on_rails
+roo_on_rails harness --fix
+```
 
-# run checks only on staging:
-ROO_ON_RAILS_ENVIRONMENTS=staging bundle exec roo_on_rails
+To run checks for only one environment, use the `--env` flag:
 
-# run checks only on production:
-ROO_ON_RAILS_ENVIRONMENTS=production bundle exec roo_on_rails
+```
+roo_on_rails harness --env staging
 ```
 
 
