@@ -9,21 +9,11 @@ jobs:
     steps: &shared_steps
       - checkout
 
-      # - run:
-      #     name: install parallelism script
-      #     command: |
-      #       curl -fsSL https://git.io/v2Ifs -o ~/circleci-matrix ;
-      #       chmod +x ~/circleci-matrix
-
-      # - run: 
-      #     name: compute cache key
-      #     command: |
-      #       cd ~/project &&
-      #       cat Gemfile.lock gemfiles/*.lock > .cache-key &&
-      #       ruby -v >> .cache-key
-
-      # - type: cache-restore
-      #   key: bundle-{{ checksum ".cache-key" }}
+      - run: 
+          name: Compute cache key
+          command: |
+            cat ~/project/.git/HEAD >> .cache-key
+            echo $CIRCLE_NODE_INDEX >> .cache-key
 
       - run:
           name: select build variant
@@ -42,9 +32,16 @@ jobs:
               9)  ruby=2.3.4 ; variant=rails_5_1 ;;
               10) ruby=2.4.1 ; variant=rails_5_1 ;;
             esac ;
+            echo $ruby >> .cache-key ;
+            echo $variant >> .cache-key ;
             rbenv local $ruby ;
             gem install bundler ;
             bundle config --local gemfile gemfiles/${variant}.gemfile
+
+      - restore_cache:
+          keys: 
+            - bundle-{{ checksum ".cache-key" }}-{{ .Branch }}
+            - bundle-{{ checksum ".cache-key" }}
 
       - run: 
           name: install dependencies
@@ -58,9 +55,14 @@ jobs:
             unset RAILS_ENV &&
             bundle exec rspec
 
-      # - type: cache-save
-      #   key: bundle-{{ checksum ".cache-key" }}
-      #   paths:
-      #     - ~/project/vendor/bundle
-      #     - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: bundle-{{ checksum ".cache-key" }}-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: bundle-{{ checksum ".cache-key" }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
