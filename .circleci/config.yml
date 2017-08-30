@@ -22,8 +22,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_3)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_3.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_3.gemfile
 
       - restore_cache:
           keys: 
@@ -77,8 +78,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_3)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_3.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_3.gemfile
 
       - restore_cache:
           keys: 
@@ -132,8 +134,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_4)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_4.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
           keys: 
@@ -187,8 +190,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_4)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_4.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
           keys: 
@@ -242,8 +246,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.4.1, rails_4)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_4.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
           keys: 
@@ -297,8 +302,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_5)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_5.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
           keys: 
@@ -352,8 +358,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_5)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_5.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
           keys: 
@@ -407,8 +414,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.4.1, rails_5)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_5.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
           keys: 
@@ -462,8 +470,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.2.7, rails_5_1)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_5_1.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
           keys: 
@@ -517,8 +526,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.3.4, rails_5_1)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_5_1.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
           keys: 
@@ -572,8 +582,9 @@ jobs:
       - run:
           name: Select build variant (Ruby 2.4.1, rails_5_1)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/rails_5_1.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
           keys: 

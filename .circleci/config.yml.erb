@@ -36,8 +36,9 @@ jobs:
       - run:
           name: Select build variant (Ruby <%= ruby %>, <%= variant %>)
           command: |
+            cd ~/project ;
             gem install bundler ;
-            bundle config --local gemfile gemfiles/<%= variant %>.gemfile
+            bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
 
       - restore_cache:
           keys: 
