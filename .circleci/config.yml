@@ -8,6 +8,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -64,6 +66,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -120,6 +124,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -176,6 +182,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -232,6 +240,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -288,6 +298,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -344,6 +356,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -400,6 +414,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -456,6 +472,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -512,6 +530,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
@@ -568,6 +588,8 @@ jobs:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
       - checkout
