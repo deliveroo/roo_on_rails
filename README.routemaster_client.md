@@ -78,6 +78,8 @@ class RiderPublisher < ApplicationPublisher
 end
 ```
 
+`#publish?`, `#topics`, `#async?`, `#data` and `#timestamp` can be overriden; see [the `Publisher` class](lib/roo_on_rails_routemaster/publisher.rb) for the default implementations.
+
 ### Register the publishers with Routemaster
 
 The final step is to tell Routemaster that these publishers exist, so that it can listen to their events. We're going to do this in an initialiser:
