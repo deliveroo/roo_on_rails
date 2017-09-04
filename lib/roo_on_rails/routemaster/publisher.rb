@@ -22,7 +22,14 @@ module RooOnRails
 
       def publish!
         return unless will_publish?
-        @client.send(@event, topic, url, async: async?, data: stringify_keys(data))
+        @client.send(
+          @event,
+          topic,
+          url,
+          async: async?,
+          data: stringify_keys(data),
+          t: timestamp && timestamp.to_i
+        )
       end
 
       def topic
@@ -38,6 +45,12 @@ module RooOnRails
       end
 
       def data
+        nil
+      end
+
+      def timestamp
+        return @model.created_at if created? && @model.respond_to?(:created_at)
+        return @model.updated_at if (updated? || created?) && @model.respond_to?(:updated_at)
         nil
       end
 

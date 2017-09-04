@@ -1,8 +1,8 @@
 require 'roo_on_rails/routemaster/publisher'
 require 'roo_on_rails/routemaster/publishers'
+require 'support/test_model'
 
 RSpec.describe RooOnRails::Routemaster::Publishers do
-  TestModel = Class.new
   TestPublisherA = Class.new(RooOnRails::Routemaster::Publisher)
   TestPublisherB = Class.new(RooOnRails::Routemaster::Publisher)
 
