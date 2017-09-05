@@ -4,7 +4,7 @@
 version: 2
 jobs:
 
-  build_2.2.7_rails_3:
+  build_2.2.6_rails_3:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -22,17 +22,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.2.7, rails_3)
+          name: Select build variant (Ruby 2.2.6, rails_3)
           command: |
-            rbenv local 2.2.7 ;
+            rbenv local 2.2.6 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_3.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.2.7-rails_3-{{ .Branch }}
-            - v2-bundle-2.2.7-rails_3
-            - v2-bundle-2.2.7
+            - v2-bundle-2.2.6-rails_3-{{ .Branch }}
+            - v2-bundle-2.2.6-rails_3
+            - v2-bundle-2.2.6
 
       - run: 
           name: Install dependencies
@@ -47,22 +47,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.2.7-rails_3-{{ .Branch }}
+          key: v2-bundle-2.2.6-rails_3-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7-rails_3
+          key: v2-bundle-2.2.6-rails_3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7
+          key: v2-bundle-2.2.6
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.3.4_rails_3:
+  build_2.3.3_rails_3:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -80,17 +80,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.3.4, rails_3)
+          name: Select build variant (Ruby 2.3.3, rails_3)
           command: |
-            rbenv local 2.3.4 ;
+            rbenv local 2.3.3 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_3.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.3.4-rails_3-{{ .Branch }}
-            - v2-bundle-2.3.4-rails_3
-            - v2-bundle-2.3.4
+            - v2-bundle-2.3.3-rails_3-{{ .Branch }}
+            - v2-bundle-2.3.3-rails_3
+            - v2-bundle-2.3.3
 
       - run: 
           name: Install dependencies
@@ -105,22 +105,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.3.4-rails_3-{{ .Branch }}
+          key: v2-bundle-2.3.3-rails_3-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4-rails_3
+          key: v2-bundle-2.3.3-rails_3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4
+          key: v2-bundle-2.3.3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.2.7_rails_4:
+  build_2.2.6_rails_4:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -138,17 +138,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.2.7, rails_4)
+          name: Select build variant (Ruby 2.2.6, rails_4)
           command: |
-            rbenv local 2.2.7 ;
+            rbenv local 2.2.6 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.2.7-rails_4-{{ .Branch }}
-            - v2-bundle-2.2.7-rails_4
-            - v2-bundle-2.2.7
+            - v2-bundle-2.2.6-rails_4-{{ .Branch }}
+            - v2-bundle-2.2.6-rails_4
+            - v2-bundle-2.2.6
 
       - run: 
           name: Install dependencies
@@ -163,22 +163,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.2.7-rails_4-{{ .Branch }}
+          key: v2-bundle-2.2.6-rails_4-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7-rails_4
+          key: v2-bundle-2.2.6-rails_4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7
+          key: v2-bundle-2.2.6
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.3.4_rails_4:
+  build_2.3.3_rails_4:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -196,17 +196,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.3.4, rails_4)
+          name: Select build variant (Ruby 2.3.3, rails_4)
           command: |
-            rbenv local 2.3.4 ;
+            rbenv local 2.3.3 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.3.4-rails_4-{{ .Branch }}
-            - v2-bundle-2.3.4-rails_4
-            - v2-bundle-2.3.4
+            - v2-bundle-2.3.3-rails_4-{{ .Branch }}
+            - v2-bundle-2.3.3-rails_4
+            - v2-bundle-2.3.3
 
       - run: 
           name: Install dependencies
@@ -221,22 +221,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.3.4-rails_4-{{ .Branch }}
+          key: v2-bundle-2.3.3-rails_4-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4-rails_4
+          key: v2-bundle-2.3.3-rails_4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4
+          key: v2-bundle-2.3.3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.4.1_rails_4:
+  build_2.4.0_rails_4:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -254,17 +254,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.4.1, rails_4)
+          name: Select build variant (Ruby 2.4.0, rails_4)
           command: |
-            rbenv local 2.4.1 ;
+            rbenv local 2.4.0 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.4.1-rails_4-{{ .Branch }}
-            - v2-bundle-2.4.1-rails_4
-            - v2-bundle-2.4.1
+            - v2-bundle-2.4.0-rails_4-{{ .Branch }}
+            - v2-bundle-2.4.0-rails_4
+            - v2-bundle-2.4.0
 
       - run: 
           name: Install dependencies
@@ -279,22 +279,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.4.1-rails_4-{{ .Branch }}
+          key: v2-bundle-2.4.0-rails_4-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.1-rails_4
+          key: v2-bundle-2.4.0-rails_4
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.1
+          key: v2-bundle-2.4.0
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.2.7_rails_5:
+  build_2.2.6_rails_5:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -312,17 +312,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.2.7, rails_5)
+          name: Select build variant (Ruby 2.2.6, rails_5)
           command: |
-            rbenv local 2.2.7 ;
+            rbenv local 2.2.6 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.2.7-rails_5-{{ .Branch }}
-            - v2-bundle-2.2.7-rails_5
-            - v2-bundle-2.2.7
+            - v2-bundle-2.2.6-rails_5-{{ .Branch }}
+            - v2-bundle-2.2.6-rails_5
+            - v2-bundle-2.2.6
 
       - run: 
           name: Install dependencies
@@ -337,22 +337,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.2.7-rails_5-{{ .Branch }}
+          key: v2-bundle-2.2.6-rails_5-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7-rails_5
+          key: v2-bundle-2.2.6-rails_5
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7
+          key: v2-bundle-2.2.6
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.3.4_rails_5:
+  build_2.3.3_rails_5:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -370,17 +370,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.3.4, rails_5)
+          name: Select build variant (Ruby 2.3.3, rails_5)
           command: |
-            rbenv local 2.3.4 ;
+            rbenv local 2.3.3 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.3.4-rails_5-{{ .Branch }}
-            - v2-bundle-2.3.4-rails_5
-            - v2-bundle-2.3.4
+            - v2-bundle-2.3.3-rails_5-{{ .Branch }}
+            - v2-bundle-2.3.3-rails_5
+            - v2-bundle-2.3.3
 
       - run: 
           name: Install dependencies
@@ -395,22 +395,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.3.4-rails_5-{{ .Branch }}
+          key: v2-bundle-2.3.3-rails_5-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4-rails_5
+          key: v2-bundle-2.3.3-rails_5
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4
+          key: v2-bundle-2.3.3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.4.1_rails_5:
+  build_2.4.0_rails_5:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -428,17 +428,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.4.1, rails_5)
+          name: Select build variant (Ruby 2.4.0, rails_5)
           command: |
-            rbenv local 2.4.1 ;
+            rbenv local 2.4.0 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.4.1-rails_5-{{ .Branch }}
-            - v2-bundle-2.4.1-rails_5
-            - v2-bundle-2.4.1
+            - v2-bundle-2.4.0-rails_5-{{ .Branch }}
+            - v2-bundle-2.4.0-rails_5
+            - v2-bundle-2.4.0
 
       - run: 
           name: Install dependencies
@@ -453,22 +453,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.4.1-rails_5-{{ .Branch }}
+          key: v2-bundle-2.4.0-rails_5-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.1-rails_5
+          key: v2-bundle-2.4.0-rails_5
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.1
+          key: v2-bundle-2.4.0
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.2.7_rails_5_1:
+  build_2.2.6_rails_5_1:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -486,17 +486,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.2.7, rails_5_1)
+          name: Select build variant (Ruby 2.2.6, rails_5_1)
           command: |
-            rbenv local 2.2.7 ;
+            rbenv local 2.2.6 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.2.7-rails_5_1-{{ .Branch }}
-            - v2-bundle-2.2.7-rails_5_1
-            - v2-bundle-2.2.7
+            - v2-bundle-2.2.6-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.2.6-rails_5_1
+            - v2-bundle-2.2.6
 
       - run: 
           name: Install dependencies
@@ -511,22 +511,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.2.7-rails_5_1-{{ .Branch }}
+          key: v2-bundle-2.2.6-rails_5_1-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7-rails_5_1
+          key: v2-bundle-2.2.6-rails_5_1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.2.7
+          key: v2-bundle-2.2.6
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.3.4_rails_5_1:
+  build_2.3.3_rails_5_1:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -544,17 +544,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.3.4, rails_5_1)
+          name: Select build variant (Ruby 2.3.3, rails_5_1)
           command: |
-            rbenv local 2.3.4 ;
+            rbenv local 2.3.3 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.3.4-rails_5_1-{{ .Branch }}
-            - v2-bundle-2.3.4-rails_5_1
-            - v2-bundle-2.3.4
+            - v2-bundle-2.3.3-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.3.3-rails_5_1
+            - v2-bundle-2.3.3
 
       - run: 
           name: Install dependencies
@@ -569,22 +569,22 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.3.4-rails_5_1-{{ .Branch }}
+          key: v2-bundle-2.3.3-rails_5_1-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4-rails_5_1
+          key: v2-bundle-2.3.3-rails_5_1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.3.4
+          key: v2-bundle-2.3.3
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.4.1_rails_5_1:
+  build_2.4.0_rails_5_1:
     docker:
       - image: deliveroo/multiruby
       - image: postgres:9.6-alpine
@@ -602,17 +602,17 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby 2.4.1, rails_5_1)
+          name: Select build variant (Ruby 2.4.0, rails_5_1)
           command: |
-            rbenv local 2.4.1 ;
+            rbenv local 2.4.0 ;
             gem install bundler ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
           keys: 
-            - v2-bundle-2.4.1-rails_5_1-{{ .Branch }}
-            - v2-bundle-2.4.1-rails_5_1
-            - v2-bundle-2.4.1
+            - v2-bundle-2.4.0-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.4.0-rails_5_1
+            - v2-bundle-2.4.0
 
       - run: 
           name: Install dependencies
@@ -627,17 +627,17 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.4.1-rails_5_1-{{ .Branch }}
+          key: v2-bundle-2.4.0-rails_5_1-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.1-rails_5_1
+          key: v2-bundle-2.4.0-rails_5_1
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.1
+          key: v2-bundle-2.4.0
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -648,25 +648,25 @@ workflows:
   test:
     jobs:
     
-      - build_2.2.7_rails_3
+      - build_2.2.6_rails_3
     
-      - build_2.3.4_rails_3
+      - build_2.3.3_rails_3
     
-      - build_2.2.7_rails_4
+      - build_2.2.6_rails_4
     
-      - build_2.3.4_rails_4
+      - build_2.3.3_rails_4
     
-      - build_2.4.1_rails_4
+      - build_2.4.0_rails_4
     
-      - build_2.2.7_rails_5
+      - build_2.2.6_rails_5
     
-      - build_2.3.4_rails_5
+      - build_2.3.3_rails_5
     
-      - build_2.4.1_rails_5
+      - build_2.4.0_rails_5
     
-      - build_2.2.7_rails_5_1
+      - build_2.2.6_rails_5_1
     
-      - build_2.3.4_rails_5_1
+      - build_2.3.3_rails_5_1
     
-      - build_2.4.1_rails_5_1
+      - build_2.4.0_rails_5_1
     
