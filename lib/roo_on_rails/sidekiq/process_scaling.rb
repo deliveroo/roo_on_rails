@@ -15,7 +15,7 @@ module RooOnRails
 
       def current_processes
         ::Sidekiq::ProcessSet.new.count do |process|
-          process['quiet'] == 'false' &&
+          process['quiet'].to_s == 'false' &&
           @queue_names.any? do |queue_name|
             process['queues'].include?(queue_name)
           end
