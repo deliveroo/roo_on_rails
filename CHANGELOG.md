@@ -1,11 +1,58 @@
-# v1.8.0 (2017-07-24)
+# HEAD
 
 Features:
 
-- adds 'default' to list of default Sidekiq queues
-- accepts custom Sidekiq queue names
-- accepts custom Sidekiq queue permitted latency values
-- allows environment-specific application checks
+- The `roo_on_rails` test harness now defaults to not fixing issues, and has extra
+  `--env` and `--fix` flags
+- All checks will now run regardless of previous failure to avoid
+  back-and-forthing (#57)
+- Friendlier error message when facing Heroku permission errors (#58)
+- Replaces the Rails logger with a structured logger (#60)
+- Bugfix for supporting non-default publishers after a `reload!` in the rails console (#62)
+- Auto-fills the Routemaster `t` timestamp field, where appropriate, from the model's `created_at` and `updated_at` fields if available (#64)
+
+
+# v1.10.0 (2017-08-11)
+
+Features:
+
+- Asynchronous publishing of events to Routemaster (#56)
+
+# v1.9.0 (2017-08-08)
+
+Features:
+
+- Publish lifecycle events to Routemaster (#19)
+
+# v1.8.1 (2017-07-27)
+
+Features:
+
+- Google OAuth supported in Rails 3 and 4 (#54)
+
+Bug fixes:
+
+- Allow client apps to load middleware (#54)
+
+# v1.8.0 (2017-07-26)
+
+Bug fixes:
+
+- Do not consider 'quiet' workers in the SLA sidekiq metric (#51)
+
+Features:
+
+- Provides a `PLAYBOOK.md` template when detected missing (#42)
+- Adds pre-baked Google OAuth support (#44, #49)
+- Reports Sidekiq metrics only for queues defined in process (#50)
+- Finer-grained Sidekiq configuration (#46)
+    - adds 'default' to list of default Sidekiq queues
+    - accepts custom Sidekiq queue names and permitted latency values
+    - allows environment-specific application checks
+
+Other:
+
+- Fixes the test harness (#48)
 
 # v1.7.0 (2017-07-18)
 

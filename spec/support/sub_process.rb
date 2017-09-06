@@ -16,6 +16,7 @@ module ROR
       @pid     = nil
       @reader  = nil
       @loglines = []
+      @full_log = [] # loglines plus our own logs
       @start_regexp = start
       @stop_regexp  = stop
       @status = nil
@@ -55,7 +56,7 @@ module ROR
     def stop
       return self if @pid.nil?
       _log "stopping (##{@pid})"
-      Process.kill('TERM', @pid)
+      Process.kill('INT', @pid)
 
       Timeout::timeout(10) do
         sleep(10e-3) until Process.wait(@pid, Process::WNOHANG)
@@ -116,6 +117,11 @@ module ROR
       @loglines.any? { |line| line =~ regexp }
     end
 
+    def dump_logs(io: STDERR)
+      return if VERBOSE # logs have been dumped already
+      @full_log.each { |line| io.write(line) }
+    end
+
     private
 
     def _read_log(io)
@@ -125,12 +131,15 @@ module ROR
           $stderr.flush
         end
         @loglines.push line
+        @full_log.push line
       end
     end
 
     def _log(message)
+      line = "\t-> #{@name}: #{message}\n"
+      @full_log.push line
       return unless VERBOSE
-      $stderr.write("\t-> #{@name}: #{message}\n")
+      $stderr.write(line)
     end
   end
 end

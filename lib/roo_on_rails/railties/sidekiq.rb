@@ -8,21 +8,25 @@ module RooOnRails
   module Railties
     class Sidekiq < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
-        require 'hirefire-resource'
-        
-        if RooOnRails::Config.sidekiq_enabled?
-          $stderr.puts 'initializer roo_on_rails.sidekiq'
+        Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
+          
+          unless RooOnRails::Config.sidekiq_enabled?
+            logger.debug 'skipping'
+            next
+          end
+
+          log.debug 'loading'
+          require 'hirefire-resource'
+         
           config_sidekiq
           config_sidekiq_metrics
           config_hirefire(app)
-        else
-          $stderr.puts 'skipping initializer roo_on_rails.sidekiq'
         end
       end
 
       def config_hirefire(app)
         unless ENV['HIREFIRE_TOKEN']
-          warn 'No HIREFIRE_TOKEN token set, auto scaling not enabled'
+          Rails.logger.warn 'No HIREFIRE_TOKEN token set, auto scaling not enabled'
           return
         end
         add_middleware(app)
@@ -44,7 +48,7 @@ module RooOnRails
           end
         end
       rescue LoadError
-        $stderr.puts 'Sidekiq metrics unavailable without Sidekiq Pro'
+        Rails.logger.warn 'Sidekiq metrics unavailable without Sidekiq Pro'
       end
 
       def add_middleware(app)

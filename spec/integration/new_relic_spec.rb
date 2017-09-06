@@ -43,10 +43,10 @@ describe 'New Relic integration' do
   end
 
   context 'when NEW_RELIC_LICENSE_KEY is missing' do
-    before do
-      app_helper.comment_lines app_path.join('.env'), /NEW_RELIC_LICENSE_KEY/
-    end
-  
+    let(:app_env_vars) {
+      super().gsub(/^NEW_RELIC_LICENSE_KEY\S*$/, '')
+    }
+
     context 'in the test environment' do
       let(:app_env) { 'test' }
 
@@ -73,7 +73,7 @@ describe 'New Relic integration' do
             # fake new relic config file
           }
         end
-      
+
         include_examples 'abort early', /newrelic.yml detected/
       end
     end

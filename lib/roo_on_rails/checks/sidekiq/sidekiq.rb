@@ -1,5 +1,4 @@
 require 'roo_on_rails/checks/base'
-require 'thor'
 
 module RooOnRails
   module Checks
@@ -17,14 +16,12 @@ module RooOnRails
             return
           end
           check_for_procfile
+          pass 'found valid Procfile'
         end
 
         def fix
-          if File.exist?('Procfile')
-            append_to_file 'Procfile', "\n#{WORKER_PROCFILE_LINE}"
-          else
-            create_file 'Procfile', WORKER_PROCFILE_LINE
-          end
+          output = File.exist?('Procfile') ? "\n#{WORKER_PROCFILE_LINE}" : WORKER_PROCFILE_LINE
+          File.open('Procfile', 'a') { |f| f.write(output) }
         end
 
         def check_for_procfile

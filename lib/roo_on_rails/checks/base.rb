@@ -20,20 +20,34 @@ module RooOnRails
         @fix     = @options.delete(:fix) { false }
         @context = @options.delete(:context) { Hashie::Mash.new }
         @shell   = @options.delete(:shell) { Shell.new }
+        @dry_run = options.fetch(:dry_run, false)
       end
 
       def run
-        resolve dependencies
+        dependency_status = resolve dependencies
+
         say intro
-        call
+        unless dependency_status
+          final_fail! 'Unmet dependencies.'
+          return
+        end
+
+        return true if @dry_run
+
+        begin
+          call
+        rescue Failure
+          return false unless @fix
+          say "\t· attempting to fix", %i[yellow]
+          fix
+          @fix = false
+          say "\t· re-checking", %i[yellow]
+          retry
+        end
+
         true
-      rescue Failure => e
-        raise if e === FinalFailure
-        raise unless @fix
-        say "\t· attempting to fix", %i[yellow]
-        fix
-        say "\t· re-checking", %i[yellow]
-        call
+      rescue FinalFailure
+        false
       end
 
       protected
@@ -42,7 +56,7 @@ module RooOnRails
 
       # Returns prerequisite checks. Can be overriden.
       def dependencies
-        self.class.requires.map { |k|
+        @dependencies ||= self.class.requires.map { |k|
           k.new(fix: @fix, context: @context, shell: @shell, **@options)
         }
       end
@@ -52,11 +66,11 @@ module RooOnRails
       end
 
       def call
-        fail! "this check wasn't implemented"
+        final_fail! "this check wasn't implemented"
       end
 
       def fix
-        fail! "can't fix this on my own"
+        final_fail! "can't fix this on my own"
       end
 
       def pass(msg)
@@ -82,10 +96,15 @@ module RooOnRails
 
       # Run each dependency, then mark them as run.
       def resolve(deps)
-        deps.each do |dep|
-          context.deps ||= {}
-          context.deps[dep.signature.join('/')] ||= dep.run
-        end
+        context.deps ||= {}
+        deps.map { |dep|
+          sig = dep.signature.join('/')
+          if context.deps.key?(sig)
+            context.deps[sig]
+          else
+            context.deps[sig] = dep.run
+          end
+        }.to_a.all?
       end
     end
   end
