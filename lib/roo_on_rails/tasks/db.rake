@@ -18,12 +18,13 @@ if defined?(ActiveRecord)
     end
   end
 
-  %i[
+  %i(
     db:create
+    db:drop
     db:migrate
     db:migrate:down
     db:rollback
-  ].each do |task|
+  ).each do |task|
     Rake::Task[task].enhance(%i[db:migrate:extend_statement_timeout])
   end
 end

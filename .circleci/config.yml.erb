@@ -1,0 +1,86 @@
+# To update the build configuration, edit the "builds" array below and run:
+# erb .circleci/config.yml.erb > .circleci/config.yml
+<%
+  builds = [
+		['2.2.6', 'rails_3'],
+		['2.3.3', 'rails_3'],
+		['2.2.6', 'rails_4'],
+		['2.3.3', 'rails_4'],
+		['2.4.0', 'rails_4'],
+		['2.2.6', 'rails_5'],
+		['2.3.3', 'rails_5'],
+		['2.4.0', 'rails_5'],
+		['2.2.6', 'rails_5_1'],
+		['2.3.3', 'rails_5_1'],
+		['2.4.0', 'rails_5_1'],
+  ]
+%>
+version: 2
+jobs:
+<% builds.each do |ruby,variant| %>
+  build_<%= ruby %>_<%= variant %>:
+    docker:
+      - image: deliveroo/multiruby
+      - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
+      - image: redis:3-alpine
+    steps:
+      - checkout
+
+      - run:
+          name: Setup RAM disk
+          command: |
+            rm -rf ~/project/tmp ;
+            mkdir /dev/shm/tmp ;
+            ln -s /dev/shm/tmp ~/project/tmp
+
+      - run:
+          name: Select build variant (Ruby <%= ruby %>, <%= variant %>)
+          command: |
+            rbenv local <%= ruby %> ;
+            gem install bundler ;
+            bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
+
+      - restore_cache:
+          keys: 
+            - v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
+            - v2-bundle-<%= ruby %>-<%= variant %>
+            - v2-bundle-<%= ruby %>
+
+      - run: 
+          name: Install dependencies
+          command: |
+            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
+
+      - run:
+          name: Run test suite
+          command: |
+            unset RACK_ENV &&
+            unset RAILS_ENV &&
+            bundle exec rspec
+
+      - save_cache:
+          key: v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-<%= ruby %>-<%= variant %>
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-<%= ruby %>
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+<% end %>
+
+workflows:
+  version: 2
+  test:
+    jobs:
+    <% builds.each do |ruby,variant| %>
+      - build_<%= ruby %>_<%= variant %>
+    <% end %>
