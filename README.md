@@ -1,4 +1,4 @@
-## `roo_on_rails` [![Gem Version](https://badge.fury.io/rb/roo_on_rails.svg)](https://badge.fury.io/rb/roo_on_rails) [![Build Status](https://travis-ci.org/deliveroo/roo_on_rails.svg?branch=master)](https://travis-ci.org/deliveroo/roo_on_rails) [![Code Climate](https://codeclimate.com/repos/58809e664ab8420081007382/badges/3489b7689ab2e0cf5d61/gpa.svg)](https://codeclimate.com/repos/58809e664ab8420081007382/feed)
+## `roo_on_rails` [![Gem Version](https://badge.fury.io/rb/roo_on_rails.svg)](https://badge.fury.io/rb/roo_on_rails) [![Build Status](https://circleci.com/gh/deliveroo/roo_on_rails.svg?style=shield&circle-token=f8ad2021dfc72fd86850fd0b7224759f34a91281)](https://circleci.com/gh/deliveroo/roo_on_rails) [![Code Climate](https://codeclimate.com/repos/58809e664ab8420081007382/badges/3489b7689ab2e0cf5d61/gpa.svg)](https://codeclimate.com/repos/58809e664ab8420081007382/feed)
 
 
 `roo_on_rails` is:
@@ -150,38 +150,47 @@ be used:
 
 ### Logging
 
-For clearer and machine-parseable log output, there in an extension to be able
-to add context to your logs which is output as
-[logfmt](https://brandur.org/logfmt) key/value pairs after the log message.
+For clearer and machine-parseable log output, the Rails logger is replaced by an
+extended logger to add context to your logs, which is output as
+[logfmt](https://brandur.org/logfmt) key/value pairs along with the log message.
+
+You can use the logger as usual:
 
 ```ruby
-# application.rb
-
-require 'roo_on_rails/context_logging'
-
-class Application < Rails::Application
-
-  # add this block somewhere within the application class
-  logger = config.logger
-  if logger.nil?
-    logger = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
-  end
-  logger = ActiveSupport::TaggedLogging.new(logger) unless logger.respond_to?(:tagged)
-  config.logger = RooOnRails::ContextLogging.new(logger)
-
-end
+Rails.logger.info { 'hello world' }
 ```
 
-You can then add context using the `with` method:
+From your console, the output will include the timestamp, severity, and message:
+
+```
+[2017-08-25 14:34:54.899]    INFO | hello world
+```
+
+In production (or whenever the output isn't a TTY), the timestamp is stripped
+(as it's provided by the logging pipes) and the output is fully valid `logfmt`:
+
+```
+at=INFO msg="hello world"
+```
+
+One can also add context using the `with` method:
 
 ```ruby
 logger.with(a: 1, b: 2) { logger.info 'Stuff' }
-logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
-logger.with(a: 1, b: 2).info('Stuff')
+# => at=INFO msg=Stuff a=1 b=2
 ```
 
-See the [class documentation](lib/roo_on_rails/context_logging.rb) for further
+```ruby
+logger.with(a: 1) { logger.with(b: 2) { logger.info('Stuff') } }
+# => at=INFO msg=Stuff a=1 b=2
+```
+
+```ruby
+logger.with(a: 1, b: 2).info('Stuff')
+# => at=INFO msg=Stuff a=1 b=2
+```
+
+See the [class documentation](lib/roo_on_rails/logger.rb) for further
 details.
 
 ### Google OAuth authentication

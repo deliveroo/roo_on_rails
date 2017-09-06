@@ -7,10 +7,6 @@ module RooOnRails
   # @see https://godoc.org/github.com/kr/logfmt The 'reference' parser
   module Logfmt
     class << self
-      SPACE = 0x20
-      QUOTE = 0x22
-      EQUALS = 0x3d
-
       def dump(hash)
         return nil if hash.nil? || hash.empty?
 
@@ -26,18 +22,10 @@ module RooOnRails
               when Array, Hash then JSON.dump(v)
               else v.respond_to?(:to_json) ? v.to_json : v.inspect
               end
-        escape(str)
-      end
 
-      def escape(str)
-        return str if ident?(str)
-
-        escaped = str.gsub(/(["\\])/, '\\\\\1')
-        %("#{escaped}")
-      end
-
-      def ident?(str)
-        str.bytes.all? { |b| b > SPACE && b != EQUALS && b != QUOTE }
+        @_escape_re ||= /[[:space:]"']/
+        return str unless @_escape_re =~ str
+        str.inspect
       end
     end
   end
