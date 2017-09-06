@@ -16,6 +16,10 @@ module RooOnRails
       # Output context:
       # - heroku.app.{env}: an app name.
       class AppExists < EnvSpecific
+        ACCEPTABLE_ENV_NAMES = {
+          'production' => %w(prd production),
+          'staging'    => %w(stg staging)
+        }.freeze
         requires Git::Origin, Heroku::Token
 
         def intro
@@ -25,7 +29,6 @@ module RooOnRails
         def call
           all_apps = client.app.list.map { |a| a['name'] }
           matches = all_apps.select { |a| candidates.include?(a) }
-
           if matches.empty?
             fail! "no apps with matching names detected"
           end
@@ -45,11 +48,15 @@ module RooOnRails
           context.app_name_stem || context.git_repo.delete('.')
         end
 
+        def env_suffixes
+          ACCEPTABLE_ENV_NAMES.fetch(env, [env])
+        end
+
         def candidates
           [
             ['deliveroo', 'roo', nil],
             [name_stem],
-            [env],
+            env_suffixes,
           ].tap { |a|
             a.replace a.first.product(*a[1..-1])
           }.map { |c|
