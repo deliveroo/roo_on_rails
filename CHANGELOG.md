@@ -1,4 +1,24 @@
-# HEAD  (2017-08-07)
+# HEAD
+
+Features:
+
+- The `roo_on_rails` test harness now defaults to not fixing issues, and has extra
+  `--env` and `--fix` flags
+- All checks will now run regardless of previous failure to avoid
+  back-and-forthing (#57)
+- Friendlier error message when facing Heroku permission errors (#58)
+- Replaces the Rails logger with a structured logger (#60)
+- Bugfix for supporting non-default publishers after a `reload!` in the rails console (#62)
+- Auto-fills the Routemaster `t` timestamp field, where appropriate, from the model's `created_at` and `updated_at` fields if available (#64)
+
+
+# v1.10.0 (2017-08-11)
+
+Features:
+
+- Asynchronous publishing of events to Routemaster (#56)
+
+# v1.9.0 (2017-08-08)
 
 Features:
 

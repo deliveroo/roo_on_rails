@@ -48,5 +48,14 @@ describe RooOnRails::Checks::Heroku::MetricsBridgeConfigured, type: :check do
       before { bridge_app_config.delete 'FOOBAR-PRODUCTION_TAGS' }
       it_expects_check_to_fail
     end
+
+    context 'when the user lacks permissions' do
+      before do
+        allow(client).to receive_message_chain(:config_var, :info_for_app).
+          and_raise(Excon::Error::Forbidden.new('oy vey'))
+      end
+
+      it_expects_check_to_fail
+    end
   end
 end
