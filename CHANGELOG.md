@@ -1,16 +1,29 @@
-# HEAD
+# v1.11.0 (2017-08-11)
 
-Features:
+Features (library):
+
+- Replaces the Rails logger with a structured logger (#60)
+- Auto-fills the Routemaster `t` timestamp field, where appropriate, from the
+  model's `created_at` and `updated_at` fields if available (#64)
+
+Features (app harness):
 
 - The `roo_on_rails` test harness now defaults to not fixing issues, and has extra
-  `--env` and `--fix` flags
+  `--env` and `--fix` flags (#57)
 - All checks will now run regardless of previous failure to avoid
   back-and-forthing (#57)
-- Friendlier error message when facing Heroku permission errors (#58)
-- Replaces the Rails logger with a structured logger (#60)
-- Bugfix for supporting non-default publishers after a `reload!` in the rails console (#62)
-- Auto-fills the Routemaster `t` timestamp field, where appropriate, from the model's `created_at` and `updated_at` fields if available (#64)
+- Tolerates apps with abbreviated environment names (#55)
 
+Bug fixes:
+
+- Bugfix for supporting non-default publishers after a `reload!` in the rails console (#62)
+- Friendlier error message when facing Heroku permission errors (#58)
+- Support apps without ActiveRecord (#40)
+
+Misc:
+
+- Now using CircleCI for builds (#61, #63)
+- Document Datadog integration (#59)
 
 # v1.10.0 (2017-08-11)
 
