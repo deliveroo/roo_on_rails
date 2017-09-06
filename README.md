@@ -24,6 +24,7 @@
   - [HireFire (for Sidekiq workers)](#hirefire-for-sidekiq-workers)
   - [Logging](#logging)
   - [Google OAuth authentication](#google-oauth-authentication)
+  - [Datadog Integration](#datadog-integration)
   - [Routemaster Client](#routemaster-client)
 - [Command features](#command-features)
   - [Usage](#usage)
@@ -207,6 +208,44 @@ This feature is bring-your-own-controller — it won't magically protect your
 application.
 
 A simple but secure example is detailed in `README.google_oauth2.md`.
+
+### Datadog Integration
+
+#### Heroku metrics
+
+To send system metrics to Datadog (CPU, memory usage, HTTP throughput per
+status, latency, etc), your application need to send their logs to
+[the metrics bridge](https://github.com/deliveroo/heroku-datadog-drain-golang).
+
+This is automatically configured when running `roo_on_rails harness`.
+
+#### Custom application metrics
+
+Sending custom metrics to Datadog through Statsd requires an agent running in
+each dyno.
+You need to add the buildpack
+[`heroku-buildpack-datadog`](https://github.com/deliveroo/heroku-buildpack-datadog).
+
+Once this is done, you can send metrics with e.g.:
+
+```ruby
+RooOnRails.statsd.increment('my.metric', tags: 'tag:value')
+```
+
+Tags `env:{name}`, `source:{dyno}`, and `app:{name}` will automatically be added
+to all your metrics.
+
+The following environment variables are being used.  The default values are fine
+except for `STATSD_ENV` which should be set.
+
+- `STATSD_ENV`
+- `STATSD_HOST`
+- `STATSD_PORT`
+
+These extra required variables are automatically set by Heroku:
+
+- `DYNO`
+- `HEROKU_APP_NAME`
 
 ### Routemaster Client
 
