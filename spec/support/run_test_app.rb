@@ -18,6 +18,10 @@ module ROR
       }
 
       after { app.terminate }
+
+      after do |example|
+        app.dump_logs if example.exception
+      end
     end
 
     def run_sidekiq
