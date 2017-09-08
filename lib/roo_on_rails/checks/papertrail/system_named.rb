@@ -33,7 +33,7 @@ module RooOnRails
         end
 
         def fix
-          context.papertrail.client.update_system(name: app_name)
+          context.papertrail.client.update_system(system_id, app_name)
         end
 
         private
