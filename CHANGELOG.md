@@ -1,8 +1,10 @@
+# v1.11.1 (2017-09-11)
+
 Bug fixes:
 
-- Fix case when SIDEKIQ_ENABLED was false, rails would not load.
+- Fix case when `SIDEKIQ_ENABLED` was false, rails would not load. (#65)
 
-# v1.11.0 (2017-08-11)
+# v1.11.0 (2017-09-06)
 
 Features (library):
 
