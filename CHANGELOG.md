@@ -1,3 +1,7 @@
+Bug fixes:
+
+- Fix case when SIDEKIQ_ENABLED was false, rails would not load.
+
 # v1.11.0 (2017-08-11)
 
 Features (library):

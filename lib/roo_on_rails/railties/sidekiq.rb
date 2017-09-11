@@ -11,7 +11,7 @@ module RooOnRails
         Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
           
           unless RooOnRails::Config.sidekiq_enabled?
-            logger.debug 'skipping'
+            log.debug 'skipping'
             next
           end
 
