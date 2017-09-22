@@ -256,6 +256,34 @@ When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaste
 
 If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
+### API Authentication
+
+RooOnRails provides a concern which will make adding rotatable API authentication to your service a breeze:
+
+```ruby
+require 'roo_on_rails/concerns/require_api_key'
+
+class ThingController < ActionController::Base
+  require_api_key
+  # or
+  require_api_key(only: :update)
+  # or
+  require_api_key(only_services: %i(service_1 service_2))
+
+  def index
+    # etc
+end
+```
+
+Keys are specified in environment variables ending with `_CLIENT_KEY`, where the value is a comma separated list of keys which the specified service can authenticate with. This means that if your service has the environment variables:
+
+```
+SERVICE_1_CLIENT_KEY=abc123abc123,def456def456
+SERVICE_2_CLIENT_KEY=I-never-could-get-the-hang-of-Thursdays
+```
+
+Then, for any controller where this concern has been initiated, Basic Authentication will be required and only `service_1:abc123abc123`, `service_1:def456def456` and `service_2:I-never-could-get-the-hang-of-Thursdays` will be allowed access.
+
 ## Command features
 
 ### Usage
