@@ -1,3 +1,8 @@
+# HEAD
+
+Features (library):
+- Provides API authentication concern for controllers. (#67)
+
 # v1.11.1 (2017-09-11)
 
 Bug fixes:
