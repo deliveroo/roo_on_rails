@@ -249,10 +249,11 @@ These extra required variables are automatically set by Heroku:
 
 ### Routemaster Client
 
-When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen you need to set the following environment variables:
+When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen, set the following environment variables:
 
 * `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
 * `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
+* `ROUTEMASTER_VERIFY_SSL` – set to false if your Routemaster application is not served with a valid cert. (optional)
 
 If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
