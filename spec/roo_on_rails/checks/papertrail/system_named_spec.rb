@@ -32,4 +32,18 @@ describe RooOnRails::Checks::Papertrail::SystemNamed, type: :check do
 
     it_expects_check_to_pass
   end
+
+  context 'call put on papertrail client' do
+    let(:existing_system) {{
+      'name' => 'testapp-production',
+    }}
+
+    before do
+      expect(client).to receive(:update_system).
+        with(12345, "testapp-production").
+        and_return({})
+    end
+
+    it { expect { subject.fix }.to_not raise_error }
+  end
 end
