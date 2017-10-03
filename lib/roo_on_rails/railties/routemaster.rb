@@ -15,6 +15,7 @@ module RooOnRails
           ::Routemaster::Client.configure do |config|
             config.url = routemaster_url
             config.uuid = routemaster_uuid
+            config.verify_ssl = routemaster_verify_ssl
           end
         end
       end
@@ -31,6 +32,10 @@ module RooOnRails
 
       def routemaster_uuid
         ENV.fetch('ROUTEMASTER_UUID')
+      end
+
+      def routemaster_verify_ssl
+        ENV.fetch('ROUTEMASTER_VERIFY_SSL', 'true') != 'false'
       end
     end
   end

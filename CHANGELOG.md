@@ -1,3 +1,10 @@
+# HEAD
+
+Features:
+
+- Provide `ROUTEMASTER_VERIFY_SSL` environment variable to disable
+  routemaster-client's SSL verification. (#68)
+
 # v1.12.0 (2017-09-27)
 
 Features (library):
