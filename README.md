@@ -138,6 +138,18 @@ Web dynos can be autoscaled by HireFire _only_ if it has been configured to use 
 $ heroku labs:enable log-runtime-metrics -a your-service-name-here
 ```
 
+You will also need a log drain for HireFire, but the RooOnRails helper below should configure this for you. You can check with
+
+```bash
+$ heroku drains | grep hirefire
+https://logdrain.hirefire.io (d.00000000-0000-0000-0000-000000000000)
+
+# No drain? Add with:
+$ heroku drains:add -a your-service-name-here https://logdrain.hirefire.io
+```
+
+([HireFire docs for set up](https://help.hirefire.io/guides/logplex/load-logplex))
+
 #### For Sidekiq Workers
 
 When `HIREFIRE_TOKEN` is set an endpoint will be mounted at `/hirefire` that
