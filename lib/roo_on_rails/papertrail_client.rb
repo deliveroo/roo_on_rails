@@ -21,7 +21,7 @@ module RooOnRails
     end
 
     def update_system(id, data)
-      _conn.put('systems/%s.json' % id, system: data).body
+      _conn.put('systems/%s.json' % id, system: { name: data }).body
     end
 
     # private

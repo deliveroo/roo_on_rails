@@ -14,8 +14,6 @@ describe RooOnRails::PapertrailClient, webmock: true do
         headers: { 'X-Papertrail-Token' => 'deadbeef' }
       )
     end
-
-
   end
 
   describe '#list_destinations' do
