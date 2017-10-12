@@ -86,7 +86,8 @@ module RooOnRails
           return false if service_name == '' || client_key == ''
 
           client_keys = @cache[normalize(service_name)]
-          client_keys && client_keys.include?(client_key)
+          return false unless client_keys
+          client_keys.include?(client_key)
         end
 
         private
@@ -96,7 +97,7 @@ module RooOnRails
         end
 
         def normalize(service_name)
-          service_name.upcase.gsub(/[A-Z0-9]+/, '_')
+          service_name.upcase.gsub(/[^A-Z0-9]+/, '_')
         end
 
         def parse_client_keys(str)
