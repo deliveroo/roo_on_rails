@@ -21,7 +21,7 @@
   - [Rack middleware](#rack-middleware)
   - [Database configuration](#database-configuration)
   - [Sidekiq](#sidekiq)
-  - [HireFire (for Sidekiq workers)](#hirefire-for-sidekiq-workers)
+  - [HireFire](#hirefire)
   - [Logging](#logging)
   - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
@@ -128,7 +128,29 @@ NB. If you are migrating to SLA-based queue names, do not set `SIDEKIQ_ENABLED`
 to `true` before your old queues have finished processing (this will prevent
 Sidekiq from seeing the old queues at all).
 
-### HireFire (for Sidekiq workers)
+### HireFire
+
+#### For Web Dynos
+
+Web dynos can be autoscaled by HireFire _only_ if it has been configured to use the `Web.Logplex.Load` source and the Heroku runtime metrics lab feature has been enabled:
+
+```bash
+$ heroku labs:enable log-runtime-metrics -a your-service-name-here
+```
+
+You will also need a log drain for HireFire, but the RooOnRails helper below should configure this for you. You can check with
+
+```bash
+$ heroku drains | grep hirefire
+https://logdrain.hirefire.io (d.00000000-0000-0000-0000-000000000000)
+
+# No drain? Add with:
+$ heroku drains:add -a your-service-name-here https://logdrain.hirefire.io
+```
+
+([HireFire docs for set up](https://help.hirefire.io/guides/logplex/load-logplex))
+
+#### For Sidekiq Workers
 
 When `HIREFIRE_TOKEN` is set an endpoint will be mounted at `/hirefire` that
 reports the required worker count as a function of queue latency. By default we
