@@ -5,6 +5,11 @@ Features:
 - Provide `ROUTEMASTER_VERIFY_SSL` environment variable to disable
   routemaster-client's SSL verification. (#68)
 
+Bug fix:
+
+- Fixes issue with `fix` command of the service setup scripts for papertrail (#66)
+- Fixes issue with API authentication concern where service name was incorrect (#71)
+
 # v1.12.0 (2017-09-27)
 
 Features (library):
