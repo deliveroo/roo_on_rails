@@ -47,8 +47,15 @@ RSpec.describe RooOnRails::Concerns::RequireApiKey do
         end
       end
 
-      context 'when giving a invalid client key' do
+      context 'when giving an invalid client key' do
         let(:given_key) { 'notcorrect' }
+
+        it { should eq false }
+      end
+
+      context 'when giving an invalid client name' do
+        let(:given_key) { real_key }
+        let(:given_service) { 'not_real_service' }
 
         it { should eq false }
       end
