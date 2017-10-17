@@ -2,7 +2,7 @@
 
 [`routemaster-client`](https://github.com/deliveroo/routemaster-client) comes as a dependency of `roo_on_rails` with a basic implementation of lifecycle event publishers.
 
-This code example assumes that you are using the latest version of the [`roo_on_rails`](roo_on_rails) gem and that you have set the correct environment variables for Routemaster Client to work on your app, as explained in the main [`README.md`](roo_on_rails#routemaster-client) file.
+This code example assumes that you are using the latest version of the [`roo_on_rails`](https://github.com/deliveroo/roo_on_rails) gem and that you have set the correct environment variables for Routemaster Client to work on your app, as explained in the main [`README.md`](https://github.com/deliveroo/roo_on_rails#routemaster-client) file.
 
 It also assumes that your app has an API for the resources you want to publish lifecycle events for, with matching routes and an `API_HOST` environment variable set.
 
@@ -78,7 +78,7 @@ class RiderPublisher < ApplicationPublisher
 end
 ```
 
-`#publish?`, `#topics`, `#async?`, `#data` and `#timestamp` can be overriden; see [the `Publisher` class](lib/roo_on_rails_routemaster/publisher.rb) for the default implementations.
+`#publish?`, `#topics`, `#async?`, `#data` and `#timestamp` can be overriden; see [the `Publisher` class](lib/roo_on_rails/routemaster/publisher.rb) for the default implementations.
 
 ### Register the publishers with Routemaster
 
