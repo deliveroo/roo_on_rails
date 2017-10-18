@@ -1,4 +1,10 @@
-# v1.12.0 (2017-10-12)
+# v1.13.1 (2017-10-18)
+
+Bug fix:
+
+- Fixes issue when `service_name` is null in `require_api_key` (#74)
+
+# v1.13.0 (2017-10-12)
 
 Features:
 

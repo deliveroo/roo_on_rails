@@ -83,7 +83,7 @@ module RooOnRails
         end
 
         def valid?(service_name, client_key)
-          return false if service_name == '' || client_key == ''
+          return false if service_name.to_s.empty? || client_key.to_s.empty?
 
           client_keys = @cache[normalize(service_name)]
           return false unless client_keys

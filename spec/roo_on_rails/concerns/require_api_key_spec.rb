@@ -59,6 +59,20 @@ RSpec.describe RooOnRails::Concerns::RequireApiKey do
 
         it { should eq false }
       end
+
+      context 'when giving a nil client name' do
+        let(:given_key) { real_key }
+        let(:given_service) { nil }
+
+        it { should eq false }
+      end
+
+      context 'when giving an empty client name' do
+        let(:given_key) { real_key }
+        let(:given_service) { '' }
+
+        it { should eq false }
+      end
     end
   end
 end
