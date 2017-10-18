@@ -1,3 +1,7 @@
+# HEAD
+
+_A description of the awesome feature or bug fix you just wrote!_
+
 # v1.13.1 (2017-10-18)
 
 Bug fix:
