@@ -26,6 +26,7 @@
   - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
   - [Routemaster Client](#routemaster-client)
+  - [API Authentication ](#api-authentication)
 - [Command features](#command-features)
   - [Usage](#usage)
   - [Description](#description)
@@ -287,6 +288,8 @@ RooOnRails provides a concern which will make adding rotatable API authenticatio
 require 'roo_on_rails/concerns/require_api_key'
 
 class ThingController < ActionController::Base
+  include RooOnRails::Concerns::RequireApiKey
+
   require_api_key
   # or
   require_api_key(only: :update)
