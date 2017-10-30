@@ -54,4 +54,11 @@ RSpec.describe RooOnRails::Logger do
       end
     end
   end
+
+  describe '#silence' do
+    before { logger.silence { logger.info('hello-world') } }
+    it 'should not output any log' do
+      expect(output).to be_empty
+    end
+  end
 end

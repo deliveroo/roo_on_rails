@@ -1,6 +1,6 @@
-require 'logger'
 require 'delegate'
 require 'roo_on_rails/logfmt'
+require 'active_support/logger'
 
 module RooOnRails
   # A compatible replacement for the standard Logger to provide context, similar
@@ -30,7 +30,7 @@ module RooOnRails
   class Logger < SimpleDelegator
     def initialize(io = STDOUT)
       @show_timestamp = io.tty?
-      logger = ::Logger.new(io).tap do |l|
+      logger = ActiveSupport::Logger.new(io).tap do |l|
         l.formatter = method(:_formatter)
       end
       super(logger)
