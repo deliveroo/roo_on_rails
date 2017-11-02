@@ -28,7 +28,7 @@ module RooOnRails
           url,
           async: async?,
           data: stringify_keys(data),
-          t: timestamp && timestamp.to_i
+          t: timestamp && (timestamp.to_f * 1000).to_i
         )
       end
 
