@@ -6,6 +6,7 @@ SimpleCov.formatter = SimpleCov::Formatter::Codecov
 
 require 'pry-byebug'
 require 'memfs'
+require 'rspec/its'
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 $LOAD_PATH.unshift File.expand_path('../..', __FILE__)
