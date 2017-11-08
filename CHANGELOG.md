@@ -1,6 +1,8 @@
 # HEAD
 
-_A description of the awesome feature or bug fix you just wrote!_
+Features:
+
+- Process JWTs in `Authorization` headers and populate the request env's `roo.identity` key with the claims, if present and valid. (#79)
 
 # v1.13.1 (2017-10-18)
 

@@ -23,6 +23,7 @@
   - [Sidekiq](#sidekiq)
   - [HireFire](#hirefire)
   - [Logging](#logging)
+  - [Identity](#identity)
   - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
   - [Routemaster Client](#routemaster-client)
@@ -215,6 +216,31 @@ logger.with(a: 1, b: 2).info('Stuff')
 
 See the [class documentation](lib/roo_on_rails/logger.rb) for further
 details.
+
+### Identity
+
+If your service wants to accept JWTs for identity claims, then adding the `json-jwt` gem
+to your `Gemfile` and the following railtie to your app will ensure any data presented is
+available:
+
+```ruby
+require 'roo_on_rails/railties/roo_identity'
+```
+
+Any inbound request which has a valid JWT will have the claims made available:
+
+```ruby
+class MyController
+  def index
+    customer_id = request.env['roo.identity']['cust']
+    request.env['roo.identity'].class
+    # => JSON::JWT
+  end
+end
+```
+
+Be aware that maliciously crafted JWTs will raise 401s that your other middleware can present
+and poorly configured JWT set up will raise errors that you'll be able to catch in test.
 
 ### Google OAuth authentication
 
