@@ -1,6 +1,12 @@
-require 'logger'
 require 'delegate'
 require 'roo_on_rails/logfmt'
+require 'rails/version'
+
+if Rails::VERSION::MAJOR < 4
+  require 'logger'
+else
+  require 'active_support/logger'
+end
 
 module RooOnRails
   # A compatible replacement for the standard Logger to provide context, similar
@@ -30,7 +36,7 @@ module RooOnRails
   class Logger < SimpleDelegator
     def initialize(io = STDOUT)
       @show_timestamp = io.tty?
-      logger = ::Logger.new(io).tap do |l|
+      logger = _default_logger_class.new(io).tap do |l|
         l.formatter = method(:_formatter)
       end
       super(logger)
@@ -99,6 +105,14 @@ module RooOnRails
       # We use our object ID here to avoid conflicting with other instances
       thread_key = @_context_stack_key ||= "roo_on_rails:logging_context:#{object_id}".freeze
       Thread.current[thread_key] ||= [{}]
+    end
+
+    def _default_logger_class
+      if Rails::VERSION::MAJOR < 4
+        ::Logger
+      else
+        ActiveSupport::Logger
+      end
     end
   end
 end
