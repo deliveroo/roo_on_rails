@@ -9,8 +9,9 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
 
   let(:rack_env_var) { 'production' }
 
-  let(:app) { described_class.new(inner_app, logger: logger) }
+  let(:app) { described_class.new(inner_app, logger: logger, skip_sig_verify: skip_sig_verify) }
   let(:inner_app) { -> env { [200, {}, []] } }
+  let(:skip_sig_verify) { true }
   let(:logger) { double('logger',
     info: -> msg {},
     warn: -> msg {},
@@ -72,10 +73,22 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
 
       it { should be_ok }
       include_examples 'roo.identity provided to inner app'
+
+      context 'when requesting sig verification' do
+        let(:skip_sig_verify) { false }
+
+        its(:status) { should eq 401 }
+      end
     end
 
     context 'when in production mode' do
       its(:status) { should eq 401 }
+
+      context 'when trying to force sig verification' do
+        let(:skip_sig_verify) { true }
+
+        its(:status) { should eq 401 }
+      end
     end
   end
 

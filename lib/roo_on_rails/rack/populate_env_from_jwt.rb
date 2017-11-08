@@ -11,13 +11,16 @@ module RooOnRails
         File.read(File.expand_path('../valid_identity_service_prefixes.yml', __FILE__))
       ).freeze
 
-      def initialize(app, logger:)
+      def initialize(app, logger:, skip_sig_verify: true)
         @app = app
         @keys = {}
         @logger = logger
 
-        if development?
-          @logger.warn "JWTs will not have their signatures checked, you're in development mode."
+        if skip_sig_verify && development?
+          @logger.warn "JWTs signature verifification has been switched off in development."
+          @verify_sigs = false
+        else
+          @verify_sigs = true
         end
       end
 
@@ -53,7 +56,7 @@ module RooOnRails
         jws_token = header_value[7..-1]
 
         JSON::JWT.decode(jws_token, :skip_verification).tap do |jwt|
-          jwt.verify!(public_key(jwt.header[:jku])) unless development?
+          jwt.verify!(public_key(jwt.header[:jku])) if @verify_sigs
         end
       end
 
