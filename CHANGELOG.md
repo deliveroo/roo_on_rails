@@ -1,8 +1,19 @@
 # HEAD
 
+_A description of your awesome new stuff here!_
+
+# v1.15.0
+
 Features:
 
 - Process JWTs in `Authorization` headers and populate the request env's `roo.identity` key with the claims, if present and valid. (#79)
+- RooOnRails::Logger is now compatible with ActiveSupport::Logger on Rails versions >= 4.2 (#77)
+
+# v1.14.0
+
+Bug Fix:
+
+- Routemaster Publisher was sending epoch seconds instead of milliseconds (#78)
 
 # v1.13.1 (2017-10-18)
 
