@@ -5,7 +5,7 @@ require 'faraday_middleware'
 module RooOnRails
   module Rack
     class PopulateEnvFromJWT
-      UnnacceptableKeyError = Class.new(RuntimeError)
+      UnacceptableKeyError = Class.new(RuntimeError)
       # Hardcoded URLs for valid keys per environment. These will change very infrequently.
       VALID_JWK_URL_PREFIXES = YAML.load(
         File.read(File.expand_path('../valid_identity_service_prefixes.yml', __FILE__))
@@ -27,7 +27,7 @@ module RooOnRails
 
       # Other exceptions will bubble up, allowing the higher middleware to return a 500, which is
       # intentional.
-      rescue UnnacceptableKeyError, JSON::JWT::Exception => e
+      rescue UnacceptableKeyError, JSON::JWT::Exception => e
         # Identifying user is clearly attempting to hack or has been given a totally incorrect
         # token, log this and flag as Forbidden, without executing the rest of the middleware stack.
         ::NewRelic::Agent.notice_error(e) if defined?(NewRelic)
@@ -44,7 +44,7 @@ module RooOnRails
         ENV['RACK_ENV'] == 'development'
       end
 
-      # @raise [UnnacceptableKeyError,Faraday::Error,OpenSSL::OpenSSLError] From `#public_key`
+      # @raise [UnacceptableKeyError,Faraday::Error,OpenSSL::OpenSSLError] From `#public_key`
       # @raise [JSON::JWT::Exception] Bubble ups from `JSON::JWT.decode`
       # @return [JSON::JWT] The list of claims this header makes by way of a JWS token. Will be an
       #   empty hash for invalid or absent tokens.
@@ -63,13 +63,13 @@ module RooOnRails
         @key_prefixes.any? { |acceptable| key_url.starts_with?(acceptable) }
       end
 
-      # @raise [UnnacceptableKeyError] When the key URL is not from a trusted location
+      # @raise [UnacceptableKeyError] When the key URL is not from a trusted location
       # @raise [Faraday::Error] When the JWK at the given URL is not retrievable for some reason.
       #   See: https://github.com/lostisland/faraday/blob/master/lib/faraday/error.rb
       # @return [JSON::JWK] The JWK for the specified URL
       def public_key(key_url)
         unless acceptable_key?(key_url)
-          raise UnnacceptableKeyError, "#{key_url} is not a valid Deliveroo Key URL"
+          raise UnacceptableKeyError, "#{key_url} is not a valid Deliveroo Key URL"
         end
 
         # NB. don't use ||= memoization, or this middleware can be attacked by
