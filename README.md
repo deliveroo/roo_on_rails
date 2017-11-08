@@ -232,8 +232,9 @@ Any inbound request which has a valid JWT will have the claims made available:
 ```ruby
 class MyController
   def index
-    p request.env['roo.identity']
-    # => JSON::
+    customer_id = request.env['roo.identity']['cust']
+    request.env['roo.identity'].class
+    # => JSON::JWT
   end
 end
 ```
