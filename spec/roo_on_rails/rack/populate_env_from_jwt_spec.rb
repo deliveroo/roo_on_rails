@@ -75,7 +75,7 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
     end
 
     context 'when in production mode' do
-      it { should be_unauthorized }
+      its(:status) { should eq 401 }
     end
   end
 
@@ -108,14 +108,14 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
           end.sign(TEST_PEM_PRV, :HS256)
         end
 
-        it { should be_unauthorized }
+        its(:status) { should eq 401 }
       end
     end
 
     context 'when the jku specified is not whitelisted' do
       let(:jku) { 'https://hax0rs.com/sadface.jwk' }
 
-      it { should be_unauthorized }
+      its(:status) { should eq 401 }
     end
 
     context 'when the jku specified does not exist' do
@@ -133,7 +133,7 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
 
       before { stub_request(:get, jku).to_return(body: 'wut') }
 
-      it { should be_unauthorized }
+      its(:status) { should eq 401 }
     end
 
     context 'when the jku specified is not a JWK' do
@@ -141,13 +141,13 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
 
       before { stub_request(:get, jku).to_return(body: '{"rhythm": "rain"}') }
 
-      it { should be_unauthorized }
+      its(:status) { should eq 401 }
     end
 
     context 'when the signature does not match the given public key' do
       before { stub_request(:get, jku).to_return(body: OTHER_JWK_PUB) }
 
-      it { should be_unauthorized }
+      its(:status) { should eq 401 }
     end
   end
 end
