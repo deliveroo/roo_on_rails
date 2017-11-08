@@ -4,8 +4,10 @@ require 'base64'
 require 'roo_on_rails/rack/populate_env_from_jwt'
 
 describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
-  subject(:call) { Rack::MockResponse.new(*app.call(rack_env)) }
-  let(:rack_env) { { 'HTTP_AUTHORIZATION' => auth_header } }
+  subject(:call) { Rack::MockResponse.new(*app.call(env)) }
+  let(:env) { { 'HTTP_AUTHORIZATION' => auth_header } }
+
+  let(:rack_env_var) { 'production' }
 
   let(:app) { described_class.new(inner_app, logger: logger) }
   let(:inner_app) { -> env { [200, {}, []] } }
@@ -14,6 +16,13 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
     warn: -> msg {},
     error: -> msg {}
   ) }
+
+  around do |test|
+    old_env = ENV['RACK_ENV']
+    ENV['RACK_ENV'] = rack_env_var
+    test.run
+    ENV['RACK_ENV'] = old_env
+  end
 
   TEST_PEM_PRV = File.read('spec/support/test_key.prv.pem').freeze
   TEST_JWK_PUB = File.read('spec/support/test_key.pub.jwk').freeze
@@ -59,32 +68,20 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
     let(:token) { JSON::JWT.new(hi: 'world').tap { |jwt| jwt.header[:alg] = 'ES256' } }
 
     context 'when in development mode' do
-      around do |test|
-        old_env = ENV['RACK_ENV']
-        ENV['RACK_ENV'] = 'development'
-        test.run
-        ENV['RACK_ENV'] = old_env
-      end
+      let(:rack_env_var) { 'development' }
 
       it { should be_ok }
       include_examples 'roo.identity provided to inner app'
     end
 
     context 'when in production mode' do
-      around do |test|
-        old_env = ENV['RACK_ENV']
-        ENV['RACK_ENV'] = 'production'
-        test.run
-        ENV['RACK_ENV'] = old_env
-      end
-
-      it { should be_forbidden }
+      it { should be_unauthorized }
     end
   end
 
   context 'when the Authorization header contains a JWT that has a valid signature' do
     let(:auth_header) { "Bearer #{token.to_s}" }
-    let(:jku) { 'https://www.deliveroo.com/identity-keys/0.jwk' }
+    let(:jku) { 'https://deliveroo.co.uk/identity-keys/0.jwk' }
     let(:private_key) { OpenSSL::PKey::EC.new(TEST_PEM_PRV) }
     let(:claims) { { hi: 'world' } }
     let(:token) do
@@ -111,18 +108,18 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
           end.sign(TEST_PEM_PRV, :HS256)
         end
 
-        it { should be_forbidden }
+        it { should be_unauthorized }
       end
     end
 
     context 'when the jku specified is not whitelisted' do
       let(:jku) { 'https://hax0rs.com/sadface.jwk' }
 
-      it { should be_forbidden }
+      it { should be_unauthorized }
     end
 
     context 'when the jku specified does not exist' do
-      let(:jku) { 'https://www.deliveroo.com/identity-keys/not-here.jwk' }
+      let(:jku) { 'https://deliveroo.co.uk/identity-keys/not-here.jwk' }
 
       before { stub_request(:get, jku).to_return(status: 404) }
 
@@ -132,25 +129,25 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
     end
 
     context 'when the jku specified is not JSON' do
-      let(:jku) { 'https://www.deliveroo.com/identity-keys/trollface.jpg' }
+      let(:jku) { 'https://deliveroo.co.uk/identity-keys/trollface.jpg' }
 
       before { stub_request(:get, jku).to_return(body: 'wut') }
 
-      it { should be_forbidden }
+      it { should be_unauthorized }
     end
 
     context 'when the jku specified is not a JWK' do
-      let(:jku) { 'https://www.deliveroo.com/identity-keys/donovan.json' }
+      let(:jku) { 'https://deliveroo.co.uk/identity-keys/donovan.json' }
 
       before { stub_request(:get, jku).to_return(body: '{"rhythm": "rain"}') }
 
-      it { should be_forbidden }
+      it { should be_unauthorized }
     end
 
     context 'when the signature does not match the given public key' do
       before { stub_request(:get, jku).to_return(body: OTHER_JWK_PUB) }
 
-      it { should be_forbidden }
+      it { should be_unauthorized }
     end
   end
 end

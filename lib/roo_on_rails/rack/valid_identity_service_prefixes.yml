@@ -1,0 +1,6 @@
+production:
+  - https://deliveroo.co.uk/identity-keys/
+  - https://identity.deliveroo.net/identity/keys/
+staging:
+  - https://test.deliveroo.co.uk/identity-keys/
+  - https://identity-staging.deliveroo.net/identity-keys/

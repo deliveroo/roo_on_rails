@@ -6,10 +6,10 @@ module RooOnRails
   module Rack
     class PopulateEnvFromJWT
       UnnacceptableKeyError = Class.new(RuntimeError)
-      VALID_JWK_URL_PREFIXES = [
-        'https://www.deliveroo.com/identity-keys/',
-        'https://identity.deliveroo.com/identity-keys/'
-      ].freeze
+      # Hardcoded URLs for valid keys per environment. These will change very infrequently.
+      VALID_JWK_URL_PREFIXES = YAML.load(
+        File.read(File.expand_path('../valid_identity_service_prefixes.yml', __FILE__))
+      ).freeze
 
       def initialize(app, logger:)
         @app = app
@@ -31,7 +31,7 @@ module RooOnRails
         # Identifying user is clearly attempting to hack or has been given a totally incorrect
         # token, log this and flag as Forbidden, without executing the rest of the middleware stack.
         ::NewRelic::Agent.notice_error(e) if defined?(NewRelic)
-        [403, {}, []]
+        [401, {}, []]
       end
 
       private
@@ -59,7 +59,8 @@ module RooOnRails
 
       def acceptable_key?(key_url)
         return false if key_url.nil?
-        VALID_JWK_URL_PREFIXES.any? { |acceptable| key_url.starts_with?(acceptable) }
+        @key_prefixes ||= VALID_JWK_URL_PREFIXES[ENV['RACK_ENV']]
+        @key_prefixes.any? { |acceptable| key_url.starts_with?(acceptable) }
       end
 
       # @raise [UnnacceptableKeyError] When the key URL is not from a trusted location
@@ -88,7 +89,6 @@ module RooOnRails
           conf.response :json
           conf.response :raise_error
           conf.request :json
-          conf.use FaradayMiddleware::FollowRedirects, limit: 3
 
           conf.adapter Faraday.default_adapter
         end
