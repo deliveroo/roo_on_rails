@@ -59,14 +59,24 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
     let(:token) { JSON::JWT.new(hi: 'world').tap { |jwt| jwt.header[:alg] = 'ES256' } }
 
     context 'when in development mode' do
-      before { ENV['RACK_ENV'] = 'development' }
+      around do |test|
+        old_env = ENV['RACK_ENV']
+        ENV['RACK_ENV'] = 'development'
+        test.run
+        ENV['RACK_ENV'] = old_env
+      end
 
       it { should be_ok }
       include_examples 'roo.identity provided to inner app'
     end
 
     context 'when in production mode' do
-      before { ENV['RACK_ENV'] = 'production' }
+      around do |test|
+        old_env = ENV['RACK_ENV']
+        ENV['RACK_ENV'] = 'production'
+        test.run
+        ENV['RACK_ENV'] = old_env
+      end
 
       it { should be_forbidden }
     end

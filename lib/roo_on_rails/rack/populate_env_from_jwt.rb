@@ -15,17 +15,21 @@ module RooOnRails
         @app = app
         @keys = {}
         @logger = logger
-        @logger.warn "JWTs will not have their signatures checked, you're in development mode." if development?
+
+        if development?
+          @logger.warn "JWTs will not have their signatures checked, you're in development mode."
+        end
       end
 
       def call(env)
         env['roo.identity'] = decode_authorization_header(env['HTTP_AUTHORIZATION'])
         @app.call(env)
 
-      # Other exceptions will bubble up, allowing the higher middleware to return a 500, which is intentional.
+      # Other exceptions will bubble up, allowing the higher middleware to return a 500, which is
+      # intentional.
       rescue UnnacceptableKeyError, JSON::JWT::Exception => e
-        # Identifying user is clearly attempting to hack or has been given a totally incorrect token, log this
-        # and flag as Forbidden, without executing the rest of the middleware stack.
+        # Identifying user is clearly attempting to hack or has been given a totally incorrect
+        # token, log this and flag as Forbidden, without executing the rest of the middleware stack.
         ::NewRelic::Agent.notice_error(e) if defined?(NewRelic)
         [403, {}, []]
       end
@@ -33,13 +37,17 @@ module RooOnRails
       private
 
       def development?
-        @logger.warn "Your RACK_ENV isn't set, you probably want it set to development in dev." if ENV['RACK_ENV'].nil?
+        if ENV['RACK_ENV'].nil?
+          @logger.warn "Your RACK_ENV isn't set. You probably want it set to 'development' in dev."
+        end
+
         ENV['RACK_ENV'] == 'development'
       end
 
-      # @raise [UnnacceptableKeyError,Faraday::Error,OpenSSL::OpenSSLError] Bubble-ups from `#public_key`
+      # @raise [UnnacceptableKeyError,Faraday::Error,OpenSSL::OpenSSLError] From `#public_key`
       # @raise [JSON::JWT::Exception] Bubble ups from `JSON::JWT.decode`
-      # @return [JSON::JWT] The list of claims this header makes by way of a JWS token. Will be an empty hash for invalid or absent tokens.
+      # @return [JSON::JWT] The list of claims this header makes by way of a JWS token. Will be an
+      #   empty hash for invalid or absent tokens.
       def decode_authorization_header(header_value)
         return JSON::JWT.new unless (header_value || '').starts_with?('Bearer ')
         jws_token = header_value[7..-1]
@@ -55,10 +63,13 @@ module RooOnRails
       end
 
       # @raise [UnnacceptableKeyError] When the key URL is not from a trusted location
-      # @raise [Faraday::Error] When the JWK at the given URL is not retrievable for some reason. See https://github.com/lostisland/faraday/blob/master/lib/faraday/error.rb
+      # @raise [Faraday::Error] When the JWK at the given URL is not retrievable for some reason.
+      #   See: https://github.com/lostisland/faraday/blob/master/lib/faraday/error.rb
       # @return [JSON::JWK] The JWK for the specified URL
       def public_key(key_url)
-        raise UnnacceptableKeyError, "#{key_url} is not a valid Deliveroo Key URL" unless acceptable_key?(key_url)
+        unless acceptable_key?(key_url)
+          raise UnnacceptableKeyError, "#{key_url} is not a valid Deliveroo Key URL"
+        end
 
         # NB. don't use ||= memoization, or this middleware can be attacked by
         # being asked to decode large numbers of non-existant key-ids, each of
