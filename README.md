@@ -91,6 +91,14 @@ We'll insert the following middlewares into the rails stack:
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 4. Optional middlewares for Google Oauth2 (more below).
 
+#### Adding an exception to `Rack::SslEnforcer`
+
+If you're running your application on Hopper and need to serve a health check
+over HTTP, or if for any other reason you might need to serve a particular endpoint
+over HTTP rather than HTTPS, you can use the `ROO_ON_RAILS_SSL_ENFORCEMENT_EXCEPTIONS`
+environment variable to specify a comma-delimited list of endpoints, for example
+`ROO_ON_RAILS_SSL_ENFORCEMENT_EXCEPTIONS=/health`.
+
 ### Database configuration
 
 The database statement timeout will be set to a low value by default. Use
