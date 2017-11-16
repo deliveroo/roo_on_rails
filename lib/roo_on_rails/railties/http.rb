@@ -18,7 +18,7 @@ module RooOnRails
             ::Rack::Timeout
           )
 
-          middleware_to_insert_before = Rails::VERSION::MAJOR < 4 ? ::ActionDispatch::Cookies : ::Rack::Head 
+          middleware_to_insert_before = Rails::VERSION::MAJOR < 4 ? ::ActionDispatch::Cookies : ::Rack::Head
 
           # This needs to be inserted low in the stack, before Rails returns the
           # thread-current connection to the pool.
@@ -37,7 +37,8 @@ module RooOnRails
           unless Rails.env.test?
             app.config.middleware.insert_before(
               middleware_to_insert_before,
-              ::Rack::SslEnforcer
+              ::Rack::SslEnforcer,
+              ignore: ENV.fetch('ROO_ON_RAILS_SSL_ENFORCEMENT_EXCEPTIONS', '').split(',')
             )
           end
         end
