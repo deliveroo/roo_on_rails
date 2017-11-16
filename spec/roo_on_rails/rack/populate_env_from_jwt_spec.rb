@@ -8,6 +8,7 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
   let(:env) { { 'HTTP_AUTHORIZATION' => auth_header } }
 
   let(:rack_env_var) { 'production' }
+  let(:identity_url_prefixes) { 'https://deliveroo.co.uk/identity-keys/' }
 
   let(:app) { described_class.new(inner_app, logger: logger, skip_sig_verify: skip_sig_verify) }
   let(:inner_app) { -> env { [200, {}, []] } }
@@ -21,6 +22,7 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
   around do |test|
     old_env = ENV['RACK_ENV']
     ENV['RACK_ENV'] = rack_env_var
+    ENV['VALID_IDENTITY_URL_PREFIXES'] = identity_url_prefixes
     test.run
     ENV['RACK_ENV'] = old_env
   end
@@ -83,12 +85,6 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
 
     context 'when in production mode' do
       its(:status) { should eq 401 }
-
-      context 'when trying to force sig verification' do
-        let(:skip_sig_verify) { true }
-
-        its(:status) { should eq 401 }
-      end
     end
   end
 
@@ -123,12 +119,20 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
 
         its(:status) { should eq 401 }
       end
-    end
 
-    context 'when the jku specified is not whitelisted' do
-      let(:jku) { 'https://hax0rs.com/sadface.jwk' }
+      context 'when the jku specified is from the second specified URL' do
+        let(:identity_url_prefixes) { 'https://another.deliveroo.tld/identity-keys/,https://identity.deliveroo.net/jwks/' }
+        let(:jku) { 'https://identity.deliveroo.net/jwks/0.jwk' }
 
-      its(:status) { should eq 401 }
+        it { should be_ok }
+        include_examples 'roo.identity provided to inner app'
+      end
+
+      context 'when the jku specified is not whitelisted' do
+        let(:jku) { 'https://hax0rs.com/sadface.jwk' }
+
+        its(:status) { should eq 401 }
+      end
     end
 
     context 'when the jku specified does not exist' do

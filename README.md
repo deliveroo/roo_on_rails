@@ -227,6 +227,13 @@ available:
 require 'roo_on_rails/railties/roo_identity'
 ```
 
+In non-development environments you must also set the `VALID_IDENTITY_URL_PREFIXES` environment
+variable to be a comma separasted list of the URL prefixes which valid JWTs come from, eg:
+
+```
+https://deliveroo.co.uk/identity-keys/,https://identity.deliveroo.com/jwks/
+```
+
 Any inbound request which has a valid JWT will have the claims made available:
 
 ```ruby
