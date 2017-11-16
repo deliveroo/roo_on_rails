@@ -4,6 +4,10 @@ Bug fix:
 
 - Ensure we can distinguish between environments' identity services (#81)
 
+Features:
+
+- Allow SSL enforcement to be disabled via `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` environment variable (#82)
+
 # v1.15.0
 
 Features:

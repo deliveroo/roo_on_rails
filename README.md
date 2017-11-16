@@ -91,6 +91,14 @@ We'll insert the following middlewares into the rails stack:
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 4. Optional middlewares for Google Oauth2 (more below).
 
+
+#### Disabling SSL enforcement
+
+If you're running your application on Hopper, you'll need to turn off SSL enforcement
+as we do that at edge level in Cloudflare rather than the application code itself,
+which must be served over HTTP to its associated ALB, which handles SSL termination.
+To do this, you can set the `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` to `YES`.
+
 ### Database configuration
 
 The database statement timeout will be set to a low value by default. Use
