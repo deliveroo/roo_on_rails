@@ -6,22 +6,22 @@ module RooOnRails
   module Rack
     class PopulateEnvFromJWT
       UnacceptableKeyError = Class.new(RuntimeError)
+      VALID_PREFIXES_KEY = 'VALID_IDENTITY_URL_PREFIXES'.freeze
+
+      def self.configured?
+        ENV[VALID_PREFIXES_KEY].present?
+      end
 
       def initialize(app, logger:, skip_sig_verify: true)
         @app = app
         @keys = {}
         @logger = logger
 
-        if skip_sig_verify && development?
+        if skip_sig_verify && non_prod?
           @logger.warn "JWTs signature verifification has been switched off in development."
           @verify_sigs = false
         else
           @verify_sigs = true
-          @key_prefixes = ENV['VALID_IDENTITY_URL_PREFIXES'].split(',')
-
-          if @key_prefixes.empty?
-            raise "No identity service URLs have been set: ENV['VALID_IDENTITY_URL_PREFIXES']"
-          end
         end
       end
 
@@ -40,12 +40,17 @@ module RooOnRails
 
       private
 
-      def development?
+      def key_prefixes
+        return [] unless self.class.configured?
+        ENV[VALID_PREFIXES_KEY].split(',')
+      end
+
+      def non_prod?
         if ENV['RACK_ENV'].nil?
           @logger.warn "Your RACK_ENV isn't set. You probably want it set to 'development' in dev."
         end
 
-        ENV['RACK_ENV'] == 'development'
+        %w(development test).include? ENV['RACK_ENV']
       end
 
       # @raise [UnacceptableKeyError,Faraday::Error,OpenSSL::OpenSSLError] From `#public_key`
@@ -63,7 +68,7 @@ module RooOnRails
 
       def acceptable_key?(key_url)
         return false if key_url.nil?
-        @key_prefixes.any? { |acceptable| key_url.starts_with?(acceptable) }
+        key_prefixes.any? { |acceptable| key_url.starts_with?(acceptable) }
       end
 
       # @raise [UnacceptableKeyError] When the key URL is not from a trusted location

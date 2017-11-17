@@ -227,16 +227,9 @@ details.
 
 ### Identity
 
-If your service wants to accept JWTs for identity claims, then adding the `json-jwt` gem
-to your `Gemfile` and the following railtie to your app will ensure any data presented is
-available:
-
-```ruby
-require 'roo_on_rails/railties/roo_identity'
-```
-
-In non-development environments you must also set the `VALID_IDENTITY_URL_PREFIXES` environment
-variable to be a comma separasted list of the URL prefixes which valid JWTs come from, eg:
+If your service wants to accept JWTs for identity claims, then setting the
+`VALID_IDENTITY_URL_PREFIXES` environment variable (to be a comma separasted list of the URL prefixes
+which valid JWTs come from) will set everything up, eg:
 
 ```
 https://deliveroo.co.uk/identity-keys/,https://identity.deliveroo.com/jwks/
