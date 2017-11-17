@@ -1,12 +1,16 @@
 # HEAD
 
-Bug fix:
+_A description of your awesome work here!_
 
-- Ensure we can distinguish between environments' identity services (#81)
+# v1.16.0 (2017-11-17)
 
 Features:
 
 - Allow SSL enforcement to be disabled via `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` environment variable (#82)
+
+Bug fix:
+
+- Ensure we can distinguish between environments' identity services (#81)
 
 # v1.15.0
 
