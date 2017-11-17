@@ -6,10 +6,6 @@ module RooOnRails
   module Rack
     class PopulateEnvFromJWT
       UnacceptableKeyError = Class.new(RuntimeError)
-      # Hardcoded URLs for valid keys per environment. These will change very infrequently.
-      VALID_JWK_URL_PREFIXES = YAML.load(
-        File.read(File.expand_path('../valid_identity_service_prefixes.yml', __FILE__))
-      ).freeze
 
       def initialize(app, logger:, skip_sig_verify: true)
         @app = app
@@ -21,6 +17,11 @@ module RooOnRails
           @verify_sigs = false
         else
           @verify_sigs = true
+          @key_prefixes = ENV['VALID_IDENTITY_URL_PREFIXES'].split(',')
+
+          if @key_prefixes.empty?
+            raise "No identity service URLs have been set: ENV['VALID_IDENTITY_URL_PREFIXES']"
+          end
         end
       end
 
@@ -62,7 +63,6 @@ module RooOnRails
 
       def acceptable_key?(key_url)
         return false if key_url.nil?
-        @key_prefixes ||= VALID_JWK_URL_PREFIXES[ENV['RACK_ENV']]
         @key_prefixes.any? { |acceptable| key_url.starts_with?(acceptable) }
       end
 

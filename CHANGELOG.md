@@ -1,6 +1,8 @@
 # HEAD
 
-_A description of your awesome new stuff here!_
+Bug fix:
+
+- Ensure we can distinguish between environments' identity services (#81)
 
 # v1.15.0
 
