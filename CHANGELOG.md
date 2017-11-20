@@ -1,5 +1,9 @@
 # HEAD
 
+_A description of your awesome work here!_
+
+# v1.16.1 (2017-11-20)
+
 Bug fix:
 
 - Auto-load roo identity if configured, prevent failing in CI (#83)
