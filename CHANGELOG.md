@@ -26,7 +26,7 @@ Features:
 
 - Process JWTs in `Authorization` headers and populate the request env's `roo.identity` key with the claims, if present and valid. (#79)
 - RooOnRails::Logger is now compatible with ActiveSupport::Logger on Rails versions >= 4.2 (#77)
-x
+
 # v1.14.0
 
 Bug Fix:
