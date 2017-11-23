@@ -73,7 +73,7 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
           let(:create_time) { Time.at(12345) }
           let(:model) { TestModel.which_responds_to(created_at: create_time).new }
 
-          it { should eq create_time.to_i }
+          it { should eq (create_time.to_f * 1000).to_i }
         end
 
         context 'when the model does not respond to created_at' do
@@ -83,7 +83,7 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
             let(:update_time) { Time.at(23456) }
             let(:model) { TestModel.which_responds_to(updated_at: update_time).new }
 
-            it { should eq update_time.to_i }
+            it { should eq (update_time.to_f * 1000).to_i }
           end
         end
       end
@@ -99,7 +99,7 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
           let(:update_time) { Time.at(34567) }
           let(:model) { TestModel.which_responds_to(updated_at: update_time).new }
 
-          it { should eq update_time.to_i }
+          it { should eq (update_time.to_f * 1000).to_i }
         end
       end
     end

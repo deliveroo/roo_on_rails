@@ -23,6 +23,7 @@
   - [Sidekiq](#sidekiq)
   - [HireFire](#hirefire)
   - [Logging](#logging)
+  - [Identity](#identity)
   - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
   - [Routemaster Client](#routemaster-client)
@@ -89,6 +90,14 @@ We'll insert the following middlewares into the rails stack:
 3. `Rack::Deflater`: compresses responses from the application, can be disabled
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 4. Optional middlewares for Google Oauth2 (more below).
+
+
+#### Disabling SSL enforcement
+
+If you're running your application on Hopper, you'll need to turn off SSL enforcement
+as we do that at edge level in Cloudflare rather than the application code itself,
+which must be served over HTTP to its associated ALB, which handles SSL termination.
+To do this, you can set the `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` to `YES`.
 
 ### Database configuration
 
@@ -215,6 +224,31 @@ logger.with(a: 1, b: 2).info('Stuff')
 
 See the [class documentation](lib/roo_on_rails/logger.rb) for further
 details.
+
+### Identity
+
+If your service wants to accept JWTs for identity claims, then setting the
+`VALID_IDENTITY_URL_PREFIXES` environment variable (to be a comma separasted list of the URL prefixes
+which valid JWTs come from) will set everything up, eg:
+
+```
+https://deliveroo.co.uk/identity-keys/,https://identity.deliveroo.com/jwks/
+```
+
+Any inbound request which has a valid JWT will have the claims made available:
+
+```ruby
+class MyController
+  def index
+    customer_id = request.env['roo.identity']['cust']
+    request.env['roo.identity'].class
+    # => JSON::JWT
+  end
+end
+```
+
+Be aware that maliciously crafted JWTs will raise 401s that your other middleware can present
+and poorly configured JWT set up will raise errors that you'll be able to catch in test.
 
 ### Google OAuth authentication
 

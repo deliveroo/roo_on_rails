@@ -14,4 +14,5 @@ if defined?(Rails)
   require 'roo_on_rails/railties/rake_tasks'
   require 'roo_on_rails/railties/google_oauth'
   require 'roo_on_rails/railties/routemaster'
+  require 'roo_on_rails/railties/roo_identity'
 end

@@ -8,7 +8,7 @@ describe 'Http rack setup' do
   context 'When booting' do
     let(:middleware) { app_helper.shell_run "cd #{app_path} && rake middleware" }
 
-    it 'inserts rack timeout into the middleware stack' do      
+    it 'inserts rack timeout into the middleware stack' do
       expect(middleware).to include 'Rack::Timeout'
     end
 
@@ -29,9 +29,18 @@ describe 'Http rack setup' do
       end
     end
 
-    context 'if RAILS_ENV is not set to "test"' do
+    context 'if RAILS_ENV is not set to "test" and ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT is not set' do
       it 'inserts rack enforcer into the middleware stack' do
         expect(middleware).to include 'Rack::SslEnforcer'
+      end
+    end
+
+    context 'if ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT is set to "YES"' do
+      before { ENV['ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT'] = 'YES' }
+      after { ENV['ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT'] = nil }
+
+      it 'does not insert Rack::SslEnforcer into the middleware stack' do
+        expect(middleware).to_not include 'Rack::SslEnforcer'
       end
     end
 

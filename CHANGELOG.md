@@ -1,6 +1,35 @@
 # HEAD
 
-_A description of the awesome feature or bug fix you just wrote!_
+_A description of your awesome work here!_
+
+# v1.16.1 (2017-11-20)
+
+Bug fix:
+
+- Auto-load roo identity if configured, prevent failing in CI (#83)
+
+# v1.16.0 (2017-11-17)
+
+Features:
+
+- Allow SSL enforcement to be disabled via `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` environment variable (#82)
+
+Bug fix:
+
+- Ensure we can distinguish between environments' identity services (#81)
+
+# v1.15.0
+
+Features:
+
+- Process JWTs in `Authorization` headers and populate the request env's `roo.identity` key with the claims, if present and valid. (#79)
+- RooOnRails::Logger is now compatible with ActiveSupport::Logger on Rails versions >= 4.2 (#77)
+
+# v1.14.0
+
+Bug Fix:
+
+- Routemaster Publisher was sending epoch seconds instead of milliseconds (#78)
 
 # v1.13.1 (2017-10-18)
 
