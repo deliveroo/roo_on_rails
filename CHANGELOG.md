@@ -1,6 +1,8 @@
 # HEAD
 
-_A description of your awesome work here!_
+Bug fix:
+
+- It's possible to set an invalid log level and crash on boot (#84)
 
 # v1.16.1 (2017-11-20)
 

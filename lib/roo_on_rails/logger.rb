@@ -61,10 +61,17 @@ module RooOnRails
     end
 
     def set_log_level
-      self.level = ::Logger::Severity.const_get(ENV.fetch('LOG_LEVEL', 'DEBUG'))
+      selected_level = ::Logger::Severity.constants.detect do |log_level|
+        log_level == log_level_setting.upcase.to_sym
+      end
+      self.level = ::Logger::Severity.const_get(selected_level || :DEBUG)
     end
 
     private
+
+    def log_level_setting
+      ENV.fetch('LOG_LEVEL', 'DEBUG')
+    end
 
     class Proxy < SimpleDelegator
       def initialize(logger, context)
