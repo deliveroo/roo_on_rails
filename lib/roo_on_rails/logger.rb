@@ -64,7 +64,7 @@ module RooOnRails
       selected_level = ::Logger::Severity.constants.detect do |log_level|
         log_level == log_level_setting.upcase.to_sym
       end
-      self.level = selected_level || :DEBUG
+      self.level = ::Logger::Severity.const_get(selected_level || :DEBUG)
     end
 
     private
