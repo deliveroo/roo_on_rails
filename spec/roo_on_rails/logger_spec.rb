@@ -5,6 +5,34 @@ RSpec.describe RooOnRails::Logger do
   let(:logger) { described_class.new(buffer) }
   let(:output) { buffer.string.chomp }
 
+  describe '#set_log_level' do
+    before do
+      allow(logger).to receive(:log_level_setting) { log_setting }
+      logger.set_log_level
+    end
+
+    context 'WARN' do
+      let(:log_setting) { 'WARN' }
+      it "should set the log level to 'warn'" do
+        expect(logger.level).to eq 2
+      end
+    end
+
+    context 'warn' do
+      let(:log_setting) { 'warn' }
+      it "should set the log level to 'warn'" do
+        expect(logger.level).to eq 2
+      end
+    end
+
+    context 'SOMETHING_INVALID' do
+      let(:log_setting) { 'SOMETHING_INVALID' }
+      it "should set the log level to 'debug'" do
+        expect(logger.level).to eq 0
+      end
+    end
+  end
+
   describe '#with' do
     context 'when the log method is nested' do
       before { logger.with(i: 123, s1: 'stuff', s2: 'more stuff') { logger.info('hello-world') } }
