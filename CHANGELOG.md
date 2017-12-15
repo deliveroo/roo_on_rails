@@ -3,6 +3,7 @@
 Bug fix:
 
 - It's possible to set an invalid log level and crash on boot (#84)
+- Do not disable ActiveRecord connection reaping by default; set default behaviour to Rails' default behaviour.
 
 # v1.16.1 (2017-11-20)
 
