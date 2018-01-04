@@ -13,7 +13,8 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
   end
 
   describe 'when configured correctly' do
-    let(:publisher) { TestPublisherA.new(model, event) }
+    let(:force_publish) { false }
+    let(:publisher) { TestPublisherA.new(model, event, force_publish: force_publish) }
 
     before do
       allow(publisher).to receive_messages(
@@ -100,6 +101,39 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
           let(:model) { TestModel.which_responds_to(updated_at: update_time).new }
 
           it { should eq (update_time.to_f * 1000).to_i }
+        end
+      end
+    end
+
+    [:created, :updated, :deleted].each do |event|
+      context 'when model was not created or changed' do
+        let(:event) { event }
+        let(:model) { TestModel.which_responds_to(new_record?: false, previous_changes: []).new }
+  
+        it 'should not publish an event to Routemaster fine' do
+          expect(::Routemaster::Client).to_not receive(:send)
+          publisher.publish!
+        end
+
+        context 'when force_publish is enabled' do
+          let(:force_publish) { true }
+
+          it 'should publish an event to Routemaster fine' do
+            expect(::Routemaster::Client).to receive(:send).with(
+              event,
+              "anonymous_test_model_classes",
+              "https://deliveroo.test/url",
+              {
+                async: false,
+                data: {
+                  "test_key_1" => "Test value 1",
+                  "test_key_2" => "Test value 2"
+                },
+                t: nil
+              }
+            )
+            publisher.publish!
+          end
         end
       end
     end

@@ -13,9 +13,9 @@ module RooOnRails
         @publishers[model_class.name] << publisher_class
       end
 
-      def self.for(model, event)
+      def self.for(model, event, force_publish: false)
         publisher_classes = @publishers[model.class.name] || @default_publishers
-        publisher_classes.map { |c| c.new(model, event) }
+        publisher_classes.map { |c| c.new(model, event, force_publish: force_publish) }
       end
 
       def self.clear
