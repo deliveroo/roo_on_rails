@@ -13,8 +13,7 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
   end
 
   describe 'when configured correctly' do
-    let(:force_publish) { false }
-    let(:publisher) { TestPublisherA.new(model, event, force_publish: force_publish) }
+    let(:publisher) { TestPublisherA.new(model, event) }
 
     before do
       allow(publisher).to receive_messages(
@@ -116,8 +115,6 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
         end
 
         context 'when force_publish is enabled' do
-          let(:force_publish) { true }
-
           it 'should publish an event to Routemaster fine' do
             expect(::Routemaster::Client).to receive(:send).with(
               event,
@@ -132,7 +129,7 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
                 t: nil
               }
             )
-            publisher.publish!
+            publisher.publish!(force_publish: true)
           end
         end
       end

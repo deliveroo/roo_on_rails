@@ -4,26 +4,24 @@ require 'routemaster/client'
 module RooOnRails
   module Routemaster
     class Publisher
-      attr_reader :model, :event, :force_publish
+      attr_reader :model, :event
 
-      def initialize(model, event, client: ::Routemaster::Client, force_publish: false)
+      def initialize(model, event, client: ::Routemaster::Client)
         @model = model
         @event = event
         @client = client
-        @force_publish = force_publish
       end
 
       def publish?
-        return true if force_publish
         noop? || @model.new_record? || @model.previous_changes.any?
       end
 
-      def will_publish?
-        Config.routemaster_publishing_enabled? && publish?
+      def will_publish?(force_publish: false)
+        Config.routemaster_publishing_enabled? && (force_publish || publish?)
       end
 
-      def publish!
-        return unless will_publish?
+      def publish!(force_publish: false)
+        return unless will_publish?(force_publish: force_publish)
         @client.send(
           @event,
           topic,

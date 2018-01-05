@@ -34,11 +34,6 @@ RSpec.describe RooOnRails::Routemaster::Publishers do
       it 'should have the event set on the publisher' do
         expect(publishers.for(model, event).first.event).to eq event
       end
-      it 'should have force_publish set properly on the publisher' do
-        expect(publishers.for(model, event).first.force_publish).to eq false
-        expect(publishers.for(model, event, force_publish: false).first.force_publish).to eq false
-        expect(publishers.for(model, event, force_publish: true).first.force_publish).to eq true
-      end
     end
 
     context 'when one publisher is registered for a model' do
@@ -55,11 +50,6 @@ RSpec.describe RooOnRails::Routemaster::Publishers do
       end
       it 'should have the event set on the publisher' do
         expect(publishers.for(model, event).first.event).to eq event
-      end
-      it 'should have force_publish set properly on the publisher' do
-        expect(publishers.for(model, event).first.force_publish).to eq false
-        expect(publishers.for(model, event, force_publish: false).first.force_publish).to eq false
-        expect(publishers.for(model, event, force_publish: true).first.force_publish).to eq true
       end
     end
 
@@ -80,15 +70,6 @@ RSpec.describe RooOnRails::Routemaster::Publishers do
       it 'should have the event set on the publishers' do
         expect(publishers.for(model, event).map(&:event).uniq).to eq [event]
       end
-      it 'should have force_publish set properly on the publisher' do
-        expect(publishers.for(model, event).map(&:force_publish).uniq).to eq [false]
-        expect(
-          publishers.for(model, event, force_publish: false).map(&:force_publish).uniq
-        ).to eq [false]
-        expect(
-          publishers.for(model, event, force_publish: true).map(&:force_publish).uniq
-        ).to eq [true]
-      end
     end
 
     context 'when multiple publishers are registered for a model' do
@@ -108,15 +89,6 @@ RSpec.describe RooOnRails::Routemaster::Publishers do
       it 'should have the event set on the publishers' do
         expect(publishers.for(model, event).map(&:event).uniq).to eq [event]
       end
-      it 'should have force_publish set properly on the publisher' do
-        expect(publishers.for(model, event).map(&:force_publish).uniq).to eq [false]
-        expect(
-          publishers.for(model, event, force_publish: false).map(&:force_publish).uniq
-        ).to eq [false]
-        expect(
-          publishers.for(model, event, force_publish: true).map(&:force_publish).uniq
-        ).to eq [true]
-      end
     end
 
     context 'when both a default publisher and a model-specific publisher are registered' do
@@ -134,15 +106,6 @@ RSpec.describe RooOnRails::Routemaster::Publishers do
       end
       it 'should have the event set on the publisher' do
         expect(publishers.for(model, event).first.event).to eq event
-      end
-      it 'should have force_publish set properly on the publisher' do
-        expect(publishers.for(model, event).map(&:force_publish).uniq).to eq [false]
-        expect(
-          publishers.for(model, event, force_publish: false).map(&:force_publish).uniq
-        ).to eq [false]
-        expect(
-          publishers.for(model, event, force_publish: true).map(&:force_publish).uniq
-        ).to eq [true]
       end
     end
   end
