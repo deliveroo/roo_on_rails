@@ -21,6 +21,12 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
   let(:subject_instance) { subject.new }
   let(:publisher_spy) { spy('publisher') }
+  
+  events_and_types = [
+    %i(create created),
+    %i(update updated),
+    %i(destroy deleted)
+  ]
 
   describe "::publish_lifecycle_events" do
     context "when called without arguments" do
@@ -35,12 +41,6 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
       end
 
       describe "and calling a callback" do
-        events_and_types = [
-          %i(create created),
-          %i(update updated),
-          %i(destroy deleted)
-        ]
-
         events_and_types.each do |lifecycle_event|
           it "fetches a publisher for #{lifecycle_event.first}" do
             callback = subject.after_commit_hooks.detect { |event| event.last[:on] == lifecycle_event.first }.first
@@ -70,6 +70,30 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
       it "adds a 'create' hook only" do
         expect(subject.after_commit_hooks).to match_array([[:publish_lifecycle_event_on_create, { on: :create }]])
+      end
+    end
+  end
+
+  describe "#publish_lifecycle_event" do
+    events_and_types.each do |lifecycle_event|
+      it "publishes #{lifecycle_event.first} event with force_publish disabled" do
+        allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
+          [publisher_spy]
+        end
+        expect(publisher_spy).to receive(:publish!).with(force_publish: false)
+        subject_instance.publish_lifecycle_event(lifecycle_event.first)
+      end
+    end
+  end
+
+  describe "#publish_lifecycle_event!" do
+    events_and_types.each do |lifecycle_event|
+      it "publishes #{lifecycle_event.first} event with force_publish enabled" do
+        allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
+          [publisher_spy]
+        end
+        expect(publisher_spy).to receive(:publish!).with(force_publish: true)
+        subject_instance.publish_lifecycle_event!(lifecycle_event.first)
       end
     end
   end

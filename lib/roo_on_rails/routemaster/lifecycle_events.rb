@@ -16,17 +16,25 @@ module RooOnRails
       private_constant :ACTIVE_RECORD_TO_ROUTEMASTER_EVENT_MAP
 
       def publish_lifecycle_event(event)
+        publish_event(event, force_publish: false)
+      end
+
+      def publish_lifecycle_event!(event)
+        publish_event(event, force_publish: true)
+      end
+
+      private
+
+      def publish_event(event, force_publish:)
         publishers = Routemaster::Publishers.for(self, routemaster_event_type(event))
         publishers.each do |publisher|
           begin
-            publisher.publish!
+            publisher.publish!(force_publish: force_publish)
           rescue => e
             NewRelic::Agent.notice_error(e)
           end
         end
       end
-
-      private
 
       def routemaster_event_type(event)
         ACTIVE_RECORD_TO_ROUTEMASTER_EVENT_MAP[event].tap do |type|
