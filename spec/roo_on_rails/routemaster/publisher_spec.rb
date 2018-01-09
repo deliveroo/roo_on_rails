@@ -103,6 +103,37 @@ RSpec.describe RooOnRails::Routemaster::Publisher do
         end
       end
     end
+
+    [:created, :updated, :deleted].each do |event|
+      context 'when model was not created or changed' do
+        let(:event) { event }
+        let(:model) { TestModel.which_responds_to(new_record?: false, previous_changes: []).new }
+  
+        it 'should not publish an event to Routemaster fine' do
+          expect(::Routemaster::Client).to_not receive(:send)
+          publisher.publish!
+        end
+
+        context 'when force_publish is enabled' do
+          it 'should publish an event to Routemaster fine' do
+            expect(::Routemaster::Client).to receive(:send).with(
+              event,
+              "anonymous_test_model_classes",
+              "https://deliveroo.test/url",
+              {
+                async: false,
+                data: {
+                  "test_key_1" => "Test value 1",
+                  "test_key_2" => "Test value 2"
+                },
+                t: nil
+              }
+            )
+            publisher.publish!(force_publish: true)
+          end
+        end
+      end
+    end
   end
 
   describe 'when missing some configuration' do

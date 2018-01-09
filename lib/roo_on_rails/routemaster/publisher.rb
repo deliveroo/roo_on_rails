@@ -16,12 +16,12 @@ module RooOnRails
         noop? || @model.new_record? || @model.previous_changes.any?
       end
 
-      def will_publish?
-        Config.routemaster_publishing_enabled? && publish?
+      def will_publish?(force_publish: false)
+        Config.routemaster_publishing_enabled? && (force_publish || publish?)
       end
 
-      def publish!
-        return unless will_publish?
+      def publish!(force_publish: false)
+        return unless will_publish?(force_publish: force_publish)
         @client.send(
           @event,
           topic,

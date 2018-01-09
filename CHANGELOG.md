@@ -2,6 +2,10 @@
 
 _Your awesome improvements here!_
 
+Features:
+
+- Forced publishing of lifecycle events to Routemaster without model checks. (#86)
+
 # v1.16.2 (2017-12-15)
 
 Bug fix:
