@@ -8,7 +8,8 @@ module RooOnRails
       end
 
       initializer 'roo_on_rails.logging.after', after: :initialize_logger do
-        Rails.logger.set_log_level
+        log_level = Rails.configuration.log_level
+        Rails.logger.set_log_level(default: log_level)
         Rails.logger.debug 'initializer roo_on_rails.logging.after'
       end
     end
