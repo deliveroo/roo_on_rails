@@ -40,7 +40,6 @@ module RooOnRails
         l.formatter = method(:_formatter)
       end
       super(logger)
-      set_log_level
     end
 
     def with(context = {})
@@ -60,17 +59,18 @@ module RooOnRails
       nil
     end
 
-    def set_log_level
+    def set_log_level(default: :DEBUG)
       selected_level = ::Logger::Severity.constants.detect do |log_level|
         log_level == log_level_setting.upcase.to_sym
       end
-      self.level = ::Logger::Severity.const_get(selected_level || :DEBUG)
+
+      self.level = ::Logger::Severity.const_get(selected_level || default.upcase)
     end
 
     private
 
     def log_level_setting
-      ENV.fetch('LOG_LEVEL', 'DEBUG')
+      @_log_level_setting ||= ENV.fetch('LOG_LEVEL', '')
     end
 
     class Proxy < SimpleDelegator
