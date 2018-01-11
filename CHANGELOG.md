@@ -1,6 +1,9 @@
 # HEAD
 
-_Your awesome improvements here!_
+Features:
+
+- Respect rails config `log_level`, default to this if no LOG_LEVEL env
+  var is set instead of `debug`. (#87)
 
 # v1.17.0 (2018-01-09)
 
