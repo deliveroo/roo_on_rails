@@ -19,8 +19,12 @@ module RooOnRails
             abort "Aborting: newrelic.yml detected in '#{path.parent.realpath}', should not exist"
           end
 
+          sync_startup = !(ENV['NEW_RELIC_SYNC_STARTUP'] == 'false')
+
           require 'newrelic_rpm'
-          ::NewRelic::Agent.manual_start unless Rails.env.test?
+          unless Rails.env.test?
+            ::NewRelic::Control.instance.init_plugin(sync_startup: sync_startup)
+          end
         end
       end
     end
