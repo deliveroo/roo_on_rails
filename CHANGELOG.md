@@ -1,5 +1,9 @@
 # HEAD
 
+_A description of your awesome changes here!_
+
+# v1.18.0 (2018-01-11)
+
 Features:
 
 - Respect rails config `log_level`, default to this if no LOG_LEVEL env
