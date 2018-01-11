@@ -8,7 +8,12 @@ module RooOnRails
       end
 
       initializer 'roo_on_rails.logging.after', after: :initialize_logger do
+        # It is not possible to set log_level to an invalid value without some
+        # deliberate gymnastics (the setter will raise an error), and Rails
+        # defaults this to `debug`, so we don't need to guard against nil /
+        # invalidity
         log_level = Rails.configuration.log_level
+
         Rails.logger.set_log_level(default: log_level)
         Rails.logger.debug 'initializer roo_on_rails.logging.after'
       end
