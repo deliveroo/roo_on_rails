@@ -2,6 +2,14 @@
 
 _A description of your awesome changes here!_
 
+Bug fix:
+
+- Avoid New Relic initialization warning by following Rails initializer behaviour
+
+Features:
+
+- Allow disabling New Relic synchronous startup by setting `NEW_RELIC_SYNC_STARTUP=false`
+
 # v1.18.0 (2018-01-11)
 
 Features:
