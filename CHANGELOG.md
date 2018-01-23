@@ -2,6 +2,8 @@
 
 _A description of your awesome changes here!_
 
+# v1.19.0 (2018-01-23)
+
 Bug fix:
 
 - Avoid New Relic initialization warning by following Rails initializer behaviour
