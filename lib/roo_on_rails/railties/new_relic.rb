@@ -19,7 +19,7 @@ module RooOnRails
             abort "Aborting: newrelic.yml detected in '#{path.parent.realpath}', should not exist"
           end
 
-          sync_startup = ENV.fetch('NEW_RELIC_SYNC_STARTUP', 'YES').match?(/\A(YES|TRUE|ON|1)\Z/i)
+          sync_startup = (ENV.fetch('NEW_RELIC_SYNC_STARTUP', 'YES') =~ /\A(YES|TRUE|ON|1)\Z/i)
 
           require 'newrelic_rpm'
           unless Rails.env.test?
