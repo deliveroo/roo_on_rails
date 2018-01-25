@@ -40,7 +40,6 @@ module RooOnRails
         l.formatter = method(:_formatter)
       end
       super(logger)
-      set_log_level(default: Rails.configuration.log_level)
     end
 
     def with(context = {})
