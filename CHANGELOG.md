@@ -6,6 +6,10 @@ Features:
 
 - Add Hopper compatibility for DataDog integration (#90)
 
+Bug fix:
+
+- Set log level when instantiating logger; this avoids always outputting an initial "debug" line
+
 # v1.19.0 (2018-01-23)
 
 Bug fixes:
