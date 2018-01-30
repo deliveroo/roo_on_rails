@@ -24,9 +24,13 @@ module RooOnRails
     def tags
       [
         "env:#{ENV.fetch('STATSD_ENV', 'unknown')}",
-        "source:#{ENV.fetch('DYNO', 'unknown')}",
+        "source:#{source_name}",
         "app:#{app_name}"
       ]
+    end
+
+    def source_name
+      ENV['DYNO'] || ENV['HOSTNAME'] || 'unknown'
     end
 
     def app_name
