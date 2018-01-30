@@ -8,7 +8,7 @@ Features:
 
 Bug fix:
 
-- Set log level when instantiating logger; this avoids always outputting an initial "debug" line
+- Set log level when instantiating logger; this avoids always outputting an initial "debug" line (#89)
 
 # v1.19.0 (2018-01-23)
 
