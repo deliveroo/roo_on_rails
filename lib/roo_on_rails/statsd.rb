@@ -25,8 +25,12 @@ module RooOnRails
       [
         "env:#{ENV.fetch('STATSD_ENV', 'unknown')}",
         "source:#{ENV.fetch('DYNO', 'unknown')}",
-        "app:#{ENV.fetch('HEROKU_APP_NAME', 'unknown')}"
+        "app:#{app_name}"
       ]
+    end
+
+    def app_name
+      ENV['HEROKU_APP_NAME'] || ENV['STATSD_APP_NAME'] || 'unknown'
     end
   end
 
