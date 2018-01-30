@@ -278,31 +278,29 @@ This is automatically configured when running `roo_on_rails harness`.
 
 #### Custom application metrics
 
-Sending custom metrics to Datadog through Statsd requires an agent running in
-each dyno.
-You need to add the buildpack
-[`heroku-buildpack-datadog`](https://github.com/deliveroo/heroku-buildpack-datadog).
+Sending custom metrics to Datadog through Statsd requires an agent running in each dyno or container. For Heroku you need to add the buildpack [`heroku-buildpack-datadog`](https://github.com/deliveroo/heroku-buildpack-datadog).
 
 Once this is done, you can send metrics with e.g.:
 
 ```ruby
-RooOnRails.statsd.increment('my.metric', tags: 'tag:value')
+RooOnRails.statsd.increment('my.metric', tags: ['tag:value'])
 ```
 
-Tags `env:{name}`, `source:{dyno}`, and `app:{name}` will automatically be added
-to all your metrics.
+The following tags will automatically be added to all your metrics and their value depends on the environment variables listed below, in order of priority:
 
-The following environment variables are being used.  The default values are fine
-except for `STATSD_ENV` which should be set.
-
-- `STATSD_ENV`
-- `STATSD_HOST`
-- `STATSD_PORT`
-
-These extra required variables are automatically set by Heroku:
-
-- `DYNO`
-- `HEROKU_APP_NAME`
+* `env:{name}`
+  * `STATDS_ENV` – optional and to be set manually (e.g. `staging`);
+  * `HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `staging`);
+  * Defaults to `unknown`.
+* `source:{name}`
+  * `DYNO` – automatically set by Heroku (e.g. `web.3`);
+  * `HOSTNAME` – automatically set by Hopper (e.g. `876c57c17207`);
+  * Defaults to `unknown`.
+* `app:{name}`
+  * `STATSD_APP_NAME` – optional and to be set manually (e.g. `notifications-staging`);
+  * `HEROKU_APP_NAME` – automatically set by Heroku (e.g. `roo-notifications-staging`);
+  * `HOPPER_APP_NAME`+`HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `notifications-staging`);
+  * Defaults to `unknown`.
 
 ### Routemaster Client
 
