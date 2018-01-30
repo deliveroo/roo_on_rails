@@ -34,7 +34,14 @@ module RooOnRails
     end
 
     def app_name
-      ENV['HEROKU_APP_NAME'] || ENV['STATSD_APP_NAME'] || 'unknown'
+      ENV['HEROKU_APP_NAME'] || ENV['STATSD_APP_NAME'] || hopper_app_name || 'unknown'
+    end
+
+    def hopper_app_name
+      app_name = ENV['HOPPER_APP_NAME']
+      cluster_name = ENV['HOPPER_ECS_CLUSTER_NAME']
+      return unless app_name && cluster_name
+      [app_name, cluster_name].join('-')
     end
   end
 
