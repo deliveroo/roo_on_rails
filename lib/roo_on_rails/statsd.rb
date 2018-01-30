@@ -23,10 +23,14 @@ module RooOnRails
 
     def tags
       [
-        "env:#{ENV.fetch('STATSD_ENV', 'unknown')}",
+        "env:#{env_name}",
         "source:#{source_name}",
         "app:#{app_name}"
       ]
+    end
+
+    def env_name
+      ENV['STATSD_ENV'] || ENV['HOPPER_ECS_CLUSTER_NAME'] || 'unknown'
     end
 
     def source_name
@@ -34,7 +38,7 @@ module RooOnRails
     end
 
     def app_name
-      ENV['HEROKU_APP_NAME'] || ENV['STATSD_APP_NAME'] || hopper_app_name || 'unknown'
+      ENV['STATSD_APP_NAME'] || ENV['HEROKU_APP_NAME'] || hopper_app_name || 'unknown'
     end
 
     def hopper_app_name
