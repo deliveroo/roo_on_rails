@@ -1,6 +1,6 @@
 # HEAD
 
-_A description of your awesome changes here!_
+- Add Hopper compatibility for DataDog integration
 
 # v1.19.0 (2018-01-23)
 
