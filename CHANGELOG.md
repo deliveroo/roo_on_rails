@@ -2,15 +2,19 @@
 
 _A description of your awesome changes here!_
 
+Features:
+
+- Add Hopper compatibility for DataDog integration (#90)
+
 # v1.19.0 (2018-01-23)
 
-Bug fix:
+Bug fixes:
 
-- Avoid New Relic initialization warning by following Rails initializer behaviour
+- Avoid New Relic initialization warning by following Rails initializer behaviour (#88)
 
 Features:
 
-- Allow disabling New Relic synchronous startup by setting `NEW_RELIC_SYNC_STARTUP=false`
+- Allow disabling New Relic synchronous startup by setting `NEW_RELIC_SYNC_STARTUP=false` (#88)
 
 # v1.18.0 (2018-01-11)
 
@@ -27,14 +31,14 @@ Features:
 
 # v1.16.2 (2017-12-15)
 
-Bug fix:
+Bug fixes:
 
 - It's possible to set an invalid log level and crash on boot (#84)
 - Do not disable ActiveRecord connection reaping by default; set default behaviour to Rails' default behaviour. (#85)
 
 # v1.16.1 (2017-11-20)
 
-Bug fix:
+Bug fixes:
 
 - Auto-load roo identity if configured, prevent failing in CI (#83)
 
@@ -44,7 +48,7 @@ Features:
 
 - Allow SSL enforcement to be disabled via `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` environment variable (#82)
 
-Bug fix:
+Bug fixes:
 
 - Ensure we can distinguish between environments' identity services (#81)
 
@@ -63,7 +67,7 @@ Bug Fix:
 
 # v1.13.1 (2017-10-18)
 
-Bug fix:
+Bug fixes:
 
 - Fixes issue when `service_name` is null in `require_api_key` (#74)
 
@@ -74,7 +78,7 @@ Features:
 - Provide `ROUTEMASTER_VERIFY_SSL` environment variable to disable
   routemaster-client's SSL verification. (#68)
 
-Bug fix:
+Bug fixes:
 
 - Fixes issue with `fix` command of the service setup scripts for papertrail (#66)
 - Fixes issue with API authentication concern where service name was incorrect (#71)
