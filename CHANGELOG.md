@@ -1,6 +1,4 @@
-# HEAD
-
-_A description of your awesome changes here!_
+# v1.20.0 (2018-03-27)
 
 Features:
 
