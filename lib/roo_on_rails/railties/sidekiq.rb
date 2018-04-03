@@ -9,7 +9,7 @@ module RooOnRails
     class Sidekiq < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
         Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
-          
+
           unless RooOnRails::Config.sidekiq_enabled?
             log.debug 'skipping'
             next
@@ -17,7 +17,7 @@ module RooOnRails
 
           log.debug 'loading'
           require 'hirefire-resource'
-         
+
           config_sidekiq
           config_sidekiq_metrics
           config_hirefire(app)
@@ -40,13 +40,8 @@ module RooOnRails
       end
 
       def config_sidekiq_metrics
-        require 'sidekiq/middleware/server/statsd'
-
-        ::Sidekiq.configure_server do |x|
-          x.server_middleware do |chain|
-            chain.add ::Sidekiq::Middleware::Server::Statsd, client: RooOnRails.statsd
-          end
-        end
+        require 'sidekiq-pro'
+        ::Sidekiq::Pro.dogstatsd = -> { RooOnRails.statsd }
       rescue LoadError
         Rails.logger.warn 'Sidekiq metrics unavailable without Sidekiq Pro'
       end
