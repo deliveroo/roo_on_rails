@@ -39,8 +39,16 @@ module RooOnRails
       end
 
       def config_sidekiq_metrics
+        # https://github.com/mperham/sidekiq/wiki/Pro-Metrics
         require 'sidekiq-pro'
         ::Sidekiq::Pro.dogstatsd = -> { RooOnRails.statsd }
+
+        Sidekiq.configure_server do |config|
+          config.server_middleware do |chain|
+            require 'sidekiq/middleware/server/statsd'
+            chain.add Sidekiq::Middleware::Server::Statsd
+          end
+        end
       rescue LoadError
         Rails.logger.warn 'Sidekiq metrics unavailable without Sidekiq Pro'
       end
