@@ -9,7 +9,6 @@ module RooOnRails
     class Sidekiq < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
         Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
-
           unless RooOnRails::Config.sidekiq_enabled?
             log.debug 'skipping'
             next
