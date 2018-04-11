@@ -25,7 +25,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'newrelic_rpm'
   spec.add_runtime_dependency 'rails', '>= 3.2.22', '< 5.3'
   spec.add_runtime_dependency 'rack-timeout'
-  spec.add_runtime_dependency 'octokit'
   spec.add_runtime_dependency 'sidekiq'
   spec.add_runtime_dependency 'dogstatsd-ruby'
   spec.add_runtime_dependency 'faraday'
@@ -33,6 +32,11 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'routemaster-client'
   spec.add_runtime_dependency 'json-jwt', '~> 1.8'
 
+
+  # Only required for the checks functionality
+  spec.add_development_dependency 'octokit'
+
+  # Development gems
   spec.add_development_dependency 'bundler', '~> 1.13'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
