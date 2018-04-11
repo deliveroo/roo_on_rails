@@ -1,5 +1,4 @@
 require 'roo_on_rails/checks/base'
-require 'thor'
 
 module RooOnRails
   module Checks
