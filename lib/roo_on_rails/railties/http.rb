@@ -6,7 +6,6 @@ module RooOnRails
           log.debug 'loading'
 
           require 'rack/timeout/base'
-          require 'rack/ssl-enforcer'
           require 'roo_on_rails/rack/safe_timeouts'
 
           ::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i
