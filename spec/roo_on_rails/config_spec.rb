@@ -4,7 +4,6 @@ require 'roo_on_rails/config'
 RSpec.describe RooOnRails::Config do
   FEATURES = [
     { name: "sidekiq", default: true },
-    { name: "google_auth", default: false },
     { name: "routemaster", default: false },
     { name: "routemaster_publishing", default: false }
   ]

@@ -22,7 +22,6 @@
   - [Sidekiq](#sidekiq)
   - [Logging](#logging)
   - [Identity](#identity)
-  - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
   - [Routemaster Client](#routemaster-client)
   - [API Authentication ](#api-authentication)
@@ -86,7 +85,6 @@ We'll insert the following middlewares into the rails stack:
    (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
 3. `Rack::Deflater`: compresses responses from the application, can be disabled
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
-4. Optional middlewares for Google Oauth2 (more below).
 
 
 ### Database configuration
@@ -196,21 +194,6 @@ end
 Be aware that maliciously crafted JWTs will raise 401s that your other middleware can present
 and poorly configured JWT set up will raise errors that you'll be able to catch in test.
 
-### Google OAuth authentication
-
-When `GOOGLE_AUTH_ENABLED` is set to true we inject a `Omniauth` Rack middleware
-with a pre-configured strategy for Google Oauth2.
-
-Parameters:
-
-- `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET` (mandatory)
-- `GOOGLE_AUTH_PATH_PREFIX` (optional, defaults to `/auth`)
-- `GOOGLE_AUTH_CONTROLLER` (optional, defaults to `sessions`)
-
-This feature is bring-your-own-controller — it won't magically protect your
-application.
-
-A simple but secure example is detailed in `README.google_oauth2.md`.
 
 ### Datadog Integration
 
