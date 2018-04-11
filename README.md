@@ -84,18 +84,10 @@ We'll insert the following middlewares into the rails stack:
 
 1. `Rack::Timeout`: sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT`
    (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
-2. `Rack::SslEnforcer`: enforces HTTPS.
 3. `Rack::Deflater`: compresses responses from the application, can be disabled
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 4. Optional middlewares for Google Oauth2 (more below).
 
-
-#### Disabling SSL enforcement
-
-If you're running your application on Hopper, you'll need to turn off SSL enforcement
-as we do that at edge level in Cloudflare rather than the application code itself,
-which must be served over HTTP to its associated ALB, which handles SSL termination.
-To do this, you can set the `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` to `YES`.
 
 ### Database configuration
 
