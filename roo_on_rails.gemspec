@@ -24,7 +24,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'dotenv-rails', '~> 2.1'
   spec.add_runtime_dependency 'newrelic_rpm'
   spec.add_runtime_dependency 'rails', '>= 3.2.22', '< 5.3'
-  spec.add_runtime_dependency 'hashie', '~> 3.4'
   spec.add_runtime_dependency 'rack-timeout'
   spec.add_runtime_dependency 'octokit'
   spec.add_runtime_dependency 'sidekiq'
