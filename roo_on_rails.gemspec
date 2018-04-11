@@ -29,7 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rack-timeout'
   spec.add_runtime_dependency 'rack-ssl-enforcer'
   spec.add_runtime_dependency 'octokit'
-  spec.add_runtime_dependency 'hirefire-resource'
   spec.add_runtime_dependency 'sidekiq'
   spec.add_runtime_dependency 'dogstatsd-ruby'
   spec.add_runtime_dependency 'omniauth-google-oauth2'
