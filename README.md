@@ -276,8 +276,6 @@ roo_on_rails harness
 That command will sequentially run a number of checks. For it to run successfully, you will need:
 
 - a GitHub API token that can read your GitHub repository's settings placed in `~/.roo_on_rails/github-token`
-- the Heroku toolbelt installed and logged in
-- admin privileges on the `roo-dd-bridge-production` (this will be addressed eventually)
 
 The command can automatically fix most of the failing checks automatically;
 simply run it with the `--fix` flag:
@@ -297,13 +295,9 @@ roo_on_rails harness --env staging
 
 Running the `roo_on_rails` command currently checks for:
 
-- the presence of `PLAYBOOK.md`
-- compliant Heroku app naming;
-- presence of the Heroku preboot flag;
+- the presence of `PLAYBOOK.md`;
+- the origin URL of the git repository;
 - correct Github master branch protection;
-- integration with the Heroku-Datadog metrics bridge (for CPU, memory, request
-  throughput data);
-- integration with Papertrail;
 - correct Sidekiq configuration.
 
 The command is designed to fix issues in many cases.
