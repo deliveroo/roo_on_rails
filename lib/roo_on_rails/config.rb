@@ -13,18 +13,6 @@ module RooOnRails
         enabled? 'SIDEKIQ_ENABLED'
       end
 
-      def google_auth_enabled?
-        enabled? 'GOOGLE_AUTH_ENABLED', default: false
-      end
-
-      def google_auth_path_prefix
-        ENV.fetch('GOOGLE_AUTH_PATH_PREFIX')
-      end
-
-      def google_auth_controller
-        ENV.fetch('GOOGLE_AUTH_CONTROLLER')
-      end
-
       def routemaster_enabled?
         enabled? 'ROUTEMASTER_ENABLED', default: false
       end
