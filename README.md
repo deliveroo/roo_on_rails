@@ -119,9 +119,7 @@ queues which take longer than the time the application needs them to be processe
 
 When `SIDEKIQ_ENABLED` is set we'll:
 
-- check for the existence of a worker line in your Procfile;
 - add SLA style queues to your worker list;
-- check for a `HIREFIRE_TOKEN` and if it's set enable SLA based autoscaling;
 
 The following ENV are available:
 
