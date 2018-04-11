@@ -32,15 +32,6 @@ module RooOnRails
           if ENV.fetch('ROO_ON_RAILS_RACK_DEFLATE', 'YES').to_s =~ /\A(YES|TRUE|ON|1)\Z/i
             app.config.middleware.use ::Rack::Deflater
           end
-
-          # Don't use SslEnforcer in test environment as it breaks Capybara
-          unless Rails.env.test? ||
-                 ENV.fetch('ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT', '') =~ /\A(YES|TRUE|ON|1)\Z/i
-            app.config.middleware.insert_before(
-              middleware_to_insert_before,
-              ::Rack::SslEnforcer
-            )
-          end
         end
       end
     end
