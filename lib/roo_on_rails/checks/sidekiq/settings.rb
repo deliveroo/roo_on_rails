@@ -5,7 +5,6 @@ module RooOnRails
   module Checks
     module Sidekiq
       class Settings < Base
-        requires Sidekiq
         def intro
           'Checking Sidekiq settings.yml...'
         end
