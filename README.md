@@ -5,8 +5,7 @@
 
 1. A library that extends Rails (as a set of Railties) and auto-configures common
    dependencies.
-2. A command that checks whether an application's Github repository and Heroku
-   instanciations are compliant.
+2. A command that checks whether an application's Github repository and project configuration are compliant.
 
 ... packaged into a gem, to make following our
 [guidelines](http://deliveroo.engineering/guidelines/services/) easy.
@@ -224,14 +223,6 @@ application.
 A simple but secure example is detailed in `README.google_oauth2.md`.
 
 ### Datadog Integration
-
-#### Heroku metrics
-
-To send system metrics to Datadog (CPU, memory usage, HTTP throughput per
-status, latency, etc), your application need to send their logs to
-[the metrics bridge](https://github.com/deliveroo/heroku-datadog-drain-golang).
-
-This is automatically configured when running `roo_on_rails harness`.
 
 #### Custom application metrics
 
