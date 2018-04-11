@@ -9,5 +9,6 @@ gem "webmock"
 gem "pg", "~> 0.18"
 gem "sqlite3"
 gem "rails", "~> 5.2.0"
+gem 'bootsnap', '>= 1.1.0', require: false
 
 gemspec path: "../"
