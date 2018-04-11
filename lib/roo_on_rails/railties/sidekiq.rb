@@ -16,20 +16,10 @@ module RooOnRails
           end
 
           log.debug 'loading'
-          require 'hirefire-resource'
          
           config_sidekiq
           config_sidekiq_metrics
-          config_hirefire(app)
         end
-      end
-
-      def config_hirefire(app)
-        unless ENV['HIREFIRE_TOKEN']
-          Rails.logger.warn 'No HIREFIRE_TOKEN token set, auto scaling not enabled'
-          return
-        end
-        add_middleware(app)
       end
 
       def config_sidekiq
@@ -49,16 +39,6 @@ module RooOnRails
         end
       rescue LoadError
         Rails.logger.warn 'Sidekiq metrics unavailable without Sidekiq Pro'
-      end
-
-      def add_middleware(app)
-        $stderr.puts 'HIREFIRE_TOKEN set'
-        app.middleware.use HireFire::Middleware
-        HireFire::Resource.configure do |config|
-          config.dyno(:worker) do
-            RooOnRails::Sidekiq::SlaMetric.queue
-          end
-        end
       end
     end
   end
