@@ -1,9 +1,3 @@
-require 'sidekiq'
-require 'roo_on_rails/config'
-require 'roo_on_rails/statsd'
-require 'roo_on_rails/sidekiq/settings'
-require 'roo_on_rails/sidekiq/sla_metric'
-
 module RooOnRails
   module Railties
     class Sidekiq < Rails::Railtie
@@ -14,6 +8,11 @@ module RooOnRails
             log.debug 'skipping'
             next
           end
+
+          require 'sidekiq'
+          require 'roo_on_rails/config'
+          require 'roo_on_rails/statsd'
+          require 'roo_on_rails/sidekiq/settings'
 
           log.debug 'loading'
          

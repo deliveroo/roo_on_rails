@@ -9,3 +9,5 @@ This file tracks the work in progress for the next version of roo_on_rails
 * Drop the Rack SSL enforcer. [pull/96](https://github.com/deliveroo/roo_on_rails/pull/96)
 * Drop the Google OAuth railtie. [pull/97](https://github.com/deliveroo/roo_on_rails/pull/97)
 * Added more hopper-specific StatsD tags. [pull/98](https://github.com/deliveroo/roo_on_rails/pull/98)
+* Reorganized the `require` calls and made some gems optionals for opt-in functionality. 
+[pull/99](https://github.com/deliveroo/roo_on_rails/pull/99)

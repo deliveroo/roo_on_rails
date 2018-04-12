@@ -15,6 +15,7 @@
 **Table of Contents**
 
 - [Installation](#installation)
+  - [Optional dependencies](#optional-dependencies)
 - [Library usage](#library-usage)
   - [New Relic configuration](#new-relic-configuration)
   - [Rack middleware](#rack-middleware)
@@ -58,6 +59,28 @@ And then execute:
     $ bundle
 
 Then re-run your test suite to make sure everything is shipshape.
+
+### Optional dependencies
+
+`roo_on_rails` is strives to have a small installation footprint and, since it's really a collection of different -- and sometimes optional -- bits of functionality, some of its dependencies are optional too.
+
+Users of the library need to explicitly add to their Gemfiles the extra gems that are needed for the functionalities they plan to use. This section of the readme describes what is required for what.
+
+#### Runtime dependencies
+
+`roo_on_rails` provides a number of mixins, utilities and railties.
+
+* `gem 'sidekiq'`, required when `SIDEKIQ_ENABLED` is enabled in the env.
+* `gem 'routemaster-client'`, required when `ROUTEMASTER_ENABLED` is enabled in the env.
+
+#### Command dependencies
+
+As described in the [Command features](#command-features) section, below, `roo_on_rails` provides a command to run locally, in development. The dependencies for this command are not required at runtime, so they're optional and should only be added to the bundle locally, when needed.
+
+They are:
+
+* `gem 'octokit'`, to interact with the GitHub API.
+* `gem 'thor'`, already required by Rails.
 
 ## Library usage
 
