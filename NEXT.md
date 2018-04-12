@@ -11,3 +11,4 @@ This file tracks the work in progress for the next version of roo_on_rails
 * Added more hopper-specific StatsD tags. [pull/98](https://github.com/deliveroo/roo_on_rails/pull/98)
 * Reorganized the `require` calls and made some gems optionals for opt-in functionality. 
 [pull/99](https://github.com/deliveroo/roo_on_rails/pull/99)
+* Sidekiq is disabled by default. [pull/100](https://github.com/deliveroo/roo_on_rails/pull/100)
