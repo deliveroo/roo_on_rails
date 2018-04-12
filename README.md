@@ -81,7 +81,6 @@ They are:
 
 * `gem 'octokit'`, to interact with the GitHub API.
 * `gem 'thor'`, already required by Rails.
-* `gem 'hashie'`.
 
 ## Library usage
 
