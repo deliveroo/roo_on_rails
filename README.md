@@ -70,7 +70,8 @@ Users of the library need to explicitly add to their Gemfiles the extra gems tha
 
 `roo_on_rails` provides a number of mixins, utilities and railties.
 
-* `gem 'sidekiq'`, required `SIDEKIQ_ENABLED` is enabled in the env.
+* `gem 'sidekiq'`, required when `SIDEKIQ_ENABLED` is enabled in the env.
+* `gem 'routemaster-client'`, required when `ROUTEMASTER_ENABLED` is enabled in the env.
 
 #### Command dependencies
 
