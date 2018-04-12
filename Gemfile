@@ -10,7 +10,3 @@ gem 'webmock'
 
 gem 'pg'
 gem 'sqlite3'
-
-gem 'sidekiq'
-gem 'routemaster-client'
-gem 'octokit'
