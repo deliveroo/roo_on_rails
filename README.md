@@ -66,6 +66,12 @@ Then re-run your test suite to make sure everything is shipshape.
 
 Users of the library need to explicitly add to their Gemfiles the extra gems that are needed for the functionalities they plan to use. This section of the readme describes what is required for what.
 
+#### Runtime dependencies
+
+`roo_on_rails` provides a number of mixins, utilities and railties.
+
+* `gem 'sidekiq'`, required `SIDEKIQ_ENABLED` is enabled in the env.
+
 #### Command dependencies
 
 As described in the [Command features](#command-features) section, below, `roo_on_rails` provides a command to run locally, in development. The dependencies for this command are not required at runtime, so they're optional and should only be added to the bundle locally, when needed.
