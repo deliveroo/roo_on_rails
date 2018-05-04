@@ -43,10 +43,10 @@ module RooOnRails
         require 'sidekiq-pro'
         ::Sidekiq::Pro.dogstatsd = -> { RooOnRails.statsd }
 
-        Sidekiq.configure_server do |config|
+        ::Sidekiq.configure_server do |config|
           config.server_middleware do |chain|
             require 'sidekiq/middleware/server/statsd'
-            chain.add Sidekiq::Middleware::Server::Statsd
+            chain.add ::Sidekiq::Middleware::Server::Statsd
           end
         end
       rescue LoadError
