@@ -6,7 +6,7 @@ require 'roo_on_rails/sidekiq/sla_metric'
 
 module RooOnRails
   module Railties
-    class Sidekiq < Rails::Railtie
+    class SidekiqIntegration < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
         Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
           unless RooOnRails::Config.sidekiq_enabled?
