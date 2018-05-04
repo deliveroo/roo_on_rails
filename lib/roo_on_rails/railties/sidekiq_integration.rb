@@ -6,7 +6,7 @@ require 'roo_on_rails/sidekiq/sla_metric'
 
 module RooOnRails
   module Railties
-    class Sidekiq < Rails::Railtie
+    class SidekiqIntegration < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
         Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
           unless RooOnRails::Config.sidekiq_enabled?
@@ -43,10 +43,10 @@ module RooOnRails
         require 'sidekiq-pro'
         ::Sidekiq::Pro.dogstatsd = -> { RooOnRails.statsd }
 
-        Sidekiq.configure_server do |config|
+        ::Sidekiq.configure_server do |config|
           config.server_middleware do |chain|
             require 'sidekiq/middleware/server/statsd'
-            chain.add Sidekiq::Middleware::Server::Statsd
+            chain.add ::Sidekiq::Middleware::Server::Statsd
           end
         end
       rescue LoadError
