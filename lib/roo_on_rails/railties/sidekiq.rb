@@ -3,7 +3,6 @@ module RooOnRails
     class Sidekiq < Rails::Railtie
       initializer 'roo_on_rails.sidekiq' do |app|
         Rails.logger.with initializer: 'roo_on_rails.sidekiq' do |log|
-          
           unless RooOnRails::Config.sidekiq_enabled?
             log.debug 'skipping'
             next
@@ -15,7 +14,7 @@ module RooOnRails
           require 'roo_on_rails/sidekiq/settings'
 
           log.debug 'loading'
-         
+
           config_sidekiq
           config_sidekiq_metrics
         end
@@ -29,11 +28,14 @@ module RooOnRails
       end
 
       def config_sidekiq_metrics
-        require 'sidekiq/middleware/server/statsd'
+        # https://github.com/mperham/sidekiq/wiki/Pro-Metrics
+        require 'sidekiq-pro'
+        ::Sidekiq::Pro.dogstatsd = -> { RooOnRails.statsd }
 
-        ::Sidekiq.configure_server do |x|
-          x.server_middleware do |chain|
-            chain.add ::Sidekiq::Middleware::Server::Statsd, client: RooOnRails.statsd
+        Sidekiq.configure_server do |config|
+          config.server_middleware do |chain|
+            require 'sidekiq/middleware/server/statsd'
+            chain.add Sidekiq::Middleware::Server::Statsd
           end
         end
       rescue LoadError
