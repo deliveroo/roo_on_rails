@@ -34,11 +34,11 @@ module ROR
         shell_run "rails new #{scaffold_dir} #{rails_new_options}"
 
         require 'rails'
-        if Rails::VERSION::MAJOR < 4
-          append_to_file scaffold_dir.join('Gemfile'), %{
-            gem 'sidekiq', '< 5'
-          }
-        end
+        append_to_file scaffold_dir.join('Gemfile'), %{
+          gem 'sidekiq'
+          gem 'routemaster-client'
+          gem 'octokit'
+        }
 
         if Rails::VERSION::MAJOR < 5
           append_to_file scaffold_dir.join('Gemfile'), %{

@@ -5,8 +5,7 @@
 
 1. A library that extends Rails (as a set of Railties) and auto-configures common
    dependencies.
-2. A command that checks whether an application's Github repository and Heroku
-   instanciations are compliant.
+2. A command that checks whether an application's Github repository and project configuration are compliant.
 
 ... packaged into a gem, to make following our
 [guidelines](http://deliveroo.engineering/guidelines/services/) easy.
@@ -16,15 +15,14 @@
 **Table of Contents**
 
 - [Installation](#installation)
+  - [Optional dependencies](#optional-dependencies)
 - [Library usage](#library-usage)
   - [New Relic configuration](#new-relic-configuration)
   - [Rack middleware](#rack-middleware)
   - [Database configuration](#database-configuration)
   - [Sidekiq](#sidekiq)
-  - [HireFire](#hirefire)
   - [Logging](#logging)
   - [Identity](#identity)
-  - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
   - [Routemaster Client](#routemaster-client)
   - [API Authentication ](#api-authentication)
@@ -62,6 +60,28 @@ And then execute:
 
 Then re-run your test suite to make sure everything is shipshape.
 
+### Optional dependencies
+
+`roo_on_rails` is strives to have a small installation footprint and, since it's really a collection of different -- and sometimes optional -- bits of functionality, some of its dependencies are optional too.
+
+Users of the library need to explicitly add to their Gemfiles the extra gems that are needed for the functionalities they plan to use. This section of the readme describes what is required for what.
+
+#### Runtime dependencies
+
+`roo_on_rails` provides a number of mixins, utilities and railties.
+
+* `gem 'sidekiq'`, required when `SIDEKIQ_ENABLED` is enabled in the env.
+* `gem 'routemaster-client'`, required when `ROUTEMASTER_ENABLED` is enabled in the env.
+
+#### Command dependencies
+
+As described in the [Command features](#command-features) section, below, `roo_on_rails` provides a command to run locally, in development. The dependencies for this command are not required at runtime, so they're optional and should only be added to the bundle locally, when needed.
+
+They are:
+
+* `gem 'octokit'`, to interact with the GitHub API.
+* `gem 'thor'`, already required by Rails.
+
 ## Library usage
 
 ### New Relic configuration
@@ -86,18 +106,9 @@ We'll insert the following middlewares into the rails stack:
 
 1. `Rack::Timeout`: sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT`
    (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
-2. `Rack::SslEnforcer`: enforces HTTPS.
 3. `Rack::Deflater`: compresses responses from the application, can be disabled
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
-4. Optional middlewares for Google Oauth2 (more below).
 
-
-#### Disabling SSL enforcement
-
-If you're running your application on Hopper, you'll need to turn off SSL enforcement
-as we do that at edge level in Cloudflare rather than the application code itself,
-which must be served over HTTP to its associated ALB, which handles SSL termination.
-To do this, you can set the `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` to `YES`.
 
 ### Database configuration
 
@@ -121,9 +132,7 @@ queues which take longer than the time the application needs them to be processe
 
 When `SIDEKIQ_ENABLED` is set we'll:
 
-- check for the existence of a worker line in your Procfile;
 - add SLA style queues to your worker list;
-- check for a `HIREFIRE_TOKEN` and if it's set enable SLA based autoscaling;
 
 The following ENV are available:
 
@@ -137,48 +146,6 @@ The following ENV are available:
 NB. If you are migrating to SLA-based queue names, do not set `SIDEKIQ_ENABLED`
 to `true` before your old queues have finished processing (this will prevent
 Sidekiq from seeing the old queues at all).
-
-### HireFire
-
-#### For Web Dynos
-
-Web dynos can be autoscaled by HireFire _only_ if it has been configured to use the `Web.Logplex.Load` source and the Heroku runtime metrics lab feature has been enabled:
-
-```bash
-$ heroku labs:enable log-runtime-metrics -a your-service-name-here
-```
-
-You will also need a log drain for HireFire, but the RooOnRails helper below should configure this for you. You can check with
-
-```bash
-$ heroku drains | grep hirefire
-https://logdrain.hirefire.io (d.00000000-0000-0000-0000-000000000000)
-
-# No drain? Add with:
-$ heroku drains:add -a your-service-name-here https://logdrain.hirefire.io
-```
-
-([HireFire docs for set up](https://help.hirefire.io/guides/logplex/load-logplex))
-
-#### For Sidekiq Workers
-
-When `HIREFIRE_TOKEN` is set an endpoint will be mounted at `/hirefire` that
-reports the required worker count as a function of queue latency. By default we
-add queue names in the style 'within1day', so if we notice an average latency in
-that queue of more than an set threshold we'll request one more worker. If we
-notice less than a threshold we'll request one less worker. These settings can
-be customised via the following ENV variables
-
-- `WORKER_INCREASE_THRESHOLD` (default 0.5)
-- `WORKER_DECREASE_THRESHOLD` (default 0.1)
-
-When setting the manager up in the HireFire web ui, the following settings must
-be used:
-
-- name: 'worker'
-- type: 'Worker.HireFire.JobQueue'
-- ratio: 1
-- decrementable: 'true'
 
 ### Logging
 
@@ -250,31 +217,8 @@ end
 Be aware that maliciously crafted JWTs will raise 401s that your other middleware can present
 and poorly configured JWT set up will raise errors that you'll be able to catch in test.
 
-### Google OAuth authentication
-
-When `GOOGLE_AUTH_ENABLED` is set to true we inject a `Omniauth` Rack middleware
-with a pre-configured strategy for Google Oauth2.
-
-Parameters:
-
-- `GOOGLE_AUTH_CLIENT_ID` and `GOOGLE_AUTH_CLIENT_SECRET` (mandatory)
-- `GOOGLE_AUTH_PATH_PREFIX` (optional, defaults to `/auth`)
-- `GOOGLE_AUTH_CONTROLLER` (optional, defaults to `sessions`)
-
-This feature is bring-your-own-controller — it won't magically protect your
-application.
-
-A simple but secure example is detailed in `README.google_oauth2.md`.
 
 ### Datadog Integration
-
-#### Heroku metrics
-
-To send system metrics to Datadog (CPU, memory usage, HTTP throughput per
-status, latency, etc), your application need to send their logs to
-[the metrics bridge](https://github.com/deliveroo/heroku-datadog-drain-golang).
-
-This is automatically configured when running `roo_on_rails harness`.
 
 #### Custom application metrics
 
@@ -355,8 +299,6 @@ roo_on_rails harness
 That command will sequentially run a number of checks. For it to run successfully, you will need:
 
 - a GitHub API token that can read your GitHub repository's settings placed in `~/.roo_on_rails/github-token`
-- the Heroku toolbelt installed and logged in
-- admin privileges on the `roo-dd-bridge-production` (this will be addressed eventually)
 
 The command can automatically fix most of the failing checks automatically;
 simply run it with the `--fix` flag:
@@ -376,13 +318,9 @@ roo_on_rails harness --env staging
 
 Running the `roo_on_rails` command currently checks for:
 
-- the presence of `PLAYBOOK.md`
-- compliant Heroku app naming;
-- presence of the Heroku preboot flag;
+- the presence of `PLAYBOOK.md`;
+- the origin URL of the git repository;
 - correct Github master branch protection;
-- integration with the Heroku-Datadog metrics bridge (for CPU, memory, request
-  throughput data);
-- integration with Papertrail;
 - correct Sidekiq configuration.
 
 The command is designed to fix issues in many cases.

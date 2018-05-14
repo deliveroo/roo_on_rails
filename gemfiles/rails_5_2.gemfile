@@ -8,7 +8,10 @@ gem "appraisal"
 gem "webmock"
 gem "pg", "~> 0.18"
 gem "sqlite3"
+gem 'sidekiq'
+gem 'routemaster-client'
+gem 'octokit'
 gem "rails", "~> 5.2.0"
-gem "bootsnap", ">= 1.1.0", require: false
+gem 'bootsnap', '>= 1.1.0', require: false
 
 gemspec path: "../"
