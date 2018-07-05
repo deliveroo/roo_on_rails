@@ -9,13 +9,13 @@ module RooOnRails
           require 'rack/ssl-enforcer'
           require 'roo_on_rails/rack/safe_timeouts'
 
-          ::Rack::Timeout.service_timeout = ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i
-          ::Rack::Timeout.wait_timeout = ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
           ::Rack::Timeout::Logger.level = ::Logger::WARN
 
           app.config.middleware.insert_before(
             ::Rack::Runtime,
-            ::Rack::Timeout
+            ::Rack::Timeout,
+            service_timeout: ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i,
+            wait_timeout: ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
           )
 
           middleware_to_insert_before = Rails::VERSION::MAJOR < 4 ? ::ActionDispatch::Cookies : ::Rack::Head
