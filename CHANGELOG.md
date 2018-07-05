@@ -1,3 +1,10 @@
+# v1.21.0 (2018-03-27)
+
+Features:
+
+- Rails 5.2 compatibility
+
+
 # v1.20.0 (2018-03-27)
 
 Features:
