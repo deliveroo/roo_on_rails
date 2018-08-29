@@ -1,3 +1,9 @@
+# v1.22.0 (2018-08-29)
+
+Features:
+
+ - Allows specifiying `BASE_NEW_RELIC_APP_NAME` instead of `NEW_RELIC_APP_NAME`, which reports to New Relic per Hopper service.
+
 # v1.21.0 (2018-03-27)
 
 Features:

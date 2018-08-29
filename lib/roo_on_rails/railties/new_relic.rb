@@ -12,6 +12,15 @@ module RooOnRails
 
           abort 'Aborting: NEW_RELIC_LICENSE_KEY is required' if license_key.nil?
 
+          # Report application stats to a per-service (worker, web) New Relic app, and to a main
+          # application for all services.
+          base_name = ENV['BASE_NEW_RELIC_APP_NAME']
+          service_name = ENV['HOPPER_SERVICE_NAME']
+          if !base_name.blank? && ENV['NEW_RELIC_APP_NAME'].blank?
+            task_app_name = service_name.present? ? "#{base_name} - #{service_name}" : nil
+            ENV['NEW_RELIC_APP_NAME'] = [task_app_name, base_name].compact.join(';')
+          end
+
           path = %w(newrelic.yml config/newrelic.yml).map do |p|
             Pathname.new(p)
           end.find(&:exist?)

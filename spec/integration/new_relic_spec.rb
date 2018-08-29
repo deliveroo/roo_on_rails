@@ -64,6 +64,45 @@ describe 'New Relic integration' do
     end
   end
 
+  context 'when BASE_NEW_RELIC_APP_NAME is set' do
+    let(:base_name) { 'base' }
+    let(:service_name) { 'service' }
+    let(:app_name) { nil }
+
+    let(:app_env_vars) do
+      [
+        super(),
+        "BASE_NEW_RELIC_APP_NAME=#{base_name}",
+        "HOPPER_SERVICE_NAME=#{service_name}",
+        "NEW_RELIC_APP_NAME=#{app_name}"
+      ].join("\n")
+    end
+
+    after { app.stop }
+
+    it 'uses HOPPER_SERVICE_NAME' do
+      app.wait_start
+      expect(app).to have_log /NewRelic.*Application: base - service, base/
+    end
+
+    context 'and NEW_RELIC_APP_NAME is set' do
+      let(:app_name) { 'specific' }
+
+      it 'uses NEW_RELIC_APP_NAME unmodified' do
+        app.wait_start
+        expect(app).to have_log /NewRelic.*Application: specific/
+      end
+    end
+
+    context 'and HOPPER_SERVICE_NAME is not set' do
+      let(:service_name) { nil }
+
+      it 'uses just the base name' do
+        app.wait_start
+        expect(app).to have_log /NewRelic.*Application: base/
+      end
+    end
+  end
 
   context 'when a newrelic.yml exists' do
     %w[. ./config].each do |path|
