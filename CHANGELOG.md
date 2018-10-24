@@ -1,3 +1,9 @@
+# v1.23.0 (2018-10-24)
+
+Features:
+
+ - Use internal URLs for keys in JWT processing (#106)
+
 # v1.22.0 (2018-08-29)
 
 Features:
