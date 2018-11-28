@@ -25,7 +25,6 @@ RSpec.describe 'Logging Railtie' do
     end
 
     context 'when LOG_LEVEL is unset' do
-
       it "uses the log level of `config.log_level`" do
         app.wait_start
         expect(app).not_to have_log(/d3bug/)
@@ -35,7 +34,6 @@ RSpec.describe 'Logging Railtie' do
     end
 
     context 'when LOG_LEVEL is set' do
-
       let(:app_env_vars) {
         [super(), "LOG_LEVEL=#{log_level}"].join("\n")
       }

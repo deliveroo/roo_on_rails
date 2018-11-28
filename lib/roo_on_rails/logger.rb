@@ -59,7 +59,7 @@ module RooOnRails
       nil
     end
 
-    def set_log_level(default: :DEBUG)
+    def set_log_level(default: :WARN)
       selected_level = ::Logger::Severity.constants.detect do |log_level|
         log_level == log_level_setting.upcase.to_sym
       end
@@ -70,7 +70,7 @@ module RooOnRails
     private
 
     def log_level_setting
-      @_log_level_setting ||= ENV.fetch('LOG_LEVEL', 'warn')
+      @_log_level_setting ||= ENV.fetch('LOG_LEVEL', '')
     end
 
     class Proxy < SimpleDelegator
