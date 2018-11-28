@@ -1,3 +1,5 @@
+ENV['LOG_LEVEL'] ||= 'info'
+
 require 'simplecov'
 SimpleCov.start
 
