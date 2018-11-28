@@ -3,7 +3,6 @@
 Features:
 
 - Sidekiq reads log level from `SIDEKIQ_LOG_LEVEL` or `LOG_LEVEL`
-- Default log level for Sidekiq and Rails is now 'warn'
 
 # v1.22.0 (2018-08-29)
 

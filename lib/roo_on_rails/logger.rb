@@ -59,7 +59,7 @@ module RooOnRails
       nil
     end
 
-    def set_log_level(default: :WARN)
+    def set_log_level(default: :DEBUG)
       selected_level = ::Logger::Severity.constants.detect do |log_level|
         log_level == log_level_setting.upcase.to_sym
       end
