@@ -32,6 +32,8 @@ module RooOnRails
       end
 
       def config_sidekiq
+        sidekiq_log_level = (ENV['SIDEKIQ_LOG_LEVEL'] || ENV['LOG_LEVEL'] || 'warn').upcase
+        ::Sidekiq::Logger.logger.level = Logger.const_get(sidekiq_log_level)
         ::Sidekiq.configure_server do |x|
           x.options[:concurrency] = RooOnRails::Sidekiq::Settings.concurrency.to_i
           x.options[:queues] = RooOnRails::Sidekiq::Settings.queues

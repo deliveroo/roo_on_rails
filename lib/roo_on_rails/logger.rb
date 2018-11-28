@@ -70,7 +70,7 @@ module RooOnRails
     private
 
     def log_level_setting
-      @_log_level_setting ||= ENV.fetch('LOG_LEVEL', '')
+      @_log_level_setting ||= ENV.fetch('LOG_LEVEL', 'warn')
     end
 
     class Proxy < SimpleDelegator

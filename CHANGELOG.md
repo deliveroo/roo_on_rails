@@ -1,15 +1,21 @@
+# HEAD
+
+Features:
+
+- Sidekiq reads log level from `SIDEKIQ_LOG_LEVEL` or `LOG_LEVEL`
+- Default log level for Sidekiq and Rails is now 'warn'
+
 # v1.22.0 (2018-08-29)
 
 Features:
 
- - Allows specifiying `BASE_NEW_RELIC_APP_NAME` instead of `NEW_RELIC_APP_NAME`, which reports to New Relic per Hopper service.
+- Allows specifiying `BASE_NEW_RELIC_APP_NAME` instead of `NEW_RELIC_APP_NAME`, which reports to New Relic per Hopper service.
 
 # v1.21.0 (2018-03-27)
 
 Features:
 
 - Rails 5.2 compatibility
-
 
 # v1.20.0 (2018-03-27)
 
