@@ -1,7 +1,7 @@
 require 'dotenv'
 require 'envied'
 module RooOnRails
-  class Environment
+  class Environment < Rails::Railtie
     def self.load
       # variables from the :hopper group MUST be specified in Hopper, so cannot be loaded from dotenv file
       if envfile_present? && hopper_environment?
