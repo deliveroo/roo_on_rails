@@ -25,7 +25,7 @@ jobs:
           name: Select build variant (Ruby 2.3.4, rails_3)
           command: |
             rbenv local 2.3.4 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_3.gemfile
 
       - restore_cache:
@@ -83,7 +83,7 @@ jobs:
           name: Select build variant (Ruby 2.3.4, rails_4)
           command: |
             rbenv local 2.3.4 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
@@ -141,7 +141,7 @@ jobs:
           name: Select build variant (Ruby 2.4.1, rails_4)
           command: |
             rbenv local 2.4.1 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
 
       - restore_cache:
@@ -199,7 +199,7 @@ jobs:
           name: Select build variant (Ruby 2.3.4, rails_5)
           command: |
             rbenv local 2.3.4 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
@@ -257,7 +257,7 @@ jobs:
           name: Select build variant (Ruby 2.4.1, rails_5)
           command: |
             rbenv local 2.4.1 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
 
       - restore_cache:
@@ -315,7 +315,7 @@ jobs:
           name: Select build variant (Ruby 2.3.4, rails_5_1)
           command: |
             rbenv local 2.3.4 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
@@ -373,7 +373,7 @@ jobs:
           name: Select build variant (Ruby 2.4.1, rails_5_1)
           command: |
             rbenv local 2.4.1 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
 
       - restore_cache:
@@ -431,7 +431,7 @@ jobs:
           name: Select build variant (Ruby 2.4.1, rails_5_2)
           command: |
             rbenv local 2.4.1 ;
-            gem install bundler ;
+            gem install bundler -v '~> 1' ;
             bundle config --local gemfile $PWD/gemfiles/rails_5_2.gemfile
 
       - restore_cache:
