@@ -2,12 +2,12 @@
 # erb .circleci/config.yml.erb > .circleci/config.yml
 <%
   builds = [
-    ['2.3.4', 'rails_4_2'],
-    ['2.4.1', 'rails_4_2'],
-    ['2.3.4', 'rails_5_0'],
-    ['2.4.1', 'rails_5_0'],
-    ['2.4.1', 'rails_5_1'],
-    ['2.4.1', 'rails_5_2']
+    ['2.5.3', 'rails_5_0'],
+    ['2.5.3', 'rails_5_1'],
+    ['2.5.3', 'rails_5_2'],
+    ['2.6.1', 'rails_5_0'],
+    ['2.6.1', 'rails_5_1'],
+    ['2.6.1', 'rails_5_2']
   ]
 %>
 version: 2
@@ -38,12 +38,12 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
 
       - restore_cache:
-          keys: 
+          keys:
             - v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
             - v2-bundle-<%= ruby %>-<%= variant %>
             - v2-bundle-<%= ruby %>
 
-      - run: 
+      - run:
           name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
