@@ -113,7 +113,7 @@ module ROR
       let(:app_path) { TEST_DIR.join(app_id) }
       let(:app_helper) { Helper.new(app_options) }
       let(:app_options) { {} }
-      let(:app_env_vars) { "NEW_RELIC_LICENSE_KEY=dead-0000-beef\n" }
+      let(:app_env_vars) { "\n" }
 
       before do
         app_helper.ensure_scaffold
