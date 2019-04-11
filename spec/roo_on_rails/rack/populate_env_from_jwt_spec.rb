@@ -10,9 +10,10 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
   let(:rack_env_var) { 'production' }
   let(:identity_url_prefixes) { 'https://deliveroo.co.uk/identity-keys/' }
 
-  let(:app) { described_class.new(inner_app, logger: logger, skip_sig_verify: skip_sig_verify) }
+  let(:app) { described_class.new(inner_app, logger: logger, skip_sig_verify: skip_sig_verify, url_mappings: url_mappings) }
   let(:inner_app) { -> env { [200, {}, []] } }
   let(:skip_sig_verify) { true }
+  let(:url_mappings) { {} }
   let(:logger) { double('logger',
     info: -> msg {},
     warn: -> msg {},
@@ -97,6 +98,18 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
       JSON::JWT.new(claims).tap do |jwt|
         jwt.header[:jku] = jku
       end.sign(private_key, :ES256)
+    end
+
+    context 'when the URL can be mapped' do
+      let(:unmapped_prefix) { 'https://deliveroo.co.uk/' }
+      let(:mapped_prefix) { 'http://direct.url/' }
+      let(:jku) { unmapped_prefix + 'identity-keys/0.jwk' }
+      let(:url_mappings) { { unmapped_prefix => mapped_prefix } }
+
+      before { stub_request(:get, mapped_prefix + 'identity-keys/0.jwk').to_return(body: TEST_JWK_PUB) }
+
+      it { should be_ok }
+      include_examples 'roo.identity provided to inner app'
     end
 
     context 'when the signature matches the given public key' do

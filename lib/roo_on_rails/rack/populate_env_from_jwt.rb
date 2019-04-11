@@ -7,15 +7,22 @@ module RooOnRails
     class PopulateEnvFromJWT
       UnacceptableKeyError = Class.new(RuntimeError)
       VALID_PREFIXES_KEY = 'VALID_IDENTITY_URL_PREFIXES'.freeze
+      DEFAULT_MAPPED_URLS = {
+        'https://test.deliveroo.co.uk/' => 'https://orderweb.rooenv-staging.io/',
+        'https://deliveroo.co.uk/' => 'https://orderweb.deliverooapp.com/',
+        'https://identity-staging.deliveroo.com/' => 'https://internal-identity.rooenv-staging.io/',
+        'https://identity.deliveroo.com/' => 'https://internal-identity.deliverooapp.com/'
+      }.freeze
 
       def self.configured?
         ENV[VALID_PREFIXES_KEY].present?
       end
 
-      def initialize(app, logger:, skip_sig_verify: true)
+      def initialize(app, logger:, skip_sig_verify: true, url_mappings: DEFAULT_MAPPED_URLS)
         @app = app
-        @keys = {}
         @logger = logger
+        @url_mappings = url_mappings
+        @keys = @mapped_urls = {}
 
         if skip_sig_verify && non_prod?
           @logger.warn "JWTs signature verifification has been switched off in development."
@@ -86,7 +93,7 @@ module RooOnRails
         return @keys[key_url] if @keys.key?(key_url)
 
         @logger.info "Downloading identity public key from #{key_url}"
-        json = http_request.get(key_url).body
+        json = http_request.get(mapped_url(key_url)).body
         @keys[key_url] = JSON::JWK.new(json)
       rescue Faraday::ParsingError
         raise JSON::JWT::InvalidFormat, 'Downloaded JWK is not a valid JSON file'
@@ -100,6 +107,20 @@ module RooOnRails
 
           conf.adapter Faraday.default_adapter
         end
+      end
+
+      # Allows us to use internal URLs instead of external ones where appropriate
+      def mapped_url(url)
+        return @mapped_urls[url] unless @mapped_urls[url].nil?
+
+        @url_mappings.each do |prefix, replacement|
+          next unless url.starts_with?(prefix)
+          mapped = url.sub(prefix, replacement)
+          @mapped_urls[url] = mapped
+          return mapped
+        end
+
+        url
       end
     end
   end
