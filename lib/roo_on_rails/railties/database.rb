@@ -8,11 +8,14 @@ module RooOnRails
 
             config = ActiveRecord::Base.configurations[Rails.env]
             config['variables'] ||= {}
-            config['variables']['statement_timeout'] = ENV.fetch('DATABASE_STATEMENT_TIMEOUT', 200)
+            statement_timeout = ENV.fetch('DATABASE_STATEMENT_TIMEOUT', 200)
+            # Use -1 to disable setting the statement timeout
+            unless statement_timeout == -1
+              config['variables']['statement_timeout'] = statement_timeout
+            end
             if ENV.key?('DATABASE_REAPING_FREQUENCY')
               config['reaping_frequency'] = ENV['DATABASE_REAPING_FREQUENCY']
             end
-
             ActiveRecord::Base.establish_connection
           end
         end
