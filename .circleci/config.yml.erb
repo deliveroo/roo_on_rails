@@ -23,8 +23,13 @@ jobs:
           PGDATA: /dev/shm/pgdata
       - image: redis:3-alpine
     steps:
+      - run:
+          name: Setup RAM disk
+          command: |
+            adduser -D luser
+            su luser
+            cd ~
       - checkout
-
       - run:
           name: Setup RAM disk
           command: |
@@ -44,12 +49,12 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
 
       - restore_cache:
-          keys: 
+          keys:
             - v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
             - v2-bundle-<%= ruby %>-<%= variant %>
             - v2-bundle-<%= ruby %>
 
-      - run: 
+      - run:
           name: Install dependencies
           command: |
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
