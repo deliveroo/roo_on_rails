@@ -35,13 +35,19 @@ jobs:
       - run:
           name: Setup requirements
           command: |
-            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata
+            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
 
       - run:
           name: Setup bundler
           command: |
-            gem install bundler -v 1.17.3;
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN \
+              BUNDLE_SILENCE_ROOT_WARNING
             bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
+            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
 #      - restore_cache:
 #          keys: 
@@ -49,17 +55,19 @@ jobs:
 #            - v2-bundle-<%= ruby %>-<%= variant %>
 #            - v2-bundle-<%= ruby %>
 
-      - run: 
-          name: Install dependencies
-          command: |
-            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
-
       - run:
           name: Run test suite
           command: |
-            unset RACK_ENV &&
-            unset RAILS_ENV &&
+            unset \
+              RACK_ENV \
+              RAILS_ENV \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN \
+              BUNDLE_SILENCE_ROOT_WARNING
             bundle exec rspec
+
 
 #      - save_cache:
 #          key: v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
