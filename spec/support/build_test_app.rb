@@ -46,6 +46,9 @@ module ROR
           }
         end
 
+        # There are compatibility problems with sqlite3 1.4.x and older Rails versions
+        gsub_file scaffold_dir.join('Gemfile'), /^\s*gem 'sqlite3'.*/, 'gem "sqlite3", "~> 1.3.6"'
+
         append_to_file scaffold_dir.join('Gemfile'), %{
           gem 'roo_on_rails', path: '#{ROOT}'
         }
