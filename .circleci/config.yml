@@ -55,6 +55,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
@@ -125,6 +126,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
@@ -195,6 +197,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
@@ -265,6 +268,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
@@ -335,6 +339,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
@@ -405,6 +410,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
@@ -475,6 +481,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
@@ -545,6 +552,7 @@ jobs:
               BUNDLE_PATH \
               BUNDLE_BIN \
               BUNDLE_SILENCE_ROOT_WARNING
+            export VERBOSE_ACCEPTANCE_TESTS=YES
             bundle exec rspec
 
 
