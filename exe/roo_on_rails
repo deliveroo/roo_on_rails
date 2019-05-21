@@ -36,6 +36,11 @@ module RooOnRails
       end
 
       def run
+        # Force output to be unbuffered, otherwise the CI
+        # tests will fail because the parent app won't see
+        # the log output from the test app
+        $stdout.sync = true
+        $stderr.sync = true
         _assert_argv_length(0..0)
         require 'roo_on_rails/sidekiq/loader'
         RooOnRails::Sidekiq::Loader.run
