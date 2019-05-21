@@ -1,10 +1,3 @@
-appraise 'rails-3' do
-  gem 'rails', '~> 3.2'
-  gem 'sqlite3'
-  gem 'sidekiq', '< 5'
-  gem 'pg', '~> 0.11'
-end
-
 appraise 'rails-4' do
   gem 'rails', '~> 4.2'
   gem 'sqlite3'
