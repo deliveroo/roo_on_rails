@@ -38,11 +38,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.4.6-rails_4-{{ .Branch }}
-#            - v2-bundle-2.4.6-rails_4
-#            - v2-bundle-2.4.6
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.4.6-rails_4-{{ .Branch }}
+            - v2-bundle-2.4.6-rails_4
+            - v2-bundle-2.4.6
 
       - run:
           name: Run test suite
@@ -59,21 +59,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_4-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_4
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_4-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_4
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
   build_2.4.6_rails_5:
     docker:
@@ -109,11 +109,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.4.6-rails_5-{{ .Branch }}
-#            - v2-bundle-2.4.6-rails_5
-#            - v2-bundle-2.4.6
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.4.6-rails_5-{{ .Branch }}
+            - v2-bundle-2.4.6-rails_5
+            - v2-bundle-2.4.6
 
       - run:
           name: Run test suite
@@ -130,21 +130,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_5-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_5
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_5-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_5
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
   build_2.4.6_rails_5_1:
     docker:
@@ -180,11 +180,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.4.6-rails_5_1-{{ .Branch }}
-#            - v2-bundle-2.4.6-rails_5_1
-#            - v2-bundle-2.4.6
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.4.6-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.4.6-rails_5_1
+            - v2-bundle-2.4.6
 
       - run:
           name: Run test suite
@@ -201,21 +201,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_5_1-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_5_1
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_5_1-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_5_1
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
   build_2.4.6_rails_5_2:
     docker:
@@ -251,11 +251,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_5_2.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.4.6-rails_5_2-{{ .Branch }}
-#            - v2-bundle-2.4.6-rails_5_2
-#            - v2-bundle-2.4.6
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.4.6-rails_5_2-{{ .Branch }}
+            - v2-bundle-2.4.6-rails_5_2
+            - v2-bundle-2.4.6
 
       - run:
           name: Run test suite
@@ -272,21 +272,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_5_2-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6-rails_5_2
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.4.6
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_5_2-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6-rails_5_2
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.4.6
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
   build_2.5.5_rails_4:
     docker:
@@ -322,11 +322,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.5.5-rails_4-{{ .Branch }}
-#            - v2-bundle-2.5.5-rails_4
-#            - v2-bundle-2.5.5
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.5.5-rails_4-{{ .Branch }}
+            - v2-bundle-2.5.5-rails_4
+            - v2-bundle-2.5.5
 
       - run:
           name: Run test suite
@@ -343,21 +343,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_4-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_4
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_4-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_4
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
   build_2.5.5_rails_5:
     docker:
@@ -393,11 +393,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.5.5-rails_5-{{ .Branch }}
-#            - v2-bundle-2.5.5-rails_5
-#            - v2-bundle-2.5.5
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.5.5-rails_5-{{ .Branch }}
+            - v2-bundle-2.5.5-rails_5
+            - v2-bundle-2.5.5
 
       - run:
           name: Run test suite
@@ -414,21 +414,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_5-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_5
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_5-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_5
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
   build_2.5.5_rails_5_1:
     docker:
@@ -464,11 +464,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.5.5-rails_5_1-{{ .Branch }}
-#            - v2-bundle-2.5.5-rails_5_1
-#            - v2-bundle-2.5.5
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.5.5-rails_5_1-{{ .Branch }}
+            - v2-bundle-2.5.5-rails_5_1
+            - v2-bundle-2.5.5
 
       - run:
           name: Run test suite
@@ -485,21 +485,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_5_1-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_5_1
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_5_1-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_5_1
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
   build_2.5.5_rails_5_2:
     docker:
@@ -535,11 +535,11 @@ jobs:
             bundle config --local gemfile $PWD/gemfiles/rails_5_2.gemfile
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
-#      - restore_cache:
-#          keys: 
-#            - v2-bundle-2.5.5-rails_5_2-{{ .Branch }}
-#            - v2-bundle-2.5.5-rails_5_2
-#            - v2-bundle-2.5.5
+      - restore_cache:
+          keys: 
+            - v2-bundle-2.5.5-rails_5_2-{{ .Branch }}
+            - v2-bundle-2.5.5-rails_5_2
+            - v2-bundle-2.5.5
 
       - run:
           name: Run test suite
@@ -556,21 +556,21 @@ jobs:
             bundle exec rspec
 
 
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_5_2-{{ .Branch }}
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5-rails_5_2
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
-#      - save_cache:
-#          key: v2-bundle-2.5.5
-#          paths:
-#            - ~/project/vendor/bundle
-#            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_5_2-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5-rails_5_2
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.5
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
 
 
 workflows:
