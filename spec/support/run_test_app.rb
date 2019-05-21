@@ -12,7 +12,7 @@ module ROR
         ROR::SubProcess.new(
           name:     'rails',
           dir:      app_path,
-          command:  'bundle exec rails server puma -e %s' % app_env,
+          command:  'bundle exec ruby -e STDOUT.sync=true -e \'load($0=ARGV.shift)\' bin/rails server puma -e %s' % app_env,
           start:    /Use Ctrl-C to stop/,
           stop:     /- Goodbye!/)
       }

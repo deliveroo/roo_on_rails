@@ -36,6 +36,8 @@ module RooOnRails
       end
 
       def run
+        $stdout.sync= true
+        $stderr.sync= true
         _assert_argv_length(0..0)
         require 'roo_on_rails/sidekiq/loader'
         RooOnRails::Sidekiq::Loader.run
