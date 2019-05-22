@@ -1,15 +1,26 @@
 # To update the build configuration, edit the "builds" array below and run:
 # erb .circleci/config.yml.erb > .circleci/config.yml
+
+
+# The default Ruby containers modify the behaviour of Bundler in a way that breaks
+# the CI since it makes it harder to run multiple apps in a single container
+# See https://github.com/docker-library/docs/pull/1221/files for a summary
+# Unsettting these variables restores the default behaviour:-
+#   * BUNDLE_APP_CONFIG
+#   * GEM_HOME
+#   * BUNDLE_PATH
+#   * BUNDLE_BIN
+
 <%
   builds = [
-		['2.3.4', 'rails_3'],
-		['2.3.4', 'rails_4'],
-		['2.4.1', 'rails_4'],
-		['2.3.4', 'rails_5'],
-		['2.4.1', 'rails_5'],
-		['2.3.4', 'rails_5_1'],
-		['2.4.1', 'rails_5_1'],
-		['2.4.1', 'rails_5_2']
+    ['2.4.6', 'rails_4'],
+    ['2.4.6', 'rails_5'],
+    ['2.4.6', 'rails_5_1'],
+    ['2.4.6', 'rails_5_2'],
+    ['2.5.5', 'rails_4'],
+    ['2.5.5', 'rails_5'],
+    ['2.5.5', 'rails_5_1'],
+    ['2.5.5', 'rails_5_2']
   ]
 %>
 version: 2
@@ -17,7 +28,7 @@ jobs:
 <% builds.each do |ruby,variant| %>
   build_<%= ruby %>_<%= variant %>:
     docker:
-      - image: deliveroo/multiruby
+      - image: ruby:<%= ruby %>-alpine
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
@@ -33,28 +44,50 @@ jobs:
             ln -s /dev/shm/tmp ~/project/tmp
 
       - run:
-          name: Select build variant (Ruby <%= ruby %>, <%= variant %>)
+          name: Setup requirements
           command: |
-            rbenv local <%= ruby %> ;
-            gem install bundler ;
+            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
+
+      - run:
+          name: Configure bundler
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
             bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
 
       - restore_cache:
-          keys: 
+          keys:
             - v2-bundle-<%= ruby %>-<%= variant %>-{{ .Branch }}
             - v2-bundle-<%= ruby %>-<%= variant %>
             - v2-bundle-<%= ruby %>
 
-      - run: 
-          name: Install dependencies
+      - run:
+          name: Install bundle
           command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
+      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
+      # the CI since it makes it harder to run multiple apps in a single container
+      # See https://github.com/docker-library/docs/pull/1221/files for a summary
+      # Unsettting the variables restores the default behaviour
       - run:
           name: Run test suite
           command: |
-            unset RACK_ENV &&
-            unset RAILS_ENV &&
+            unset \
+              RACK_ENV \
+              RAILS_ENV \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
             bundle exec rspec
 
       - save_cache:
