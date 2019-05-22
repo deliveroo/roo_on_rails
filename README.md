@@ -1,6 +1,5 @@
 ## `roo_on_rails` [![Gem Version](https://badge.fury.io/rb/roo_on_rails.svg)](https://badge.fury.io/rb/roo_on_rails) [![Build Status](https://circleci.com/gh/deliveroo/roo_on_rails.svg?style=shield&circle-token=f8ad2021dfc72fd86850fd0b7224759f34a91281)](https://circleci.com/gh/deliveroo/roo_on_rails) [![Code Climate](https://codeclimate.com/repos/58809e664ab8420081007382/badges/3489b7689ab2e0cf5d61/gpa.svg)](https://codeclimate.com/repos/58809e664ab8420081007382/feed)
 
-
 `roo_on_rails` is:
 
 1. A library that extends Rails (as a set of Railties) and auto-configures common
@@ -13,6 +12,7 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
 **Table of Contents**
 
 - [Installation](#installation)
@@ -48,11 +48,6 @@ Remove the following gems from your Gemfile, as they're provided and configured
 by `roo_on_rails`:
 
 - `dotenv`
-- `newrelic_rpm`
-
-Remove the following configuration files:
-
-- `newrelic.yml` or `config/newrelic.yml`
 
 Also remove any other gem-specific configuration from your repository.
 
@@ -64,22 +59,6 @@ Then re-run your test suite to make sure everything is shipshape.
 
 ## Library usage
 
-### New Relic configuration
-
-We enforce configuration of New Relic.
-
-1. Your app must be loaded with a `NEW_RELIC_LICENSE_KEY` environment variable,
-   otherwise it will abort.
-2. No `new_relic.yml` file may be presentin your app. Overrides to New Relic settings
-   through [environment
-   variables](https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration)
-   is permitted.
-3. The `NEW_RELIC_APP_NAME` environment variable must be defined
-   such that the app will be properly registered in New Relic.
-
-No further configuration is required for production apps as the gem configures
-our standard settings.
-
 ### Rack middleware
 
 We'll insert the following middlewares into the rails stack:
@@ -90,7 +69,6 @@ We'll insert the following middlewares into the rails stack:
 3. `Rack::Deflater`: compresses responses from the application, can be disabled
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 4. Optional middlewares for Google Oauth2 (more below).
-
 
 #### Disabling SSL enforcement
 
@@ -288,27 +266,27 @@ RooOnRails.statsd.increment('my.metric', tags: ['tag:value'])
 
 The following tags will automatically be added to all your metrics and their value depends on the environment variables listed below, in order of priority:
 
-* `env:{name}`
-  * `STATDS_ENV` – optional and to be set manually (e.g. `staging`);
-  * `HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `staging`);
-  * Defaults to `unknown`.
-* `source:{name}`
-  * `DYNO` – automatically set by Heroku (e.g. `web.3`);
-  * `HOSTNAME` – automatically set by Hopper (e.g. `876c57c17207`);
-  * Defaults to `unknown`.
-* `app:{name}`
-  * `STATSD_APP_NAME` – optional and to be set manually (e.g. `notifications-staging`);
-  * `HEROKU_APP_NAME` – automatically set by Heroku (e.g. `roo-notifications-staging`);
-  * `HOPPER_APP_NAME`+`HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `notifications-staging`);
-  * Defaults to `unknown`.
+- `env:{name}`
+  - `STATDS_ENV` – optional and to be set manually (e.g. `staging`);
+  - `HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `staging`);
+  - Defaults to `unknown`.
+- `source:{name}`
+  - `DYNO` – automatically set by Heroku (e.g. `web.3`);
+  - `HOSTNAME` – automatically set by Hopper (e.g. `876c57c17207`);
+  - Defaults to `unknown`.
+- `app:{name}`
+  - `STATSD_APP_NAME` – optional and to be set manually (e.g. `notifications-staging`);
+  - `HEROKU_APP_NAME` – automatically set by Heroku (e.g. `roo-notifications-staging`);
+  - `HOPPER_APP_NAME`+`HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `notifications-staging`);
+  - Defaults to `unknown`.
 
 ### Routemaster Client
 
 When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen, set the following environment variables:
 
-* `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
-* `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
-* `ROUTEMASTER_VERIFY_SSL` – set to false if your Routemaster application is not served with a valid cert. (optional)
+- `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
+- `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
+- `ROUTEMASTER_VERIFY_SSL` – set to false if your Routemaster application is not served with a valid cert. (optional)
 
 If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
@@ -371,7 +349,6 @@ To run checks for only one environment, use the `--env` flag:
 roo_on_rails harness --env staging
 ```
 
-
 ### Description
 
 Running the `roo_on_rails` command currently checks for:
@@ -387,12 +364,10 @@ Running the `roo_on_rails` command currently checks for:
 
 The command is designed to fix issues in many cases.
 
-
 ## Contributing
 
 Pull requests are welcome on GitHub at
 `https://github.com/deliveroo/roo_on_rails`.
-
 
 ## License
 

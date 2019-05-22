@@ -1,5 +1,4 @@
 require 'active_support/concern'
-require 'new_relic/agent'
 require 'roo_on_rails/routemaster/publishers'
 
 module RooOnRails
@@ -31,7 +30,8 @@ module RooOnRails
           begin
             publisher.publish!(force_publish: force_publish)
           rescue => e
-            NewRelic::Agent.notice_error(e)
+            # SENTRY: To be migrated once we're on sentry
+            Rails.logger.error("#{e.inspect} rescued in #{self.class.name}::publish_event")
           end
         end
       end
