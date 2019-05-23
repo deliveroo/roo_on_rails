@@ -1,5 +1,6 @@
 ## `roo_on_rails` [![Gem Version](https://badge.fury.io/rb/roo_on_rails.svg)](https://badge.fury.io/rb/roo_on_rails) [![Build Status](https://circleci.com/gh/deliveroo/roo_on_rails.svg?style=shield&circle-token=f8ad2021dfc72fd86850fd0b7224759f34a91281)](https://circleci.com/gh/deliveroo/roo_on_rails) [![Code Climate](https://codeclimate.com/repos/58809e664ab8420081007382/badges/3489b7689ab2e0cf5d61/gpa.svg)](https://codeclimate.com/repos/58809e664ab8420081007382/feed)
 
+
 `roo_on_rails` is:
 
 1. A library that extends Rails (as a set of Railties) and auto-configures common
@@ -12,22 +13,25 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 **Table of Contents**
 
 - [Installation](#installation)
 - [Library usage](#library-usage)
-  - [New Relic configuration](#new-relic-configuration)
   - [Rack middleware](#rack-middleware)
+    - [Disabling SSL enforcement](#disabling-ssl-enforcement)
   - [Database configuration](#database-configuration)
   - [Sidekiq](#sidekiq)
   - [HireFire](#hirefire)
+    - [For Web Dynos](#for-web-dynos)
+    - [For Sidekiq Workers](#for-sidekiq-workers)
   - [Logging](#logging)
   - [Identity](#identity)
   - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
+    - [Heroku metrics](#heroku-metrics)
+    - [Custom application metrics](#custom-application-metrics)
   - [Routemaster Client](#routemaster-client)
-  - [API Authentication ](#api-authentication)
+  - [API Authentication](#api-authentication)
 - [Command features](#command-features)
   - [Usage](#usage)
   - [Description](#description)
@@ -69,6 +73,7 @@ We'll insert the following middlewares into the rails stack:
 3. `Rack::Deflater`: compresses responses from the application, can be disabled
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
 4. Optional middlewares for Google Oauth2 (more below).
+
 
 #### Disabling SSL enforcement
 
@@ -266,27 +271,27 @@ RooOnRails.statsd.increment('my.metric', tags: ['tag:value'])
 
 The following tags will automatically be added to all your metrics and their value depends on the environment variables listed below, in order of priority:
 
-- `env:{name}`
-  - `STATDS_ENV` – optional and to be set manually (e.g. `staging`);
-  - `HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `staging`);
-  - Defaults to `unknown`.
-- `source:{name}`
-  - `DYNO` – automatically set by Heroku (e.g. `web.3`);
-  - `HOSTNAME` – automatically set by Hopper (e.g. `876c57c17207`);
-  - Defaults to `unknown`.
-- `app:{name}`
-  - `STATSD_APP_NAME` – optional and to be set manually (e.g. `notifications-staging`);
-  - `HEROKU_APP_NAME` – automatically set by Heroku (e.g. `roo-notifications-staging`);
-  - `HOPPER_APP_NAME`+`HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `notifications-staging`);
-  - Defaults to `unknown`.
+* `env:{name}`
+  * `STATDS_ENV` – optional and to be set manually (e.g. `staging`);
+  * `HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `staging`);
+  * Defaults to `unknown`.
+* `source:{name}`
+  * `DYNO` – automatically set by Heroku (e.g. `web.3`);
+  * `HOSTNAME` – automatically set by Hopper (e.g. `876c57c17207`);
+  * Defaults to `unknown`.
+* `app:{name}`
+  * `STATSD_APP_NAME` – optional and to be set manually (e.g. `notifications-staging`);
+  * `HEROKU_APP_NAME` – automatically set by Heroku (e.g. `roo-notifications-staging`);
+  * `HOPPER_APP_NAME`+`HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `notifications-staging`);
+  * Defaults to `unknown`.
 
 ### Routemaster Client
 
 When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen, set the following environment variables:
 
-- `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
-- `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
-- `ROUTEMASTER_VERIFY_SSL` – set to false if your Routemaster application is not served with a valid cert. (optional)
+* `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
+* `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
+* `ROUTEMASTER_VERIFY_SSL` – set to false if your Routemaster application is not served with a valid cert. (optional)
 
 If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
@@ -349,6 +354,7 @@ To run checks for only one environment, use the `--env` flag:
 roo_on_rails harness --env staging
 ```
 
+
 ### Description
 
 Running the `roo_on_rails` command currently checks for:
@@ -364,10 +370,12 @@ Running the `roo_on_rails` command currently checks for:
 
 The command is designed to fix issues in many cases.
 
+
 ## Contributing
 
 Pull requests are welcome on GitHub at
 `https://github.com/deliveroo/roo_on_rails`.
+
 
 ## License
 
