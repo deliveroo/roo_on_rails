@@ -30,8 +30,7 @@ module RooOnRails
           begin
             publisher.publish!(force_publish: force_publish)
           rescue => e
-            # SENTRY: To be migrated once we're on sentry
-            Rails.logger.error("#{e.inspect} rescued in #{self.class.name}::publish_event")
+            Raven.report_exception(e) if defined?(Raven)
           end
         end
       end
