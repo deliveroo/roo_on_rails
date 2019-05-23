@@ -61,6 +61,18 @@ And then execute:
 
 Then re-run your test suite to make sure everything is shipshape.
 
+## Running specs
+
+To run the specs locally, you will need to run the following command:
+
+```ruby
+bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
+```
+
+Where `<%= variant %>` is the Rails version you'd like to test (e.g. `rails_5_2`).
+
+`bundle exec rspec` should then work as normal.
+
 ## Library usage
 
 ### Rack middleware
