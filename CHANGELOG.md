@@ -8,13 +8,14 @@ Features:
 
 Features:
 
-- Allows specifiying `BASE_NEW_RELIC_APP_NAME` instead of `NEW_RELIC_APP_NAME`, which reports to New Relic per Hopper service.
+ - Allows specifiying `BASE_NEW_RELIC_APP_NAME` instead of `NEW_RELIC_APP_NAME`, which reports to New Relic per Hopper service.
 
 # v1.21.0 (2018-03-27)
 
 Features:
 
 - Rails 5.2 compatibility
+
 
 # v1.20.0 (2018-03-27)
 
@@ -106,7 +107,6 @@ Bug fixes:
 # v1.12.0 (2017-09-27)
 
 Features (library):
-
 - Provides API authentication concern for controllers. (#67)
 
 # v1.11.1 (2017-09-11)
@@ -176,9 +176,9 @@ Features:
 - Adds pre-baked Google OAuth support (#44, #49)
 - Reports Sidekiq metrics only for queues defined in process (#50)
 - Finer-grained Sidekiq configuration (#46)
-  - adds 'default' to list of default Sidekiq queues
-  - accepts custom Sidekiq queue names and permitted latency values
-  - allows environment-specific application checks
+    - adds 'default' to list of default Sidekiq queues
+    - accepts custom Sidekiq queue names and permitted latency values
+    - allows environment-specific application checks
 
 Other:
 
