@@ -31,6 +31,7 @@ module RooOnRails
             publisher.publish!(force_publish: force_publish)
           rescue => e
             Raven.report_exception(e) if defined?(Raven)
+            Rails.logger.error("#{error.inspect} rescued in #{self.class.name}")
           end
         end
       end

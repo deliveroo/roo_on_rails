@@ -41,6 +41,8 @@ module RooOnRails
       rescue UnacceptableKeyError, JSON::JWT::Exception => e
         # Identifying user is clearly attempting to hack or has been given a totally incorrect
         # token, log this and flag as Forbidden, without executing the rest of the middleware stack.
+        Raven.report_exception(e) if defined?(Raven)
+        Rails.logger.error("#{error.inspect} rescued in #{self.class.name}")
         [401, {}, []]
       end
 
