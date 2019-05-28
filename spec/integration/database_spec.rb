@@ -31,6 +31,15 @@ describe 'Database setup', rails_min_version: 4 do
         end
       end
 
+      context 'when DATABASE_STATEMENT_TIMEOUT is -1' do
+        before { ENV['DATABASE_STATEMENT_TIMEOUT'] = '-1' }
+        after { ENV['DATABASE_STATEMENT_TIMEOUT'] = nil }
+
+        it 'does not set a statement timeout' do
+          expect(statement_timeout).to_not include '200ms'
+        end
+      end
+
       context 'when DATABASE_STATEMENT_TIMEOUT is set' do
         before { ENV['DATABASE_STATEMENT_TIMEOUT'] = '750' }
         after { ENV['DATABASE_STATEMENT_TIMEOUT'] = nil }
