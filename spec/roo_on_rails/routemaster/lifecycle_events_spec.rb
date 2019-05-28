@@ -3,6 +3,11 @@ require 'roo_on_rails/routemaster/publishers'
 require 'roo_on_rails/routemaster/publisher'
 
 RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
+  class Raven
+    def report_exception(e)
+    end
+  end
+
   subject do
     Class.new do
       @after_commit_hooks = []
@@ -21,7 +26,7 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
   let(:subject_instance) { subject.new }
   let(:publisher_spy) { spy('publisher') }
-  
+
   events_and_types = [
     %i(create created),
     %i(update updated),
@@ -76,11 +81,21 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
   describe "#publish_lifecycle_event" do
     events_and_types.each do |lifecycle_event|
-      it "publishes #{lifecycle_event.first} event with force_publish disabled" do
+      before do
         allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
           [publisher_spy]
         end
+      end
+
+      it "publishes #{lifecycle_event.first} event with force_publish disabled" do
         expect(publisher_spy).to receive(:publish!).with(force_publish: false)
+        subject_instance.publish_lifecycle_event(lifecycle_event.first)
+      end
+
+      it 'reports with Raven on error' do
+        allow(publisher_spy).to receive(:publish!).and_raise(StandardError)
+
+        expect(Raven).to receive(:report_exception).with(StandardError)
         subject_instance.publish_lifecycle_event(lifecycle_event.first)
       end
     end
@@ -88,12 +103,22 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
   describe "#publish_lifecycle_event!" do
     events_and_types.each do |lifecycle_event|
-      it "publishes #{lifecycle_event.first} event with force_publish enabled" do
+      before do
         allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
           [publisher_spy]
         end
+      end
+
+      it "publishes #{lifecycle_event.first} event with force_publish enabled" do
         expect(publisher_spy).to receive(:publish!).with(force_publish: true)
         subject_instance.publish_lifecycle_event!(lifecycle_event.first)
+      end
+
+      it 'reports with Raven on error' do
+        allow(publisher_spy).to receive(:publish!).and_raise(StandardError)
+
+        expect(Raven).to receive(:report_exception).with(StandardError)
+        subject_instance.publish_lifecycle_event(lifecycle_event.first)
       end
     end
   end
