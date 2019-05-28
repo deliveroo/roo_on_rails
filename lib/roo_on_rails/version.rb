@@ -1,3 +1,3 @@
 module RooOnRails
-  VERSION = '1.23.0'.freeze
+  VERSION = '2.0.0-pre.1'.freeze
 end

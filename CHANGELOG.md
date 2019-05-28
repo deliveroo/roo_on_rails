@@ -1,3 +1,9 @@
+# v2.0.0-pre.1
+
+Features:
+
+- Remove New Relic
+
 # v1.23.0 (2019-04-24)
 
 Features:

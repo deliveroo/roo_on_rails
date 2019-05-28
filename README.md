@@ -17,17 +17,21 @@
 
 - [Installation](#installation)
 - [Library usage](#library-usage)
-  - [New Relic configuration](#new-relic-configuration)
   - [Rack middleware](#rack-middleware)
+    - [Disabling SSL enforcement](#disabling-ssl-enforcement)
   - [Database configuration](#database-configuration)
   - [Sidekiq](#sidekiq)
   - [HireFire](#hirefire)
+    - [For Web Dynos](#for-web-dynos)
+    - [For Sidekiq Workers](#for-sidekiq-workers)
   - [Logging](#logging)
   - [Identity](#identity)
   - [Google OAuth authentication](#google-oauth-authentication)
   - [Datadog Integration](#datadog-integration)
+    - [Heroku metrics](#heroku-metrics)
+    - [Custom application metrics](#custom-application-metrics)
   - [Routemaster Client](#routemaster-client)
-  - [API Authentication ](#api-authentication)
+  - [API Authentication](#api-authentication)
 - [Command features](#command-features)
   - [Usage](#usage)
   - [Description](#description)
@@ -48,11 +52,6 @@ Remove the following gems from your Gemfile, as they're provided and configured
 by `roo_on_rails`:
 
 - `dotenv`
-- `newrelic_rpm`
-
-Remove the following configuration files:
-
-- `newrelic.yml` or `config/newrelic.yml`
 
 Also remove any other gem-specific configuration from your repository.
 
@@ -62,23 +61,19 @@ And then execute:
 
 Then re-run your test suite to make sure everything is shipshape.
 
+## Running specs
+
+To run the specs locally, you will need to run the following command:
+
+```ruby
+bundle config --local gemfile $PWD/gemfiles/<%= variant %>.gemfile
+```
+
+Where `<%= variant %>` is the Rails version you'd like to test (e.g. `rails_5_2`).
+
+`bundle exec rspec` should then work as normal.
+
 ## Library usage
-
-### New Relic configuration
-
-We enforce configuration of New Relic.
-
-1. Your app must be loaded with a `NEW_RELIC_LICENSE_KEY` environment variable,
-   otherwise it will abort.
-2. No `new_relic.yml` file may be presentin your app. Overrides to New Relic settings
-   through [environment
-   variables](https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration)
-   is permitted.
-3. The `NEW_RELIC_APP_NAME` environment variable must be defined
-   such that the app will be properly registered in New Relic.
-
-No further configuration is required for production apps as the gem configures
-our standard settings.
 
 ### Rack middleware
 

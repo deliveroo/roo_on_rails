@@ -58,7 +58,6 @@ module RooOnRails
         def valid?(service_name, client_key)
           return false unless whitelisted?(service_name)
 
-          NewRelic::Agent.add_custom_attributes(httpBasicUserId: service_name) if defined?(NewRelic)
           ClientApiKeys.instance.valid?(service_name, client_key)
         end
 

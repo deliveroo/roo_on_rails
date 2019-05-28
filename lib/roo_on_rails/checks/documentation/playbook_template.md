@@ -20,10 +20,6 @@ As a last resort, in an emergency, the following people have experience working 
 
 FIXME: A very brief high-level explanation of what this functional area does
 
-#### 🚨 FIXME: a New Relic alert which might be raised - named so it can be searched for
-
-FIXME: A description of the New Relic alert, what it means for the service, and what actions should be taken to remedy the situation.
-
 #### 🚨 FIXME: an action which might need to be taken during an incident
 
 FIXME: A description of how to perform this action, and any side-effects that the on-call engineer should be aware of.
