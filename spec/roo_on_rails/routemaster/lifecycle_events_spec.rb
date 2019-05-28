@@ -3,17 +3,6 @@ require 'roo_on_rails/routemaster/publishers'
 require 'roo_on_rails/routemaster/publisher'
 
 RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
-  before do
-    class Raven
-      def report_exception(e)
-      end
-    end
-  end
-
-  after do
-    Object.send(:remove_const, :Raven)
-  end
-
   subject do
     Class.new do
       @after_commit_hooks = []
@@ -86,6 +75,11 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
   end
 
   describe "#publish_lifecycle_event" do
+    before do
+      MockRaven = class_double("Raven", report_exception: nil)
+      stub_const("Raven", MockRaven)
+    end
+
     events_and_types.each do |lifecycle_event|
       before do
         allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
@@ -108,6 +102,11 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
   end
 
   describe "#publish_lifecycle_event!" do
+    before do
+      MockRaven = class_double("Raven", report_exception: nil)
+      stub_const("Raven", MockRaven)
+    end
+
     events_and_types.each do |lifecycle_event|
       before do
         allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
