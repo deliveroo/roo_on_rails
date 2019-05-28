@@ -1,8 +1,16 @@
+# v1.23.0 (2019-04-24)
+
+Features:
+
+- Setting DATABASE_STATEMENT_TIMEOUT to -1 will prevent the app setting any timeout.
+  Setting timeouts from the app conflicts with PGBouncer and should be disabled if
+  using one.
+
 # v1.22.0 (2018-08-29)
 
 Features:
 
- - Allows specifiying `BASE_NEW_RELIC_APP_NAME` instead of `NEW_RELIC_APP_NAME`, which reports to New Relic per Hopper service.
+ - Allows specifying `BASE_NEW_RELIC_APP_NAME` instead of `NEW_RELIC_APP_NAME`, which reports to New Relic per Hopper service.
 
 # v1.21.0 (2018-03-27)
 

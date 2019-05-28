@@ -104,6 +104,11 @@ To do this, you can set the `ROO_ON_RAILS_DISABLE_SSL_ENFORCEMENT` to `YES`.
 The database statement timeout will be set to a low value by default. Use
 `DATABASE_STATEMENT_TIMEOUT` (milliseconds, default 200) to customise.
 
+When using a PGBouncer, setting the timeout from the application will cause
+inconsistent results. The timeout should always be set using the RDS parameter
+group in thise case. To prevent the app trying to set a timeout, set
+`DATABASE_STATEMENT_TIMEOUT` to -1.
+
 For database creation and migration (specifically the `db:create`, `db:migrate`,
 `db:migrate:down` and `db:rollback` tasks) a much higher statement timeout is
 set by default. Use `MIGRATION_STATEMENT_TIMEOUT` (milliseconds, default 10000)
