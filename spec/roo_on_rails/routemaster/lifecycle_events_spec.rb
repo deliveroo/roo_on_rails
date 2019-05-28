@@ -3,9 +3,15 @@ require 'roo_on_rails/routemaster/publishers'
 require 'roo_on_rails/routemaster/publisher'
 
 RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
-  class Raven
-    def report_exception(e)
+  before do
+    class Raven
+      def report_exception(e)
+      end
     end
+  end
+
+  after do
+    Object.send(:remove_const, :Raven)
   end
 
   subject do
