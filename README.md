@@ -84,22 +84,6 @@ They are:
 
 ## Library usage
 
-### New Relic configuration
-
-We enforce configuration of New Relic.
-
-1. Your app must be loaded with a `NEW_RELIC_LICENSE_KEY` environment variable,
-   otherwise it will abort.
-2. No `new_relic.yml` file may be presentin your app. Overrides to New Relic settings
-   through [environment
-   variables](https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration)
-   is permitted.
-3. The `NEW_RELIC_APP_NAME` environment variable must be defined
-   such that the app will be properly registered in New Relic.
-
-No further configuration is required for production apps as the gem configures
-our standard settings.
-
 ### Rack middleware
 
 We'll insert the following middlewares into the rails stack:
