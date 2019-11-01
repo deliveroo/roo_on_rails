@@ -29,6 +29,11 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
   ]
 
   describe "::publish_lifecycle_events" do
+    before do
+      MockRaven = class_double("Raven", capture_exception: nil)
+      stub_const("Raven", MockRaven)
+    end
+
     context "when called without arguments" do
       before { subject.publish_lifecycle_events }
 
@@ -75,11 +80,6 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
   end
 
   describe "#publish_lifecycle_event" do
-    before do
-      MockRaven = class_double("Raven", capture_exception: nil)
-      stub_const("Raven", MockRaven)
-    end
-
     events_and_types.each do |lifecycle_event|
       before do
         allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
@@ -102,11 +102,6 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
   end
 
   describe "#publish_lifecycle_event!" do
-    before do
-      MockRaven = class_double("Raven", capture_exception: nil)
-      stub_const("Raven", MockRaven)
-    end
-
     events_and_types.each do |lifecycle_event|
       before do
         allow(RooOnRails::Routemaster::Publishers).to receive(:for).with(subject, lifecycle_event.last) do
