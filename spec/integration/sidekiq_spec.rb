@@ -7,17 +7,17 @@ describe 'Sidekiq Setup' do
 
   context 'When booting' do
     let(:middleware) { app_helper.shell_run "cd #{app_path} && rake middleware" }
-    it 'does not insert hirefire into the middleware stack' do
-      expect(middleware).not_to include 'HireFire::Middleware'
-    end
+    # it 'does not insert hirefire into the middleware stack' do
+    #   expect(middleware).not_to include 'HireFire::Middleware'
+    # end
 
-    context "if HIREFIRE_TOKEN is set" do
-      let(:app_env_vars) { ["HIREFIRE_TOKEN=hello", super()].join("\n") }
+    # context "if HIREFIRE_TOKEN is set" do
+    #   let(:app_env_vars) { ["HIREFIRE_TOKEN=hello", super()].join("\n") }
 
-      it 'inserts hirefire into the middleware stack' do
-        expect(middleware).to include 'HireFire::Middleware'
-      end
-    end
+    #   it 'inserts hirefire into the middleware stack' do
+    #     expect(middleware).to include 'HireFire::Middleware'
+    #   end
+    # end
   end
 end
 

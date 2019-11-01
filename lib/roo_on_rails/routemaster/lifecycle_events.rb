@@ -30,7 +30,7 @@ module RooOnRails
           begin
             publisher.publish!(force_publish: force_publish)
           rescue => e
-            Raven.report_exception(e) if defined?(Raven)
+            Raven.capture_exception(e) if defined?(Raven)
           end
         end
       end
