@@ -389,6 +389,7 @@ jobs:
       # Unsettting the variables restores the default behaviour
       - run:
           name: Run test suite
+          no_output_timeout: 60m
           command: |
             unset \
               RACK_ENV \
@@ -469,6 +470,7 @@ jobs:
       # Unsettting the variables restores the default behaviour
       - run:
           name: Run test suite
+          no_output_timeout: 60m
           command: |
             unset \
               RACK_ENV \
@@ -549,6 +551,7 @@ jobs:
       # Unsettting the variables restores the default behaviour
       - run:
           name: Run test suite
+          no_output_timeout: 60m
           command: |
             unset \
               RACK_ENV \
@@ -629,6 +632,7 @@ jobs:
       # Unsettting the variables restores the default behaviour
       - run:
           name: Run test suite
+          no_output_timeout: 60m
           command: |
             unset \
               RACK_ENV \
@@ -660,20 +664,20 @@ workflows:
   version: 2
   test:
     jobs:
-    
+
       - build_2.4.6_rails_4
-    
+
       - build_2.4.6_rails_5
-    
+
       - build_2.4.6_rails_5_1
-    
+
       - build_2.4.6_rails_5_2
-    
+
       - build_2.5.5_rails_4
-    
+
       - build_2.5.5_rails_5
-    
+
       - build_2.5.5_rails_5_1
-    
+
       - build_2.5.5_rails_5_2
-    
+
