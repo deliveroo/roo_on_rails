@@ -1,3 +1,9 @@
+# v2.0.1 (2019-11-01)
+
+Features:
+
+- Update deprecated Raven API call `report_exception` to `capture_exception`
+
 # v2.0.0-pre.1
 
 Features:

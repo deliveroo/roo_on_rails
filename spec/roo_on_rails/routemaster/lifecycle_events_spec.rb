@@ -76,7 +76,7 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
   describe "#publish_lifecycle_event" do
     before do
-      MockRaven = class_double("Raven", report_exception: nil)
+      MockRaven = class_double("Raven", capture_exception: nil)
       stub_const("Raven", MockRaven)
     end
 
@@ -95,7 +95,7 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
       it 'reports with Raven on error' do
         allow(publisher_spy).to receive(:publish!).and_raise(StandardError)
 
-        expect(Raven).to receive(:report_exception).with(StandardError)
+        expect(Raven).to receive(:capture_exception).with(StandardError)
         subject_instance.publish_lifecycle_event(lifecycle_event.first)
       end
     end
@@ -103,7 +103,7 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
 
   describe "#publish_lifecycle_event!" do
     before do
-      MockRaven = class_double("Raven", report_exception: nil)
+      MockRaven = class_double("Raven", capture_exception: nil)
       stub_const("Raven", MockRaven)
     end
 
@@ -122,7 +122,7 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
       it 'reports with Raven on error' do
         allow(publisher_spy).to receive(:publish!).and_raise(StandardError)
 
-        expect(Raven).to receive(:report_exception).with(StandardError)
+        expect(Raven).to receive(:capture_exception).with(StandardError)
         subject_instance.publish_lifecycle_event(lifecycle_event.first)
       end
     end
