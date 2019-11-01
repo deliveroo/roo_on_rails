@@ -3,6 +3,10 @@ require 'roo_on_rails/routemaster/publishers'
 require 'roo_on_rails/routemaster/publisher'
 
 RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
+  before do
+    MockRaven = class_double("Raven", capture_exception: nil)
+    stub_const("Raven", MockRaven)
+  end
   subject do
     Class.new do
       @after_commit_hooks = []
@@ -29,11 +33,6 @@ RSpec.describe RooOnRails::Routemaster::LifecycleEvents do
   ]
 
   describe "::publish_lifecycle_events" do
-    before do
-      MockRaven = class_double("Raven", capture_exception: nil)
-      stub_const("Raven", MockRaven)
-    end
-
     context "when called without arguments" do
       before { subject.publish_lifecycle_events }
 
