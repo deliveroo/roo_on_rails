@@ -1,3 +1,9 @@
+# v2.0.0-pre.2
+
+Features:
+
+- Removes routemaster
+
 # v2.0.0-pre.1
 
 Features:

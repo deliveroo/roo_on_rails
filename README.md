@@ -30,7 +30,6 @@
   - [Datadog Integration](#datadog-integration)
     - [Heroku metrics](#heroku-metrics)
     - [Custom application metrics](#custom-application-metrics)
-  - [Routemaster Client](#routemaster-client)
   - [API Authentication](#api-authentication)
 - [Command features](#command-features)
   - [Usage](#usage)
@@ -301,16 +300,6 @@ The following tags will automatically be added to all your metrics and their val
   * `HEROKU_APP_NAME` – automatically set by Heroku (e.g. `roo-notifications-staging`);
   * `HOPPER_APP_NAME`+`HOPPER_ECS_CLUSTER_NAME` – automatically set by Hopper (e.g. `notifications-staging`);
   * Defaults to `unknown`.
-
-### Routemaster Client
-
-When `ROUTEMASTER_ENABLED` is set to `true` we attempt to configure [`routemaster-client`](https://github.com/deliveroo/routemaster-client) on your application. In order for this to happen, set the following environment variables:
-
-* `ROUTEMASTER_URL` – the full URL of your Routemaster application (mandatory)
-* `ROUTEMASTER_UUID` – the UUID of your application, e.g. `logistics-dashboard` (mandatory)
-* `ROUTEMASTER_VERIFY_SSL` – set to false if your Routemaster application is not served with a valid cert. (optional)
-
-If you then want to enable the publishing of events onto the event bus, you need to set `ROUTEMASTER_PUBLISHING_ENABLED` to `true` and implement publishers as needed. An example of how to do this is detailed in [`README.routemaster_client.md`](README.routemaster_client.md).
 
 ### API Authentication
 

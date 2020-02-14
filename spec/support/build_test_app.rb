@@ -22,7 +22,7 @@ module ROR
       def shell_run(command)
         say_status 'running', command.gsub(Dir.pwd, '$PWD')
         output = %x{#{command}}
-        raise 'command failed' unless $?.success?
+        raise "command: `#{command}` failed" unless $?.success?
         output
       end
 
