@@ -4,13 +4,11 @@ module RooOnRails
   module Railties
     class RooIdentity < Rails::Railtie
       initializer 'roo_on_rails.roo_identity.middleware' do |app|
-        Rails.logger.with initializer: 'roo_on_rails.roo_identity' do |log|
-          if RooOnRails::Rack::PopulateEnvFromJWT.configured?
-            log.debug 'loading'
-            _add_middleware(app, log)
-          else
-            log.warn 'not configured, roo.identity will be unavailable'
-          end
+        if RooOnRails::Rack::PopulateEnvFromJWT.configured?
+          Rails.logger.debug '[roo_on_rails.roo_identity.middleware] loading'
+          _add_middleware(app, Rails.logger)
+        else
+          Rails.logger.warn '[roo_on_rails.roo_identity.middleware] not configured, roo.identity will be unavailable'
         end
       end
 
@@ -19,7 +17,7 @@ module RooOnRails
       def _add_middleware(app, log)
         app.config.middleware.use RooOnRails::Rack::PopulateEnvFromJWT, logger: log
       rescue LoadError
-        log.error 'the json-jwt gem is not in the bundle so Roo Identity will not be available'
+        log.error '[roo_on_rails.roo_identity.middleware] the json-jwt gem is not in the bundle so Roo Identity will not be available'
       end
     end
   end

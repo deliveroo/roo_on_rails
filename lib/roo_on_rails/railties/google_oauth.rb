@@ -4,12 +4,10 @@ module RooOnRails
   module Railties
     class GoogleOAuth < Rails::Railtie
       initializer 'roo_on_rails.google_auth.middleware' do |app|
-        Rails.logger.with initializer: 'roo_on_rails.google_auth' do |log|
-          next unless Config.google_auth_enabled?
-          log.debug 'loading'
-          _add_middleware(app)
-          _add_routes(app)
-        end
+        next unless Config.google_auth_enabled?
+        Rails.logger.debug '[roo_on_rails.google_auth] loading'
+        _add_middleware(app)
+        _add_routes(app)
       end
 
       private
