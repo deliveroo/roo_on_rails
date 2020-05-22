@@ -7,7 +7,7 @@ module ROR
     ROOT = Pathname.new('../../..').expand_path(__FILE__)
     TEST_DIR = ROOT.join('tmp/scaffold')
     BUNDLE_CACHE = ROOT.join('vendor/bundle-scaffold').join(RUBY_VERSION)
-    RAILS_NEW_BASE_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle'.freeze
+    RAILS_NEW_BASE_OPTIONS = '--skip-test --skip-git --skip-spring --skip-bundle --skip-bootsnap'.freeze
 
     class Helper < Thor::Group
       include Thor::Actions
@@ -22,8 +22,13 @@ module ROR
       def shell_run(command)
         say_status 'running', command.gsub(Dir.pwd, '$PWD')
         output = %x{#{command}}
-        raise "command: `#{command}` failed" unless $?.success?
-        output
+
+        if $?.success?
+          output
+        else
+          puts output
+          raise "command: `#{command}` failed"
+        end
       end
 
       def ensure_scaffold
