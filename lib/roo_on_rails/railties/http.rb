@@ -17,9 +17,11 @@ module RooOnRails
           wait_timeout: ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
         )
 
-        # rubocop:disable Metrics/LineLength
-        middleware_to_insert_before = Rails::VERSION::MAJOR < 4 ? ::ActionDispatch::Cookies : ::Rack::Head
-        # rubocop:enable
+        middleware_to_insert_before = if Rails::VERSION::MAJOR < 4
+          ::ActionDispatch::Cookies
+        else
+          ::Rack::Head
+        end
 
         # This needs to be inserted low in the stack, before Rails returns the
         # thread-current connection to the pool.
