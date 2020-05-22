@@ -10,6 +10,7 @@ module RooOnRails
         else
           # rubocop:disable Metrics/LineLength
           Rails.logger.warn '[roo_on_rails.roo_identity.middleware] not configured, roo.identity will be unavailable'
+          # rubocop:enable
         end
       end
 
@@ -20,6 +21,7 @@ module RooOnRails
       rescue LoadError
         # rubocop:disable Metrics/LineLength
         log.error '[roo_on_rails.roo_identity.middleware] the json-jwt gem is not in the bundle so Roo Identity will not be available'
+        # rubocop:enable
       end
     end
   end
