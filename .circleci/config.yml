@@ -18,9 +18,15 @@ jobs:
   build_2.4.6_rails_4:
     docker:
       - image: ruby:2.4.6-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: root
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: root
+          POSTGRES_DB: circle-test_test
       - image: redis:3-alpine
     steps:
       - checkout
