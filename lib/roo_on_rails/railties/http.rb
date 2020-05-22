@@ -17,10 +17,10 @@ module RooOnRails
           wait_timeout: ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
         )
 
-        middleware_to_insert_before = if Rails::VERSION::MAJOR < 4
-          ::ActionDispatch::Cookies
+        if Rails::VERSION::MAJOR < 4
+          middleware_to_insert_before = ::ActionDispatch::Cookies
         else
-          ::Rack::Head
+          middleware_to_insert_before = ::Rack::Head
         end
 
         # This needs to be inserted low in the stack, before Rails returns the
