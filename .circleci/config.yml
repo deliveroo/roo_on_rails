@@ -11,6 +11,16 @@
 #   * BUNDLE_PATH
 #   * BUNDLE_BIN
 
+common_ruby_environment: &common_ruby_environment
+  environment:
+    RAILS_ENV: test
+    PGHOST: 127.0.0.1
+    PGUSER: postgres
+    POSTGRES_HOST_AUTH_METHOD: "trust"
+common_pg_environment_vars: &common_pg_environment_vars
+    POSTGRES_USER: postgres
+    POSTGRES_DB: ror_testapp_test
+    POSTGRES_HOST_AUTH_METHOD: "trust"
 
 version: 2
 jobs:
@@ -18,9 +28,12 @@ jobs:
   build_2.4.6_rails_4:
     docker:
       - image: ruby:2.4.6-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -98,9 +111,12 @@ jobs:
   build_2.4.6_rails_5:
     docker:
       - image: ruby:2.4.6-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -178,9 +194,12 @@ jobs:
   build_2.4.6_rails_5_1:
     docker:
       - image: ruby:2.4.6-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -258,9 +277,12 @@ jobs:
   build_2.4.6_rails_5_2:
     docker:
       - image: ruby:2.4.6-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -338,9 +360,12 @@ jobs:
   build_2.5.5_rails_4:
     docker:
       - image: ruby:2.5.5-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -418,9 +443,12 @@ jobs:
   build_2.5.5_rails_5:
     docker:
       - image: ruby:2.5.5-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -498,9 +526,12 @@ jobs:
   build_2.5.5_rails_5_1:
     docker:
       - image: ruby:2.5.5-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -578,9 +609,12 @@ jobs:
   build_2.5.5_rails_5_2:
     docker:
       - image: ruby:2.5.5-alpine
+        <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+
       - image: redis:3-alpine
     steps:
       - checkout
@@ -654,7 +688,6 @@ jobs:
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
-
 
 workflows:
   version: 2
