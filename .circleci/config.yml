@@ -56,7 +56,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-bundle-2.4.6-rails_4-{{ .Branch }}
+            - v2-bundle-2.4.6-rails_4--{{ .Branch }}
             - v2-bundle-2.4.6-rails_4
             - v2-bundle-2.4.6
 
@@ -87,19 +87,19 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.4.6-rails_4-{{ .Branch }}
+          key: v2-bundle-2.4.6-rails_4--{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.6-rails_4
+          key: v2-bundle-2.4.6-rails_4-
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
           key: v2-bundle-2.4.6
           paths:
-            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-
             - ~/project/vendor/bundle-scaffold
 
   build_2.4.6_rails_5:
