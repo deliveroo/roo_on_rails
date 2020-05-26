@@ -21,13 +21,14 @@ jobs:
         environment:
           RAILS_ENV: test
           PGHOST: 127.0.0.1
-          PGUSER: root
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
-          POSTGRES_USER: root
+          POSTGRES_USER: postgres
           POSTGRES_DB: ror_testapp_test
-          POSTGRES_PASSWORD: ""
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -105,9 +106,17 @@ jobs:
   build_2.4.6_rails_5:
     docker:
       - image: ruby:2.4.6-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ror_testapp_test
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -185,9 +194,17 @@ jobs:
   build_2.4.6_rails_5_1:
     docker:
       - image: ruby:2.4.6-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ror_testapp_test
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -265,9 +282,17 @@ jobs:
   build_2.4.6_rails_5_2:
     docker:
       - image: ruby:2.4.6-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ror_testapp_test
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -345,9 +370,17 @@ jobs:
   build_2.5.5_rails_4:
     docker:
       - image: ruby:2.5.5-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ror_testapp_test
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -425,9 +458,17 @@ jobs:
   build_2.5.5_rails_5:
     docker:
       - image: ruby:2.5.5-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ror_testapp_test
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -505,9 +546,17 @@ jobs:
   build_2.5.5_rails_5_1:
     docker:
       - image: ruby:2.5.5-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ror_testapp_test
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -585,9 +634,17 @@ jobs:
   build_2.5.5_rails_5_2:
     docker:
       - image: ruby:2.5.5-alpine
+        environment:
+          RAILS_ENV: test
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: postgres:9.6-alpine
         environment:
           PGDATA: /dev/shm/pgdata
+          POSTGRES_USER: postgres
+          POSTGRES_DB: ror_testapp_test
+          POSTGRES_HOST_AUTH_METHOD: "trust"
       - image: redis:3-alpine
     steps:
       - checkout
@@ -661,7 +718,6 @@ jobs:
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
-
 
 workflows:
   version: 2
