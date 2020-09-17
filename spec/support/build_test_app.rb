@@ -36,9 +36,14 @@ module ROR
         scaffold_dir.rmtree if scaffold_dir.exist?
         TEST_DIR.mkpath
 
-        shell_run "rails new #{scaffold_dir} #{rails_new_options}"
-
         require 'rails'
+
+        if Rails::VERSION::MAJOR > 5
+          shell_run "rails new #{scaffold_dir} #{rails_new_options} --skip-javascript"
+        else
+          shell_run "rails new #{scaffold_dir} #{rails_new_options}"
+        end
+
         if Rails::VERSION::MAJOR < 4
           append_to_file scaffold_dir.join('Gemfile'), %{
             gem 'sidekiq', '< 5'
@@ -51,13 +56,14 @@ module ROR
           }
         end
 
-        # There are compatibility problems with sqlite3 1.4.x and older Rails versions
-        gsub_file scaffold_dir.join('Gemfile'), /^\s*gem 'sqlite3'.*/, 'gem "sqlite3", "~> 1.3.6"'
+        if Rails::VERSION::MAJOR < 6
+          # There are compatibility problems with sqlite3 1.4.x and older Rails versions
+          gsub_file scaffold_dir.join('Gemfile'), /^\s*gem 'sqlite3'.*/, 'gem "sqlite3", "~> 1.3.6"'
+        end
 
         append_to_file scaffold_dir.join('Gemfile'), %{
           gem 'roo_on_rails', path: '#{ROOT}'
         }
-
 
         Bundler.with_clean_env do
           shell_run "cd #{scaffold_dir} && bundle install -j4 --retry=3 --path=#{BUNDLE_CACHE}"
