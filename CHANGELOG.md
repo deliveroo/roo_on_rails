@@ -1,3 +1,9 @@
+# v2.1.0
+
+Features:
+
+- Rails 6 compatibility
+
 # v2.0.0-pre.2
 
 Features:
