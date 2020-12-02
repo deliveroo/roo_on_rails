@@ -14,19 +14,9 @@ module RooOnRails
         end
 
         Rails.logger.debug '[roo_on_rails.sidekiq] loading'
-        require 'hirefire-resource'
 
         config_sidekiq
         config_sidekiq_metrics
-        config_hirefire(app)
-      end
-
-      def config_hirefire(app)
-        unless ENV['HIREFIRE_TOKEN']
-          Rails.logger.warn 'No HIREFIRE_TOKEN token set, auto scaling not enabled'
-          return
-        end
-        add_middleware(app)
       end
 
       def config_sidekiq

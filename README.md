@@ -21,9 +21,6 @@
     - [Disabling SSL enforcement](#disabling-ssl-enforcement)
   - [Database configuration](#database-configuration)
   - [Sidekiq](#sidekiq)
-  - [HireFire](#hirefire)
-    - [For Web Dynos](#for-web-dynos)
-    - [For Sidekiq Workers](#for-sidekiq-workers)
   - [Logging](#logging)
   - [Identity](#identity)
   - [Google OAuth authentication](#google-oauth-authentication)
@@ -136,48 +133,6 @@ The following ENV are available:
 NB. If you are migrating to SLA-based queue names, do not set `SIDEKIQ_ENABLED`
 to `true` before your old queues have finished processing (this will prevent
 Sidekiq from seeing the old queues at all).
-
-### HireFire
-
-#### For Web Dynos
-
-Web dynos can be autoscaled by HireFire _only_ if it has been configured to use the `Web.Logplex.Load` source and the Heroku runtime metrics lab feature has been enabled:
-
-```bash
-$ heroku labs:enable log-runtime-metrics -a your-service-name-here
-```
-
-You will also need a log drain for HireFire, but the RooOnRails helper below should configure this for you. You can check with
-
-```bash
-$ heroku drains | grep hirefire
-https://logdrain.hirefire.io (d.00000000-0000-0000-0000-000000000000)
-
-# No drain? Add with:
-$ heroku drains:add -a your-service-name-here https://logdrain.hirefire.io
-```
-
-([HireFire docs for set up](https://help.hirefire.io/guides/logplex/load-logplex))
-
-#### For Sidekiq Workers
-
-When `HIREFIRE_TOKEN` is set an endpoint will be mounted at `/hirefire` that
-reports the required worker count as a function of queue latency. By default we
-add queue names in the style 'within1day', so if we notice an average latency in
-that queue of more than an set threshold we'll request one more worker. If we
-notice less than a threshold we'll request one less worker. These settings can
-be customised via the following ENV variables
-
-- `WORKER_INCREASE_THRESHOLD` (default 0.5)
-- `WORKER_DECREASE_THRESHOLD` (default 0.1)
-
-When setting the manager up in the HireFire web ui, the following settings must
-be used:
-
-- name: 'worker'
-- type: 'Worker.HireFire.JobQueue'
-- ratio: 1
-- decrementable: 'true'
 
 ### Logging
 
