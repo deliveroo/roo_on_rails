@@ -179,5 +179,21 @@ describe RooOnRails::Rack::PopulateEnvFromJWT, :webmock do
 
       its(:status) { should eq 401 }
     end
+
+    context 'when url is mapped and key fetching fails' do
+      let(:unmapped_prefix) { 'https://deliveroo.co.uk/' }
+      let(:mapped_prefix) { 'http://direct.url/' }
+      let(:jku) { unmapped_prefix + 'identity-keys/0.jwk' }
+      let(:url_mappings) { { unmapped_prefix => mapped_prefix } }
+
+      before { stub_request(:get, mapped_prefix + 'identity-keys/0.jwk').to_return( {status: 404}, {body: TEST_JWK_PUB}) }
+
+      it 'works the second time' do
+        expect { subject }.to raise_error(Faraday::ResourceNotFound)
+        subject
+      end
+
+    end
+
   end
 end
