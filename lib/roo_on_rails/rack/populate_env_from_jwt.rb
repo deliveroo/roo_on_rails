@@ -22,7 +22,8 @@ module RooOnRails
         @app = app
         @logger = logger
         @url_mappings = url_mappings
-        @keys = @mapped_urls = {}
+        @keys = {}
+        @mapped_urls = {}
 
         if skip_sig_verify && non_prod?
           @logger.warn "JWTs signature verifification has been switched off in development."

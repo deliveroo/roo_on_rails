@@ -337,6 +337,11 @@ The command is designed to fix issues in many cases.
 Pull requests are welcome on GitHub at
 `https://github.com/deliveroo/roo_on_rails`.
 
+## Releasing
+
+1. Bump the version number in `lib/roo_on_rails/version.rb
+1. Add an entry to the changelog
+1. After merging to master release e.g. `bundle exec rake release`
 
 ## License
 
