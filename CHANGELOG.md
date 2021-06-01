@@ -1,3 +1,9 @@
+# v2.1.2
+
+Bug fix:
+
+- fixes PopulateEnvFromJWT caching issue where a key that couldn't be fetched would be cached
+
 # v2.1.0
 
 Features:
