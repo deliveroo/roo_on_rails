@@ -40,7 +40,7 @@ module RooOnRails
         # @see AbstractController::Callbacks::ClassMethods#before_action for additional scoping opts
         def require_api_key(only_services: nil, **options)
           before_action(**options) do
-            authenticate_or_request_with_http_basic('Authenitcation required') do |service_name, client_key|
+            authenticate_or_request_with_http_basic('Authentication required') do |service_name, client_key|
               Authenticator.new([*only_services]).valid?(service_name, client_key).tap do |is_valid|
                 @current_client = OpenStruct.new(name: service_name).freeze if is_valid
               end
