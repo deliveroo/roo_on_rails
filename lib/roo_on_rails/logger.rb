@@ -1,12 +1,7 @@
 require 'delegate'
 require 'roo_on_rails/logfmt'
 require 'rails/version'
-
-if Rails::VERSION::MAJOR < 4
-  require 'logger'
-else
-  require 'active_support/logger'
-end
+require 'active_support/logger'
 
 module RooOnRails
   # A compatible replacement for the standard Logger to provide context, similar
