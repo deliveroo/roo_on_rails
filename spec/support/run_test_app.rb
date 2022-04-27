@@ -8,13 +8,26 @@ module ROR
       build_test_app
 
       let(:app_env) { 'production' }
+
+      let(:rails_server_command_line) do
+        if Rails::VERSION::MAJOR == 5
+          'bin/rails server puma -e %s' % app_env
+        else
+          'bin/rails server -u puma -e %s' % app_env
+        end
+      end
+
+      let(:app_command_line) do
+        # This ugly line forces the test app to run with unbuffered IO
+        # The old line was `bundle exec rails server puma ...`
+        "bundle exec ruby -e STDOUT.sync=true -e 'load($0=ARGV.shift)' #{rails_server_command_line}"
+      end
+
       let(:app) {
         ROR::SubProcess.new(
           name:     'rails',
           dir:      app_path,
-          # This ugly line forces the test app to run with unbuffered IO
-          # The old line was `bundle exec rails server puma ...`
-          command:  'bundle exec ruby -e STDOUT.sync=true -e \'load($0=ARGV.shift)\' bin/rails server puma -e %s' % app_env,
+          command:  app_command_line,
           start:    /Use Ctrl-C to stop/,
           stop:     /- Goodbye!/)
       }
