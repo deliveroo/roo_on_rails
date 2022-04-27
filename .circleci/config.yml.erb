@@ -21,17 +21,14 @@ common_pg_environment_vars: &common_pg_environment_vars
     POSTGRES_DB: ror_testapp_test
     POSTGRES_HOST_AUTH_METHOD: "trust"
 <%
-  builds = [
-    ['2.4.6', 'rails_4'],
-    ['2.4.6', 'rails_5'],
-    ['2.4.6', 'rails_5_1'],
-    ['2.4.6', 'rails_5_2'],
-    ['2.5.5', 'rails_4'],
-    ['2.5.5', 'rails_5'],
-    ['2.5.5', 'rails_5_1'],
-    ['2.5.5', 'rails_5_2'],
-    ['2.6.5', 'rails_6']
-  ]
+builds = [
+    ['2.5.9', 'rails_5_2'],
+    ['2.6.10', 'rails_5_2'],
+    ['2.7.6', 'rails_5_2'],
+    ['2.5.9', 'rails_6_0'],
+    ['2.6.10', 'rails_6_0'],
+    ['2.7.6', 'rails_6_0']
+]
 %>
 version: 2
 jobs:

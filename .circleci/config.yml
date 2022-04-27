@@ -24,255 +24,9 @@ common_pg_environment_vars: &common_pg_environment_vars
 version: 2
 jobs:
 
-  build_2.4.6_rails_4:
+  build_2.5.9_rails_5_2:
     docker:
-      - image: ruby:2.4.6-alpine
-        <<: *common_ruby_environment
-      - image: postgres:9.6-alpine
-        environment:
-          PGDATA: /dev/shm/pgdata
-          <<: *common_pg_environment_vars
-      - image: redis:4-alpine
-    steps:
-      - checkout
-
-      - run:
-          name: Setup RAM disk
-          command: |
-            rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
-            ln -s /dev/shm/tmp ~/project/tmp
-
-      - run:
-          name: Setup requirements
-          command: |
-            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
-
-      - run:
-          name: Configure bundler
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
-
-      - restore_cache:
-          keys:
-            - v2-bundle-2.4.6-rails_4-{{ .Branch }}
-            - v2-bundle-2.4.6-rails_4
-            - v2-bundle-2.4.6
-
-      - run:
-          name: Install bundle
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
-
-      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
-      # the CI since it makes it harder to run multiple apps in a single container
-      # See https://github.com/docker-library/docs/pull/1221/files for a summary
-      # Unsettting the variables restores the default behaviour
-      - run:
-          name: Run test suite
-          command: |
-            unset \
-              RACK_ENV \
-              RAILS_ENV \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle exec rspec
-
-      - save_cache:
-          key: v2-bundle-2.4.6-rails_4-{{ .Branch }}
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.4.6-rails_4
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.4.6
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-
-  build_2.4.6_rails_5:
-    docker:
-      - image: ruby:2.4.6-alpine
-        <<: *common_ruby_environment
-      - image: postgres:9.6-alpine
-        environment:
-          PGDATA: /dev/shm/pgdata
-          <<: *common_pg_environment_vars
-      - image: redis:4-alpine
-    steps:
-      - checkout
-
-      - run:
-          name: Setup RAM disk
-          command: |
-            rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
-            ln -s /dev/shm/tmp ~/project/tmp
-
-      - run:
-          name: Setup requirements
-          command: |
-            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
-
-      - run:
-          name: Configure bundler
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
-
-      - restore_cache:
-          keys:
-            - v2-bundle-2.4.6-rails_5-{{ .Branch }}
-            - v2-bundle-2.4.6-rails_5
-            - v2-bundle-2.4.6
-
-      - run:
-          name: Install bundle
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
-
-      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
-      # the CI since it makes it harder to run multiple apps in a single container
-      # See https://github.com/docker-library/docs/pull/1221/files for a summary
-      # Unsettting the variables restores the default behaviour
-      - run:
-          name: Run test suite
-          command: |
-            unset \
-              RACK_ENV \
-              RAILS_ENV \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle exec rspec
-
-      - save_cache:
-          key: v2-bundle-2.4.6-rails_5-{{ .Branch }}
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.4.6-rails_5
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.4.6
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-
-  build_2.4.6_rails_5_1:
-    docker:
-      - image: ruby:2.4.6-alpine
-        <<: *common_ruby_environment
-      - image: postgres:9.6-alpine
-        environment:
-          PGDATA: /dev/shm/pgdata
-          <<: *common_pg_environment_vars
-      - image: redis:4-alpine
-    steps:
-      - checkout
-
-      - run:
-          name: Setup RAM disk
-          command: |
-            rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
-            ln -s /dev/shm/tmp ~/project/tmp
-
-      - run:
-          name: Setup requirements
-          command: |
-            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
-
-      - run:
-          name: Configure bundler
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
-
-      - restore_cache:
-          keys:
-            - v2-bundle-2.4.6-rails_5_1-{{ .Branch }}
-            - v2-bundle-2.4.6-rails_5_1
-            - v2-bundle-2.4.6
-
-      - run:
-          name: Install bundle
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
-
-      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
-      # the CI since it makes it harder to run multiple apps in a single container
-      # See https://github.com/docker-library/docs/pull/1221/files for a summary
-      # Unsettting the variables restores the default behaviour
-      - run:
-          name: Run test suite
-          command: |
-            unset \
-              RACK_ENV \
-              RAILS_ENV \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle exec rspec
-
-      - save_cache:
-          key: v2-bundle-2.4.6-rails_5_1-{{ .Branch }}
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.4.6-rails_5_1
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.4.6
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-
-  build_2.4.6_rails_5_2:
-    docker:
-      - image: ruby:2.4.6-alpine
+      - image: ruby:2.5.9-alpine
         <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
@@ -306,9 +60,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-bundle-2.4.6-rails_5_2-{{ .Branch }}
-            - v2-bundle-2.4.6-rails_5_2
-            - v2-bundle-2.4.6
+            - v2-bundle-2.5.9-rails_5_2-{{ .Branch }}
+            - v2-bundle-2.5.9-rails_5_2
+            - v2-bundle-2.5.9
 
       - run:
           name: Install bundle
@@ -337,270 +91,24 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.4.6-rails_5_2-{{ .Branch }}
+          key: v2-bundle-2.5.9-rails_5_2-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.6-rails_5_2
+          key: v2-bundle-2.5.9-rails_5_2
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.4.6
+          key: v2-bundle-2.5.9
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.5.5_rails_4:
+  build_2.6.10_rails_5_2:
     docker:
-      - image: ruby:2.5.5-alpine
-        <<: *common_ruby_environment
-      - image: postgres:9.6-alpine
-        environment:
-          PGDATA: /dev/shm/pgdata
-          <<: *common_pg_environment_vars
-      - image: redis:4-alpine
-    steps:
-      - checkout
-
-      - run:
-          name: Setup RAM disk
-          command: |
-            rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
-            ln -s /dev/shm/tmp ~/project/tmp
-
-      - run:
-          name: Setup requirements
-          command: |
-            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
-
-      - run:
-          name: Configure bundler
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_4.gemfile
-
-      - restore_cache:
-          keys:
-            - v2-bundle-2.5.5-rails_4-{{ .Branch }}
-            - v2-bundle-2.5.5-rails_4
-            - v2-bundle-2.5.5
-
-      - run:
-          name: Install bundle
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
-
-      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
-      # the CI since it makes it harder to run multiple apps in a single container
-      # See https://github.com/docker-library/docs/pull/1221/files for a summary
-      # Unsettting the variables restores the default behaviour
-      - run:
-          name: Run test suite
-          command: |
-            unset \
-              RACK_ENV \
-              RAILS_ENV \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle exec rspec
-
-      - save_cache:
-          key: v2-bundle-2.5.5-rails_4-{{ .Branch }}
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.5.5-rails_4
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.5.5
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-
-  build_2.5.5_rails_5:
-    docker:
-      - image: ruby:2.5.5-alpine
-        <<: *common_ruby_environment
-      - image: postgres:9.6-alpine
-        environment:
-          PGDATA: /dev/shm/pgdata
-          <<: *common_pg_environment_vars
-      - image: redis:4-alpine
-    steps:
-      - checkout
-
-      - run:
-          name: Setup RAM disk
-          command: |
-            rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
-            ln -s /dev/shm/tmp ~/project/tmp
-
-      - run:
-          name: Setup requirements
-          command: |
-            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
-
-      - run:
-          name: Configure bundler
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_5.gemfile
-
-      - restore_cache:
-          keys:
-            - v2-bundle-2.5.5-rails_5-{{ .Branch }}
-            - v2-bundle-2.5.5-rails_5
-            - v2-bundle-2.5.5
-
-      - run:
-          name: Install bundle
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
-
-      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
-      # the CI since it makes it harder to run multiple apps in a single container
-      # See https://github.com/docker-library/docs/pull/1221/files for a summary
-      # Unsettting the variables restores the default behaviour
-      - run:
-          name: Run test suite
-          command: |
-            unset \
-              RACK_ENV \
-              RAILS_ENV \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle exec rspec
-
-      - save_cache:
-          key: v2-bundle-2.5.5-rails_5-{{ .Branch }}
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.5.5-rails_5
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.5.5
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-
-  build_2.5.5_rails_5_1:
-    docker:
-      - image: ruby:2.5.5-alpine
-        <<: *common_ruby_environment
-      - image: postgres:9.6-alpine
-        environment:
-          PGDATA: /dev/shm/pgdata
-          <<: *common_pg_environment_vars
-      - image: redis:4-alpine
-    steps:
-      - checkout
-
-      - run:
-          name: Setup RAM disk
-          command: |
-            rm -rf ~/project/tmp ;
-            mkdir /dev/shm/tmp ;
-            ln -s /dev/shm/tmp ~/project/tmp
-
-      - run:
-          name: Setup requirements
-          command: |
-            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
-
-      - run:
-          name: Configure bundler
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_5_1.gemfile
-
-      - restore_cache:
-          keys:
-            - v2-bundle-2.5.5-rails_5_1-{{ .Branch }}
-            - v2-bundle-2.5.5-rails_5_1
-            - v2-bundle-2.5.5
-
-      - run:
-          name: Install bundle
-          command: |
-            unset \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
-
-      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
-      # the CI since it makes it harder to run multiple apps in a single container
-      # See https://github.com/docker-library/docs/pull/1221/files for a summary
-      # Unsettting the variables restores the default behaviour
-      - run:
-          name: Run test suite
-          command: |
-            unset \
-              RACK_ENV \
-              RAILS_ENV \
-              BUNDLE_APP_CONFIG \
-              GEM_HOME \
-              BUNDLE_PATH \
-              BUNDLE_BIN
-            bundle exec rspec
-
-      - save_cache:
-          key: v2-bundle-2.5.5-rails_5_1-{{ .Branch }}
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.5.5-rails_5_1
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-      - save_cache:
-          key: v2-bundle-2.5.5
-          paths:
-            - ~/project/vendor/bundle
-            - ~/project/vendor/bundle-scaffold
-
-  build_2.5.5_rails_5_2:
-    docker:
-      - image: ruby:2.5.5-alpine
+      - image: ruby:2.6.10-alpine
         <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
@@ -634,9 +142,9 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-bundle-2.5.5-rails_5_2-{{ .Branch }}
-            - v2-bundle-2.5.5-rails_5_2
-            - v2-bundle-2.5.5
+            - v2-bundle-2.6.10-rails_5_2-{{ .Branch }}
+            - v2-bundle-2.6.10-rails_5_2
+            - v2-bundle-2.6.10
 
       - run:
           name: Install bundle
@@ -665,24 +173,24 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.5.5-rails_5_2-{{ .Branch }}
+          key: v2-bundle-2.6.10-rails_5_2-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.5.5-rails_5_2
+          key: v2-bundle-2.6.10-rails_5_2
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.5.5
+          key: v2-bundle-2.6.10
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
-  build_2.6.5_rails_6:
+  build_2.7.6_rails_5_2:
     docker:
-      - image: ruby:2.6.5-alpine
+      - image: ruby:2.7.6-alpine
         <<: *common_ruby_environment
       - image: postgres:9.6-alpine
         environment:
@@ -712,13 +220,13 @@ jobs:
               GEM_HOME \
               BUNDLE_PATH \
               BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_6.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_5_2.gemfile
 
       - restore_cache:
           keys:
-            - v2-bundle-2.6.5-rails_6-{{ .Branch }}
-            - v2-bundle-2.6.5-rails_6
-            - v2-bundle-2.6.5
+            - v2-bundle-2.7.6-rails_5_2-{{ .Branch }}
+            - v2-bundle-2.7.6-rails_5_2
+            - v2-bundle-2.7.6
 
       - run:
           name: Install bundle
@@ -747,17 +255,263 @@ jobs:
             bundle exec rspec
 
       - save_cache:
-          key: v2-bundle-2.6.5-rails_6-{{ .Branch }}
+          key: v2-bundle-2.7.6-rails_5_2-{{ .Branch }}
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.6.5-rails_6
+          key: v2-bundle-2.7.6-rails_5_2
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
       - save_cache:
-          key: v2-bundle-2.6.5
+          key: v2-bundle-2.7.6
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+
+  build_2.5.9_rails_6_0:
+    docker:
+      - image: ruby:2.5.9-alpine
+        <<: *common_ruby_environment
+      - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+      - image: redis:4-alpine
+    steps:
+      - checkout
+
+      - run:
+          name: Setup RAM disk
+          command: |
+            rm -rf ~/project/tmp ;
+            mkdir /dev/shm/tmp ;
+            ln -s /dev/shm/tmp ~/project/tmp
+
+      - run:
+          name: Setup requirements
+          command: |
+            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
+
+      - run:
+          name: Configure bundler
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle config --local gemfile $PWD/gemfiles/rails_6_0.gemfile
+
+      - restore_cache:
+          keys:
+            - v2-bundle-2.5.9-rails_6_0-{{ .Branch }}
+            - v2-bundle-2.5.9-rails_6_0
+            - v2-bundle-2.5.9
+
+      - run:
+          name: Install bundle
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
+
+      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
+      # the CI since it makes it harder to run multiple apps in a single container
+      # See https://github.com/docker-library/docs/pull/1221/files for a summary
+      # Unsettting the variables restores the default behaviour
+      - run:
+          name: Run test suite
+          command: |
+            unset \
+              RACK_ENV \
+              RAILS_ENV \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle exec rspec
+
+      - save_cache:
+          key: v2-bundle-2.5.9-rails_6_0-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.9-rails_6_0
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.5.9
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+
+  build_2.6.10_rails_6_0:
+    docker:
+      - image: ruby:2.6.10-alpine
+        <<: *common_ruby_environment
+      - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+      - image: redis:4-alpine
+    steps:
+      - checkout
+
+      - run:
+          name: Setup RAM disk
+          command: |
+            rm -rf ~/project/tmp ;
+            mkdir /dev/shm/tmp ;
+            ln -s /dev/shm/tmp ~/project/tmp
+
+      - run:
+          name: Setup requirements
+          command: |
+            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
+
+      - run:
+          name: Configure bundler
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle config --local gemfile $PWD/gemfiles/rails_6_0.gemfile
+
+      - restore_cache:
+          keys:
+            - v2-bundle-2.6.10-rails_6_0-{{ .Branch }}
+            - v2-bundle-2.6.10-rails_6_0
+            - v2-bundle-2.6.10
+
+      - run:
+          name: Install bundle
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
+
+      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
+      # the CI since it makes it harder to run multiple apps in a single container
+      # See https://github.com/docker-library/docs/pull/1221/files for a summary
+      # Unsettting the variables restores the default behaviour
+      - run:
+          name: Run test suite
+          command: |
+            unset \
+              RACK_ENV \
+              RAILS_ENV \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle exec rspec
+
+      - save_cache:
+          key: v2-bundle-2.6.10-rails_6_0-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.6.10-rails_6_0
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.6.10
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+
+  build_2.7.6_rails_6_0:
+    docker:
+      - image: ruby:2.7.6-alpine
+        <<: *common_ruby_environment
+      - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+      - image: redis:4-alpine
+    steps:
+      - checkout
+
+      - run:
+          name: Setup RAM disk
+          command: |
+            rm -rf ~/project/tmp ;
+            mkdir /dev/shm/tmp ;
+            ln -s /dev/shm/tmp ~/project/tmp
+
+      - run:
+          name: Setup requirements
+          command: |
+            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
+
+      - run:
+          name: Configure bundler
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle config --local gemfile $PWD/gemfiles/rails_6_0.gemfile
+
+      - restore_cache:
+          keys:
+            - v2-bundle-2.7.6-rails_6_0-{{ .Branch }}
+            - v2-bundle-2.7.6-rails_6_0
+            - v2-bundle-2.7.6
+
+      - run:
+          name: Install bundle
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
+
+      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
+      # the CI since it makes it harder to run multiple apps in a single container
+      # See https://github.com/docker-library/docs/pull/1221/files for a summary
+      # Unsettting the variables restores the default behaviour
+      - run:
+          name: Run test suite
+          command: |
+            unset \
+              RACK_ENV \
+              RAILS_ENV \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle exec rspec
+
+      - save_cache:
+          key: v2-bundle-2.7.6-rails_6_0-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.7.6-rails_6_0
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-2.7.6
           paths:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
@@ -768,21 +522,15 @@ workflows:
   test:
     jobs:
     
-      - build_2.4.6_rails_4
+      - build_2.5.9_rails_5_2
     
-      - build_2.4.6_rails_5
+      - build_2.6.10_rails_5_2
     
-      - build_2.4.6_rails_5_1
+      - build_2.7.6_rails_5_2
     
-      - build_2.4.6_rails_5_2
+      - build_2.5.9_rails_6_0
     
-      - build_2.5.5_rails_4
+      - build_2.6.10_rails_6_0
     
-      - build_2.5.5_rails_5
-    
-      - build_2.5.5_rails_5_1
-    
-      - build_2.5.5_rails_5_2
-    
-      - build_2.6.5_rails_6
+      - build_2.7.6_rails_6_0
     
