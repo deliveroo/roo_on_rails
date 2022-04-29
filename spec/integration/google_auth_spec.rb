@@ -24,7 +24,10 @@ RSpec.describe 'Google OAuth' do
   end
 
   describe 'routes' do
-    let(:output) { app_helper.shell_run "cd #{app_path} && rake routes" }
+    let(:output) do
+      command = Rails.version.to_f >= 6.1 ? 'rails routes' : 'rake routes'
+      app_helper.shell_run "cd #{app_path} && #{command}"
+    end
 
     context "if Google Auth has been enabled" do
       before { ENV['GOOGLE_AUTH_ENABLED'] = 'YES' }

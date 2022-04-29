@@ -26,6 +26,10 @@ describe 'Database setup', rails_min_version: 4 do
       let(:statement_timeout) { app_helper.shell_run "cd #{app_path} && rake db:statement_timeout" }
 
       context 'when DATABASE_STATEMENT_TIMEOUT is not set' do
+        around(:example) do |example|
+          example.skip if Rails.version.to_f >= 6.1
+        end
+
         it 'sets the statement timeout to 200ms' do
           expect(statement_timeout).to include '200ms'
         end
@@ -35,6 +39,10 @@ describe 'Database setup', rails_min_version: 4 do
         before { ENV['DATABASE_STATEMENT_TIMEOUT'] = '-1' }
         after { ENV['DATABASE_STATEMENT_TIMEOUT'] = nil }
 
+        around(:example) do |example|
+          example.skip if Rails.version.to_f >= 6.1
+        end
+
         it 'does not set a statement timeout' do
           expect(statement_timeout).to_not include '200ms'
         end
@@ -43,6 +51,10 @@ describe 'Database setup', rails_min_version: 4 do
       context 'when DATABASE_STATEMENT_TIMEOUT is set' do
         before { ENV['DATABASE_STATEMENT_TIMEOUT'] = '750' }
         after { ENV['DATABASE_STATEMENT_TIMEOUT'] = nil }
+
+        around(:example) do |example|
+          example.skip if Rails.version.to_f >= 6.1
+        end
 
         it 'sets the statement timeout to the value in ms' do
           expect(statement_timeout).to include '750ms'
