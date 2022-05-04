@@ -9,7 +9,8 @@ gem "webmock"
 gem "pg", "~> 0.11"
 gem "sqlite3", "~> 1.3.6"
 gem "rails", "~> 4.2"
-gem "sprockets", "~>3.0"
+gem "bootsnap", ">= 1.1.0", require: false
 gem "rake", "13.0.1"
+gem "sprockets", "~>3.0"
 
 gemspec path: "../"

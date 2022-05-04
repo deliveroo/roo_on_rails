@@ -1,3 +1,9 @@
+# v2.1.3
+
+Features:
+
+- Rails 6.1 compatibility
+
 # v2.1.2
 
 Bug fix:
