@@ -8,13 +8,15 @@ if defined?(ActiveRecord)
 
     namespace :migrate do
       task extend_statement_timeout: :environment do
-        if ActiveRecord::VERSION::MAJOR >= 4 && ActiveRecord::VERSION::MAJOR < 6
+        rails_version = Gem::Version.new(Rails.version)
+
+        if rails_version >= Gem::Version.new('4') && rails_version < Gem::Version.new('6.1')
           config = ActiveRecord::Base.configurations[Rails.env]
           config['variables'] ||= {}
           config['variables']['statement_timeout'] = ENV.fetch('MIGRATION_STATEMENT_TIMEOUT', 10_000)
         end
 
-        if Rails::VERSION::MAJOR >= 6
+        if rails_version >= Gem::Version.new('6.1')
           configs = ActiveRecord::Base.configurations.configurations
           db_names = configs.select { |c| c.env_name == Rails.env }.map { |c| c.name }
           db_names.each do |db_name|

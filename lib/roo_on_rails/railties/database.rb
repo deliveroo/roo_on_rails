@@ -5,7 +5,7 @@ module RooOnRails
         ActiveSupport.on_load :active_record do
           Rails.logger.debug('[roo_on_rails.database] loading')
 
-          if Rails::VERSION::MAJOR >= 6
+          if Gem::Version.new(Rails.version) >= Gem::Version.new('6.1')
             configs = ActiveRecord::Base.configurations.configurations
             db_names = configs.select { |c| c.env_name == Rails.env }.map { |c| c.name }
             db_names.each do |db_name|
