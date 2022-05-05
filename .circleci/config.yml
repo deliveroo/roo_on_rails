@@ -794,7 +794,7 @@ jobs:
               GEM_HOME \
               BUNDLE_PATH \
               BUNDLE_BIN
-            bundle config --local gemfile $PWD/gemfiles/rails_6.gemfile
+            bundle config --local gemfile $PWD/gemfiles/rails_6_1.gemfile
 
       - restore_cache:
           keys:
