@@ -40,7 +40,7 @@ appraise 'rails-6-1' do
   gem 'rails', '~> 6.1.5'
   gem 'bootsnap', '>= 1.1.0', require: false
   gem 'sqlite3', '~> 1.4'
-  gem 'pg', '~> 0.18'
+  gem 'pg', '~> 1.0'
   gem 'rake', '13.0.1'
   gem 'thor', '~> 1.0'
 end
