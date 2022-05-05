@@ -24,12 +24,20 @@ if defined?(ActiveRecord)
             new_config_hash = old_url_config.configuration_hash.deep_dup
             new_config_hash[:variables] ||= {}
             new_config_hash[:variables][:statement_timeout] = ENV.fetch('MIGRATION_STATEMENT_TIMEOUT', 10_000)
-            new_url_config = ActiveRecord::DatabaseConfigurations::UrlConfig.new(
-              old_url_config.env_name,
-              old_url_config.name,
-              old_url_config.url,
-              new_config_hash
-            )
+            if old_url_config.respond_to?(:url)
+              new_url_config = ActiveRecord::DatabaseConfigurations::UrlConfig.new(
+                old_url_config.env_name,
+                old_url_config.name,
+                old_url_config.url,
+                new_config_hash
+              )
+            else
+              new_url_config = ActiveRecord::DatabaseConfigurations::HashConfig.new(
+                old_url_config.env_name,
+                old_url_config.name,
+                new_config_hash
+              )
+            end
             configs.delete(old_url_config)
             configs << new_url_config
           end

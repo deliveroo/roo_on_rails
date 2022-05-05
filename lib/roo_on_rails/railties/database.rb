@@ -18,12 +18,20 @@ module RooOnRails
               # Use -1 to disable setting the statement timeout
               new_config_hash[:variables][:statement_timeout] = statement_timeout unless statement_timeout == '-1'
               new_config_hash[:reaping_frequency] = ENV['DATABASE_REAPING_FREQUENCY'] if ENV.key?('DATABASE_REAPING_FREQUENCY')
-              new_url_config = ActiveRecord::DatabaseConfigurations::UrlConfig.new(
-                old_url_config.env_name,
-                old_url_config.name,
-                old_url_config.url,
-                new_config_hash
-              )
+              if old_url_config.respond_to?(:url)
+                new_url_config = ActiveRecord::DatabaseConfigurations::UrlConfig.new(
+                  old_url_config.env_name,
+                  old_url_config.name,
+                  old_url_config.url,
+                  new_config_hash
+                )
+              else
+                new_url_config = ActiveRecord::DatabaseConfigurations::HashConfig.new(
+                  old_url_config.env_name,
+                  old_url_config.name,
+                  new_config_hash
+                )
+              end
               configs.delete(old_url_config)
               configs << new_url_config
             end
