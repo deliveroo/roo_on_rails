@@ -11,5 +11,6 @@ gem "sqlite3", "~> 1.4"
 gem "rails", "~> 6.1.5"
 gem "bootsnap", ">= 1.1.0", require: false
 gem "rake", "13.0.1"
+gem "thor", "~> 1.0"
 
 gemspec path: "../"
