@@ -3,6 +3,8 @@ module RooOnRails
     class Database < Rails::Railtie
       initializer 'roo_on_rails.database', after: 'active_record.initialize_database' do
         ActiveSupport.on_load :active_record do
+          return if Rails::VERSION::MAJOR >= 7
+
           Rails.logger.debug('[roo_on_rails.database] loading')
 
           config = ActiveRecord::Base.configurations[Rails.env]
