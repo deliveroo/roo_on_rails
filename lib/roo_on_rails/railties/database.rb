@@ -5,7 +5,7 @@ module RooOnRails
         ActiveSupport.on_load :active_record do
           Rails.logger.debug('[roo_on_rails.database] loading')
 
-          if Rails::VERSION::MAJOR < 7
+          if Rails.version.to_f < 6.1
             config = ActiveRecord::Base.configurations[Rails.env]
             config['variables'] ||= {}
             statement_timeout = ENV.fetch('DATABASE_STATEMENT_TIMEOUT', 200)
