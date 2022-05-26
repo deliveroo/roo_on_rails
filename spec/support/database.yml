@@ -3,6 +3,8 @@ default: &default
   host: localhost
   port: 5432
   username: postgres
+  variables:
+    statement_timeout: 200
 development:
   <<: *default
   database: ror_testapp_development

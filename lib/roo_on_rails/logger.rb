@@ -1,12 +1,7 @@
 require 'delegate'
 require 'roo_on_rails/logfmt'
 require 'rails/version'
-
-if Rails::VERSION::MAJOR < 4
-  require 'logger'
-else
-  require 'active_support/logger'
-end
+require 'active_support/logger'
 
 module RooOnRails
   # A compatible replacement for the standard Logger to provide context, similar
@@ -115,11 +110,7 @@ module RooOnRails
     end
 
     def _default_logger_class
-      if Rails::VERSION::MAJOR < 4
-        ::Logger
-      else
-        ActiveSupport::Logger
-      end
+      ActiveSupport::Logger
     end
   end
 end

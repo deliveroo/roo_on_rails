@@ -5,16 +5,29 @@ module RooOnRails
         ActiveSupport.on_load :active_record do
           Rails.logger.debug('[roo_on_rails.database] loading')
 
-          config = ActiveRecord::Base.configurations[Rails.env]
-          config['variables'] ||= {}
-          statement_timeout = ENV.fetch('DATABASE_STATEMENT_TIMEOUT', 200)
-          # Use -1 to disable setting the statement timeout
-          unless statement_timeout == '-1'
-            config['variables']['statement_timeout'] = statement_timeout
+          ActiveRecord::Base.configurations.configurations.each do |config|
+            next unless config.env_name == Rails.env
+
+            next if config.configuration_hash[:variables]&.[]('statement_timeout')
+
+            message = <<-TEXT
+RooOnRails no longer manages DATABASE_STATEMENT_TIMEOUT.
+Please set this yourself inside of config/database.yml
+
+Example:
+
+default: &default
+  adapter: postgres
+  port: 5432
+  ...
+  variables:
+    statement_timeout: <%= ENV['DATABASE_STATEMENT_TIMEOUT'] || 200 %>
+            TEXT
+
+            Rails.logger.error(message)
+            raise StandardError, 'DATABASE_STATEMENT_TIMEOUT not set'
           end
-          if ENV.key?('DATABASE_REAPING_FREQUENCY')
-            config['reaping_frequency'] = ENV['DATABASE_REAPING_FREQUENCY']
-          end
+
           ActiveRecord::Base.establish_connection
         end
       end
