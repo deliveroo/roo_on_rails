@@ -64,7 +64,13 @@ module ROR
       end
 
       def configure_database(path)
-        puts '@@@', path.join('./config/database.yml').read
+        config_path = path.join('./config/database.yml')
+
+        config = YAML.load_file(config_path)
+        config['default']['variables'] = { 'statement_timeout' => -1 }
+
+        create_file config_path, config.to_yaml
+        
         self
       end
 
