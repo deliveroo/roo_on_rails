@@ -66,11 +66,13 @@ module ROR
       def configure_database(path)
         config_path = path.join('./config/database.yml')
 
-        config = YAML.load_file(config_path)
-        config['default']['variables'] = { 'statement_timeout' => -1 }
+        if File.exist?(config_path)
+          config = YAML.load_file(config_path)
+          config['default']['variables'] = { 'statement_timeout' => -1 }
 
-        remove_file(config_path)
-        create_file(config_path, config.to_yaml)
+          remove_file(config_path)
+          create_file(config_path, config.to_yaml)
+        end
         
         self
       end

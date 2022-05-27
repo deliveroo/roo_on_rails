@@ -12,7 +12,7 @@ module RooOnRails
             # Rails 6.0 deprecates the legacy config and 6.1 removes it
             config_hash = Rails.version.to_f == 6.0 ? config.config : config.configuration_hash
 
-            next if config_hash[:variables]&.[]('statement_timeout')
+            next if config_hash.with_indifferent_access[:variables]&.[]('statement_timeout')
 
             message = <<-TEXT
 RooOnRails no longer manages DATABASE_STATEMENT_TIMEOUT.
