@@ -6,9 +6,13 @@ module RooOnRails
           Rails.logger.debug('[roo_on_rails.database] loading')
 
           ActiveRecord::Base.configurations.configurations.each do |config|
+            # Configurations returns the config for all envs
             next unless config.env_name == Rails.env
 
-            next if config.configuration_hash[:variables]&.[]('statement_timeout')
+            # Rails 6.0 deprecates the legacy config and 6.1 removes it
+            config_hash = Rails.version.to_f == 6.0 ? config.config : config.configuration_hash
+
+            next if config_hash[:variables]&.[]('statement_timeout')
 
             message = <<-TEXT
 RooOnRails no longer manages DATABASE_STATEMENT_TIMEOUT.

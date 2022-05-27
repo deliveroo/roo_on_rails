@@ -9,7 +9,6 @@ describe 'Database setup', rails_min_version: 4 do
     let(:app_options) {{ database: 'postgresql' }}
     let(:database_config) { Pathname.new(__FILE__).join('../../support/database.yml').read }
 
-    # fix database.yml
     before do
       app_path.join('config/database.yml').tap do |db_yml|
         app_helper.remove_file(db_yml)

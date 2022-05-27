@@ -63,6 +63,11 @@ module ROR
         self
       end
 
+      def configure_database
+        puts '@@@', scaffold_dir.join('./config/database.yml').read
+        self
+      end
+
       def clear_test_app_at(path)
         path.rmtree if path.exist?
         self
@@ -109,8 +114,10 @@ module ROR
       let(:app_env_vars) { "" }
 
       before do
-        app_helper.ensure_scaffold
+        app_helper
+          .ensure_scaffold
           .unpack_scaffold_at(app_path)
+          .configure_database
           .write_dotenv_file(app_path, app_env_vars)
       end
 
