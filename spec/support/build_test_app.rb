@@ -69,7 +69,8 @@ module ROR
         config = YAML.load_file(config_path)
         config['default']['variables'] = { 'statement_timeout' => -1 }
 
-        create_file config_path, config.to_yaml
+        remove_file(config_path)
+        create_file(config_path, config.to_yaml)
         
         self
       end
