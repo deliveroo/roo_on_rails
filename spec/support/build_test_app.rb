@@ -63,8 +63,8 @@ module ROR
         self
       end
 
-      def configure_database
-        puts '@@@', scaffold_dir.join('./config/database.yml').read
+      def configure_database(path)
+        puts '@@@', path.join('./config/database.yml').read
         self
       end
 
@@ -117,7 +117,7 @@ module ROR
         app_helper
           .ensure_scaffold
           .unpack_scaffold_at(app_path)
-          .configure_database
+          .configure_database(app_path)
           .write_dotenv_file(app_path, app_env_vars)
       end
 
