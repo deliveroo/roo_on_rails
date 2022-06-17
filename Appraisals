@@ -26,3 +26,16 @@ appraise 'rails-6-1' do
   gem 'webpacker', '~>3.0'
   gem 'psych', '< 4'
 end
+
+appraise 'rails-7-0' do
+  gem 'rails', '~> 7.0.3'
+  gem 'bootsnap', require: false
+  gem 'sqlite3'
+  gem 'pg'
+  gem 'rake'
+  gem 'net-smtp', require: false
+  gem 'net-pop', require: false
+  gem 'net-imap', require: false
+  gem 'webpacker', '~>3.0'
+  gem 'psych', '< 4'
+end

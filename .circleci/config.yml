@@ -926,6 +926,88 @@ jobs:
             - ~/project/vendor/bundle
             - ~/project/vendor/bundle-scaffold
 
+  build_3.1.2_rails_7_0:
+    docker:
+      - image: ruby:3.1.2-alpine
+        <<: *common_ruby_environment
+      - image: postgres:9.6-alpine
+        environment:
+          PGDATA: /dev/shm/pgdata
+          <<: *common_pg_environment_vars
+      - image: redis:4-alpine
+    steps:
+      - checkout
+
+      - run:
+          name: Setup RAM disk
+          command: |
+            rm -rf ~/project/tmp ;
+            mkdir /dev/shm/tmp ;
+            ln -s /dev/shm/tmp ~/project/tmp
+
+      - run:
+          name: Setup requirements
+          command: |
+            apk add --update git bash build-base postgresql-dev sqlite-dev tzdata nodejs
+
+      - run:
+          name: Configure bundler
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle config --local gemfile $PWD/gemfiles/rails_7_0.gemfile
+
+      - restore_cache:
+          keys:
+            - v2-bundle-3.1.2-rails_7_0-{{ .Branch }}
+            - v2-bundle-3.1.2-rails_7_0
+            - v2-bundle-3.1.2
+
+      - run:
+          name: Install bundle
+          command: |
+            unset \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
+
+      # The default Ruby containers modify the behaviour of Bundler in a way that breaks
+      # the CI since it makes it harder to run multiple apps in a single container
+      # See https://github.com/docker-library/docs/pull/1221/files for a summary
+      # Unsettting the variables restores the default behaviour
+      - run:
+          name: Run test suite
+          command: |
+            unset \
+              RACK_ENV \
+              RAILS_ENV \
+              BUNDLE_APP_CONFIG \
+              GEM_HOME \
+              BUNDLE_PATH \
+              BUNDLE_BIN
+            bundle exec rspec
+
+      - save_cache:
+          key: v2-bundle-3.1.2-rails_7_0-{{ .Branch }}
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-3.1.2-rails_7_0
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+      - save_cache:
+          key: v2-bundle-3.1.2
+          paths:
+            - ~/project/vendor/bundle
+            - ~/project/vendor/bundle-scaffold
+
 
 workflows:
   version: 2
@@ -953,3 +1035,5 @@ workflows:
       - build_3.0.4_rails_6_1
 
       - build_3.1.2_rails_6_1
+
+      - build_3.1.2_rails_7_0

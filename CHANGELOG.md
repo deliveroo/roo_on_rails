@@ -10,6 +10,7 @@ Breaking changes:
 Features:
 
 - Adds Rails 6.1 support
+- Adds Rails 7.0 support
 - Adds Ruby 2.7 support
 - Adds Ruby 3.0 support
 - Adds Ruby 3.1 support
