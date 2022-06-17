@@ -6,7 +6,7 @@ describe 'Database setup', rails_min_version: 4 do
   run_test_app
 
   context 'with a postgresql database' do
-    let(:app_options) {{ database: 'postgresql' }}
+    let(:app_options) { { database: 'postgresql' } }
 
     # fix database.yml
     before do
@@ -20,10 +20,10 @@ describe 'Database setup', rails_min_version: 4 do
     before { app.wait_start }
 
     context 'When booting' do
-      before { app_helper.shell_run "cd #{app_path} && rake db:create" }
-      after  { app_helper.shell_run "cd #{app_path} && rake db:drop" }
+      before { app_helper.shell_run "cd #{app_path} && rails db:create" }
+      after  { app_helper.shell_run "cd #{app_path} && rails db:drop" }
 
-      let(:statement_timeout) { app_helper.shell_run "cd #{app_path} && rake db:statement_timeout" }
+      let(:statement_timeout) { app_helper.shell_run "cd #{app_path} && rails db:statement_timeout" }
 
       context 'when DATABASE_STATEMENT_TIMEOUT is not set' do
         it 'sets the statement timeout to 200ms' do
@@ -54,7 +54,7 @@ describe 'Database setup', rails_min_version: 4 do
         let(:migration_path) { migration_dir.join("#{Time.now.to_i}_test_timeout.rb") }
         let(:migration) do
           major, minor, * = Gem::Version.new(Rails::VERSION::STRING).segments
-          version = "[#{major}.#{minor}]" if major >= 5
+          version = "[#{major}.#{minor}]"
           <<-EOF
             class TestTimeout < ActiveRecord::Migration#{version}
               def up
@@ -68,8 +68,8 @@ describe 'Database setup', rails_min_version: 4 do
           EOF
         end
 
-        let(:migrate) { app_helper.shell_run "cd #{app_path} && rake db:migrate" }
-        let(:rollback) { app_helper.shell_run "cd #{app_path} && rake db:rollback" }
+        let(:migrate) { app_helper.shell_run "cd #{app_path} && rails db:migrate" }
+        let(:rollback) { app_helper.shell_run "cd #{app_path} && rails db:rollback" }
 
         before do
           FileUtils.mkdir_p(migration_dir)
@@ -88,7 +88,7 @@ describe 'Database setup', rails_min_version: 4 do
   end
 
   context 'with ActiveRecord disabled' do
-    let(:app_options) {{ database: nil }}
+    let(:app_options) { { database: nil } }
 
     it 'boots the app without errors' do
       app.start.wait_start

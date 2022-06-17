@@ -10,13 +10,11 @@ if defined?(ActiveRecord)
       task extend_statement_timeout: :environment do
         rails_version = Gem::Version.new(Rails.version)
 
-        if rails_version >= Gem::Version.new('4') && rails_version < Gem::Version.new('6.1')
+        if rails_version < Gem::Version.new('6.1')
           config = ActiveRecord::Base.configurations[Rails.env]
           config['variables'] ||= {}
           config['variables']['statement_timeout'] = ENV.fetch('MIGRATION_STATEMENT_TIMEOUT', 10_000)
-        end
-
-        if rails_version >= Gem::Version.new('6.1')
+        else
           configs = ActiveRecord::Base.configurations.configurations
           old_url_config = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: 'primary')
           new_config_hash = old_url_config.configuration_hash.deep_dup
