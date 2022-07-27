@@ -16,5 +16,6 @@ gem "net-pop", require: false
 gem "net-imap", require: false
 gem "webpacker", "~>3.0"
 gem "psych", "< 4"
+gem "dotenv", "~> 2.7.6"
 
 gemspec path: "../"

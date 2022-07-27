@@ -4,6 +4,7 @@ appraise 'rails-5-2' do
   gem 'sqlite3', '~> 1.3.6'
   gem 'pg', '~> 0.18'
   gem 'rake', '13.0.1'
+  gem 'dotenv', '~> 2.7.6'
 end
 
 appraise 'rails-6-0' do
@@ -12,6 +13,7 @@ appraise 'rails-6-0' do
   gem 'sqlite3', '~> 1.4'
   gem 'pg', '~> 0.18'
   gem 'rake', '13.0.1'
+  gem 'dotenv', '~> 2.7.6'
 end
 
 appraise 'rails-6-1' do
@@ -25,6 +27,7 @@ appraise 'rails-6-1' do
   gem 'net-imap', require: false
   gem 'webpacker', '~>3.0'
   gem 'psych', '< 4'
+  gem 'dotenv', '~> 2.7.6'
 end
 
 appraise 'rails-7-0' do
