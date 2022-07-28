@@ -21,9 +21,9 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'dotenv-rails', '~> 2.1'
+  spec.add_runtime_dependency 'dotenv-rails', '~> 2.7.6'
   spec.add_runtime_dependency 'rails', '>= 3.2.22'
-  spec.add_runtime_dependency 'sprockets', '~>3.0'
+  spec.add_runtime_dependency 'sprockets', '~> 3.0'
   spec.add_runtime_dependency 'platform-api', '~> 2.0'
   spec.add_runtime_dependency 'hashie', '~> 3.4'
   spec.add_runtime_dependency 'rack-timeout', '>= 0.4.0'
@@ -35,11 +35,14 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'faraday'
   spec.add_runtime_dependency 'faraday_middleware'
   spec.add_runtime_dependency 'json-jwt', '~> 1.8'
+  spec.add_runtime_dependency 'net-smtp'
+  spec.add_runtime_dependency 'net-pop'
+  spec.add_runtime_dependency 'net-imap'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'thor', '~> 0.19'
+  spec.add_development_dependency 'thor'
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'memfs'
   spec.add_development_dependency 'simplecov'

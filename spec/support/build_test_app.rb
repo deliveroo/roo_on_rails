@@ -21,9 +21,9 @@ module ROR
 
       def shell_run(command)
         say_status 'running', command.gsub(Dir.pwd, '$PWD')
-        output = %x{#{command}}
+        output = `#{command}`
 
-        if $?.success?
+        if $CHILD_STATUS.success?
           output
         else
           puts output
@@ -42,18 +42,6 @@ module ROR
           shell_run "rails new #{scaffold_dir} #{rails_new_options} --skip-javascript"
         else
           shell_run "rails new #{scaffold_dir} #{rails_new_options}"
-        end
-
-        if Rails::VERSION::MAJOR < 4
-          append_to_file scaffold_dir.join('Gemfile'), %{
-            gem 'sidekiq', '< 5'
-          }
-        end
-
-        if Rails::VERSION::MAJOR < 5
-          append_to_file scaffold_dir.join('Gemfile'), %{
-            gem 'puma', '~> 3.0'
-          }
         end
 
         if Rails::VERSION::MAJOR < 6
@@ -125,7 +113,7 @@ module ROR
     def build_test_app
       let(:app_id) { '%s.%s' % [Time.now.strftime('%F.%H%M%S'), SecureRandom.hex(4)] }
       let(:app_path) { TEST_DIR.join(app_id) }
-      let(:app_helper) { Helper.new(app_options) }
+      let(:app_helper) { Helper.new(**app_options) }
       let(:app_options) { {} }
       let(:app_env_vars) { "" }
 

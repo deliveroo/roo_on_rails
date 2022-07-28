@@ -8,12 +8,37 @@ if defined?(ActiveRecord)
 
     namespace :migrate do
       task extend_statement_timeout: :environment do
-        if ActiveRecord::VERSION::MAJOR >= 4
+        rails_version = Gem::Version.new(Rails.version)
+
+        if rails_version < Gem::Version.new('6.1')
           config = ActiveRecord::Base.configurations[Rails.env]
           config['variables'] ||= {}
           config['variables']['statement_timeout'] = ENV.fetch('MIGRATION_STATEMENT_TIMEOUT', 10_000)
-          ActiveRecord::Base.establish_connection
+        else
+          configs = ActiveRecord::Base.configurations.configurations
+          old_url_config = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: 'primary')
+          new_config_hash = old_url_config.configuration_hash.deep_dup
+          new_config_hash[:variables] ||= {}
+          new_config_hash[:variables][:statement_timeout] = ENV.fetch('MIGRATION_STATEMENT_TIMEOUT', 10_000)
+          if old_url_config.respond_to?(:url)
+            new_url_config = ActiveRecord::DatabaseConfigurations::UrlConfig.new(
+              old_url_config.env_name,
+              old_url_config.name,
+              old_url_config.url,
+              new_config_hash
+            )
+          else
+            new_url_config = ActiveRecord::DatabaseConfigurations::HashConfig.new(
+              old_url_config.env_name,
+              old_url_config.name,
+              new_config_hash
+            )
+          end
+          configs.delete(old_url_config)
+          configs << new_url_config
         end
+
+        ActiveRecord::Base.establish_connection
       end
     end
   end
