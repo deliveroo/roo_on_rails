@@ -1,4 +1,4 @@
-# v2.1.3
+# v2.2.0
 
 Breaking changes:
 
