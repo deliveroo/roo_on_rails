@@ -1,4 +1,6 @@
 # v2.2.0
+- Drops ActiveRecord::Base.establish_connection from Railtie::Database.
+# v2.2.0
 
 Breaking changes:
 
