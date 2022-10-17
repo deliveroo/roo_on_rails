@@ -1,5 +1,9 @@
-# v2.2.0
+# v2.2.2
+- Drops Railtie::Database. STATEMENT_TIMEOUT no longer set by this gem.
+
+# v2.2.1
 - Drops ActiveRecord::Base.establish_connection from Railtie::Database.
+
 # v2.2.0
 
 Breaking changes:
