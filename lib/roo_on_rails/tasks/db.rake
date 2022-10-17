@@ -2,6 +2,7 @@ if defined?(ActiveRecord)
   namespace :db do
     desc 'Prints out the database statement timeout'
     task statement_timeout: :environment do
+      ActiveRecord::Base.establish_connection
       result = ActiveRecord::Base.connection.execute('SHOW statement_timeout').first
       puts result['statement_timeout']
     end
@@ -37,8 +38,6 @@ if defined?(ActiveRecord)
           configs.delete(old_url_config)
           configs << new_url_config
         end
-
-        ActiveRecord::Base.establish_connection
       end
     end
   end
