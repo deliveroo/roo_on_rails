@@ -42,8 +42,6 @@ module RooOnRails
               config['reaping_frequency'] = ENV['DATABASE_REAPING_FREQUENCY']
             end
           end
-
-          ActiveRecord::Base.establish_connection
         end
       end
     end
