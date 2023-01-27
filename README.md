@@ -76,7 +76,7 @@ Where `<%= variant %>` is the Rails version you'd like to test (e.g. `rails_5_2`
 We'll insert the following middlewares into the rails stack:
 
 1. `Rack::Timeout`: sets a timeout for all requests. Use `RACK_SERVICE_TIMEOUT`
-   (default 15) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
+   (default 10) and `RACK_WAIT_TIMEOUT` (default 30) to customise.
 2. `Rack::SslEnforcer`: enforces HTTPS.
 3. `Rack::Deflater`: compresses responses from the application, can be disabled
    with `ROO_ON_RAILS_RACK_DEFLATE` (default: 'YES').
