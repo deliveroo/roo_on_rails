@@ -10,7 +10,7 @@ end
 appraise 'rails-6-0' do
   gem 'rails', '~> 6.0.3'
   gem 'bootsnap', '>= 1.1.0', require: false
-  gem 'sqlite3', '~> 1.4'
+  gem 'sqlite3', '~> 1.4', '< 1.6.0'
   gem 'pg', '~> 0.18'
   gem 'rake', '13.0.1'
   gem 'dotenv', '~> 2.7.6'
@@ -19,7 +19,7 @@ end
 appraise 'rails-6-1' do
   gem 'rails', '~> 6.1.5'
   gem 'bootsnap', require: false
-  gem 'sqlite3'
+  gem 'sqlite3', '< 1.6.0'
   gem 'pg'
   gem 'rake'
   gem 'net-smtp', require: false
