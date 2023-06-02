@@ -47,6 +47,9 @@ module ROR
         if Rails::VERSION::MAJOR < 6
           # There are compatibility problems with sqlite3 1.4.x and older Rails versions
           gsub_file scaffold_dir.join('Gemfile'), /^\s*gem 'sqlite3'.*/, 'gem "sqlite3", "~> 1.3.6"'
+        elsif RUBY_VERSION.first(3).in? ['2.5', '2.6']
+          # `sqlite3` gem has dropped support for Ruby 2.6 and below since version 1.6.0
+          gsub_file scaffold_dir.join('Gemfile'), /^\s*gem 'sqlite3'.*/, 'gem "sqlite3", "< 1.6.0"'
         end
 
         append_to_file scaffold_dir.join('Gemfile'), %{
