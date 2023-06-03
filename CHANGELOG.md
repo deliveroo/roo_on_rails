@@ -1,3 +1,6 @@
+# v2.2.3
+- Update `RACK_WAIT_TIMEOUT` on README and code to align with timeout value in default.env
+
 # v2.2.2
 - Drops Railtie::Database. STATEMENT_TIMEOUT no longer set by this gem.
 
