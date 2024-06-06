@@ -6,7 +6,7 @@ gem "guard"
 gem "guard-rspec"
 gem "appraisal"
 gem "webmock"
-gem "pg", "~> 0.18"
+gem "pg"
 gem "sqlite3", "~> 1.4", "< 1.6.0"
 gem "rails", "~> 6.0.3"
 gem "bootsnap", ">= 1.1.0", require: false

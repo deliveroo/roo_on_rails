@@ -21,8 +21,8 @@ module RooOnRails
 
       def config_sidekiq
         ::Sidekiq.configure_server do |x|
-          x.options[:concurrency] = RooOnRails::Sidekiq::Settings.concurrency.to_i
-          x.options[:queues] = RooOnRails::Sidekiq::Settings.queues
+          x.concurrency = RooOnRails::Sidekiq::Settings.concurrency.to_i
+          x.queues = RooOnRails::Sidekiq::Settings.queues
         end
       end
 

@@ -1,3 +1,18 @@
+# v2.3.0
+Breaking changes:
+- Drops Rails 5.2
+- Drops Ruby 2.x
+
+Features:
+- Adds Rails 7.1 support
+- Adds Ruby 3.2 support
+- Adds Ruby 3.3 support
+
+Misc:
+- Now uses Redis 7 locally
+- Now uses Ruby 3.3.2 locally
+- Un-pins Sidekiq version
+
 # v2.2.2
 - Drops Railtie::Database. STATEMENT_TIMEOUT no longer set by this gem.
 

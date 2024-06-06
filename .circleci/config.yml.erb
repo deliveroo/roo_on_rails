@@ -22,22 +22,18 @@ common_pg_environment_vars: &common_pg_environment_vars
     POSTGRES_HOST_AUTH_METHOD: "trust"
 <%
   builds = [
-    ['2.5.9', 'rails_5_2'],
-    ['2.5.9', 'rails_6_0'],
-    ['2.5.9', 'rails_6_1'],
-
-    ['2.6.10', 'rails_5_2'],
-    ['2.6.10', 'rails_6_0'],
-    ['2.6.10', 'rails_6_1'],
-
-    ['2.7.6', 'rails_6_0'],
-    ['2.7.6', 'rails_6_1'],
-
     ['3.0.4', 'rails_6_0'],
     ['3.0.4', 'rails_6_1'],
 
     ['3.1.2', 'rails_6_1'],
-    ['3.1.2', 'rails_7_0']
+    ['3.1.2', 'rails_7_0'],
+    ['3.1.2', 'rails_7_1'],
+
+    ['3.2.1', 'rails_7_0'],
+    ['3.2.1', 'rails_7_1'],
+
+    ['3.3.2', 'rails_7_0'],
+    ['3.3.2', 'rails_7_1'],
   ]
 %>
 version: 2
@@ -51,7 +47,7 @@ jobs:
         environment:
           PGDATA: /dev/shm/pgdata
           <<: *common_pg_environment_vars
-      - image: redis:4-alpine
+      - image: redis:7-alpine
     steps:
       - checkout
 

@@ -4,7 +4,7 @@
 #
 require 'yaml'
 
-RUBIES = ['2.5.9', '2.6.10', '2.7.6', '3.0.4', '3.1.2'].freeze
+RUBIES = ['3.0.4', '3.1.2', '3.2.1',  '3.3.2'].freeze
 APPRAISALS = `appraisal list`.strip.split(/\s+/)
 
 # setup
