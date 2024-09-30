@@ -13,7 +13,7 @@ module RooOnRails
         app.config.middleware.insert_before(
           ::Rack::Runtime,
           ::Rack::Timeout,
-          service_timeout: ENV.fetch('RACK_SERVICE_TIMEOUT', 15).to_i,
+          service_timeout: ENV.fetch('RACK_SERVICE_TIMEOUT', 10).to_i,
           wait_timeout: ENV.fetch('RACK_WAIT_TIMEOUT', 30).to_i
         )
 
