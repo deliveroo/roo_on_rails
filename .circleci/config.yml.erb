@@ -22,17 +22,6 @@ common_pg_environment_vars: &common_pg_environment_vars
     POSTGRES_HOST_AUTH_METHOD: "trust"
 <%
   builds = [
-    ['2.5.9', 'rails_5_2'],
-    ['2.5.9', 'rails_6_0'],
-    ['2.5.9', 'rails_6_1'],
-
-    ['2.6.10', 'rails_5_2'],
-    ['2.6.10', 'rails_6_0'],
-    ['2.6.10', 'rails_6_1'],
-
-    ['2.7.6', 'rails_6_0'],
-    ['2.7.6', 'rails_6_1'],
-
     ['3.0.4', 'rails_6_0'],
     ['3.0.4', 'rails_6_1'],
 
@@ -91,6 +80,7 @@ jobs:
               GEM_HOME \
               BUNDLE_PATH \
               BUNDLE_BIN
+            gem update --system
             bundle install --jobs=3 --retry=3 --path=$PWD/vendor/bundle
 
       # The default Ruby containers modify the behaviour of Bundler in a way that breaks
