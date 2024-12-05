@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     # This step will try to find a Dockerfile in the repository and extract the Ruby version from it.
     # If you don't use Docker, you can remove this step and add the Ruby version directly to the
