@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rack-timeout', '>= 0.4.0'
   spec.add_runtime_dependency 'rack-ssl-enforcer'
   spec.add_runtime_dependency 'octokit'
-  spec.add_runtime_dependency 'sidekiq', '< 6.0.0'
+  spec.add_runtime_dependency 'sidekiq'
   spec.add_runtime_dependency 'dogstatsd-ruby'
   spec.add_runtime_dependency 'omniauth-google-oauth2'
   spec.add_runtime_dependency 'faraday'
