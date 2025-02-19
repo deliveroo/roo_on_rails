@@ -1,9 +1,3 @@
-require 'simplecov'
-SimpleCov.start
-
-require 'codecov'
-SimpleCov.formatter = SimpleCov::Formatter::Codecov
-
 require 'pry-byebug'
 require 'memfs'
 require 'rspec/its'

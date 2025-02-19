@@ -6,7 +6,7 @@ RSpec.describe 'Google OAuth' do
   after  { ENV['GOOGLE_AUTH_ENABLED'] = 'NO' }
 
   describe 'middleware' do
-    let(:output) { app_helper.shell_run "cd #{app_path} && rake middleware" }
+    let(:output) { app_helper.shell_run "cd #{app_path} && rails middleware" }
 
     context "if Google Auth has been enabled" do
       before { ENV['GOOGLE_AUTH_ENABLED'] = 'YES' }
@@ -24,7 +24,7 @@ RSpec.describe 'Google OAuth' do
   end
 
   describe 'routes' do
-    let(:output) { app_helper.shell_run "cd #{app_path} && rake routes" }
+    let(:output) { app_helper.shell_run "cd #{app_path} && rails routes" }
 
     context "if Google Auth has been enabled" do
       before { ENV['GOOGLE_AUTH_ENABLED'] = 'YES' }
@@ -53,7 +53,7 @@ RSpec.describe 'Google OAuth' do
       }
     end
 
-    let(:output) { app_helper.shell_run "cd #{app_path} && rake middleware" }
+    let(:output) { app_helper.shell_run "cd #{app_path} && rails middleware" }
 
     it 'allows for other middleware' do
       expect(output).to include('Rack::Deflater')

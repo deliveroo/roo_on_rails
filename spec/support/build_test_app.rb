@@ -21,9 +21,9 @@ module ROR
 
       def shell_run(command)
         say_status 'running', command.gsub(Dir.pwd, '$PWD')
-        output = %x{#{command}}
+        output = `#{command}`
 
-        if $?.success?
+        if $CHILD_STATUS.success?
           output
         else
           puts output
@@ -44,21 +44,12 @@ module ROR
           shell_run "rails new #{scaffold_dir} #{rails_new_options}"
         end
 
-        if Rails::VERSION::MAJOR < 4
-          append_to_file scaffold_dir.join('Gemfile'), %{
-            gem 'sidekiq', '< 5'
-          }
-        end
-
-        if Rails::VERSION::MAJOR < 5
-          append_to_file scaffold_dir.join('Gemfile'), %{
-            gem 'puma', '~> 3.0'
-          }
-        end
-
         if Rails::VERSION::MAJOR < 6
           # There are compatibility problems with sqlite3 1.4.x and older Rails versions
           gsub_file scaffold_dir.join('Gemfile'), /^\s*gem 'sqlite3'.*/, 'gem "sqlite3", "~> 1.3.6"'
+        elsif RUBY_VERSION.first(3).in? ['2.5', '2.6']
+          # `sqlite3` gem has dropped support for Ruby 2.6 and below since version 1.6.0
+          gsub_file scaffold_dir.join('Gemfile'), /^\s*gem 'sqlite3'.*/, 'gem "sqlite3", "< 1.6.0"'
         end
 
         append_to_file scaffold_dir.join('Gemfile'), %{
@@ -125,7 +116,7 @@ module ROR
     def build_test_app
       let(:app_id) { '%s.%s' % [Time.now.strftime('%F.%H%M%S'), SecureRandom.hex(4)] }
       let(:app_path) { TEST_DIR.join(app_id) }
-      let(:app_helper) { Helper.new(app_options) }
+      let(:app_helper) { Helper.new(**app_options) }
       let(:app_options) { {} }
       let(:app_env_vars) { "" }
 

@@ -1,3 +1,26 @@
+# v2.2.2
+- Drops Railtie::Database. STATEMENT_TIMEOUT no longer set by this gem.
+
+# v2.2.1
+- Drops ActiveRecord::Base.establish_connection from Railtie::Database.
+
+# v2.2.0
+
+Breaking changes:
+
+- Drops Rails 4 support
+- Drops Rails 5.0 support
+- Drops Rails 5.1 support
+- Drops Ruby 2.4 support
+
+Features:
+
+- Adds Rails 6.1 support
+- Adds Rails 7.0 support
+- Adds Ruby 2.7 support
+- Adds Ruby 3.0 support
+- Adds Ruby 3.1 support
+
 # v2.1.2
 
 Bug fix:

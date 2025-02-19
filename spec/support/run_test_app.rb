@@ -8,13 +8,21 @@ module ROR
       build_test_app
 
       let(:app_env) { 'production' }
+      let(:command) do
+        if Gem::Version.new(Rails.version) >= Gem::Version.new('6.1')
+          # From Rails 6.1 the option -u can be used for specifying the Rack server used to run the application
+          'bundle exec ruby -e STDOUT.sync=true -e \'load($0=ARGV.shift)\' bin/rails server -u puma -e %s'
+        else
+          'bundle exec ruby -e STDOUT.sync=true -e \'load($0=ARGV.shift)\' bin/rails server puma -e %s'
+        end
+      end
       let(:app) {
         ROR::SubProcess.new(
           name:     'rails',
           dir:      app_path,
           # This ugly line forces the test app to run with unbuffered IO
           # The old line was `bundle exec rails server puma ...`
-          command:  'bundle exec ruby -e STDOUT.sync=true -e \'load($0=ARGV.shift)\' bin/rails server puma -e %s' % app_env,
+          command:  command % app_env,
           start:    /Use Ctrl-C to stop/,
           stop:     /- Goodbye!/)
       }

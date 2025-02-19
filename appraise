@@ -4,8 +4,7 @@
 #
 require 'yaml'
 
-
-RUBIES = ['2.4.5', '2.5.5', '2.6.5']
+RUBIES = ['2.5.9', '2.6.10', '2.7.6', '3.0.4', '3.1.2'].freeze
 APPRAISALS = `appraisal list`.strip.split(/\s+/)
 
 # setup
@@ -14,7 +13,7 @@ RUBIES.each do |ruby|
   system 'rbenv version'
   system 'rbenv exec ruby -v'
   system 'rbenv exec bundle check || rbenv exec bundle install'
-  system "rbenv exec appraisal install"
+  system 'rbenv exec appraisal install'
 end
 
 # tests
